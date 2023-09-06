@@ -1,3 +1,4 @@
+import Navbar from "@/components/navbar/Navbar";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
@@ -21,8 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={roboto.className}>
       <body className="bg-gray-400 w-full h-screen">
-        <main className="overflow-hidden relative mx-auto h-screen w-full max-w-md bg-gray-100">
-          {children}
+        <main className="relative overflow-hidden mx-auto h-screen w-full max-w-md bg-gray-100">
+          <div className="h-[90%] overflow-hidden">{children}</div>
+          <Navbar />
         </main>
       </body>
     </html>
