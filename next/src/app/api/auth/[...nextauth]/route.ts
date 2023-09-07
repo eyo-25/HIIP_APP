@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 
 import GoogleProvider from "next-auth/providers/google";
-import FacebookProvider from "next-auth/providers/facebook";
+import KAKAOProvider from "next-auth/providers/kakao";
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -9,11 +9,14 @@ const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_OAUTH_ID || "",
       clientSecret: process.env.GOOGLE_OAUTH_SECRET || "",
     }),
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_OAUTH_ID || "",
-      clientSecret: process.env.FACEBOOK_OAUTH_SECRET || "",
+    KAKAOProvider({
+      clientId: process.env.KAKAO_OAUTH_ID || "",
+      clientSecret: process.env.KAKAO_OAUTH_SECRET || "",
     }),
   ],
+  pages: {
+    signIn: "/auth",
+  },
 };
 
 const handler = NextAuth(authOptions);
