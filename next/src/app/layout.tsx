@@ -1,7 +1,8 @@
-import Navbar from "@/components/navbar/Navbar";
 import "./globals.css";
-import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
+import type { Metadata } from "next";
+
+import AuthContext from "@/context/AuthContext";
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700", "900"],
@@ -23,8 +24,7 @@ export default function RootLayout({
     <html lang="en" className={roboto.className}>
       <body className="bg-gray-400 w-full h-screen">
         <main className="relative overflow-hidden mx-auto h-screen w-full max-w-md bg-gray-100">
-          <div className="h-[90%] overflow-hidden">{children}</div>
-          <Navbar />
+          <AuthContext>{children}</AuthContext>
         </main>
       </body>
     </html>
