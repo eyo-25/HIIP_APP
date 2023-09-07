@@ -4,11 +4,6 @@ export default {
   type: 'document',
   fields: [
     {
-      title: 'Username',
-      name: 'username',
-      type: 'string',
-    },
-    {
       title: 'Name',
       name: 'name',
       type: 'string',
@@ -27,7 +22,6 @@ export default {
   preview: {
     select: {
       title: 'name',
-      subtitle: 'username',
     },
   },
 }
