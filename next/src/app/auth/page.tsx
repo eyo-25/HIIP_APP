@@ -1,7 +1,6 @@
 import { getProviders } from "next-auth/react";
 
 import AuthButton from "@/components/ui/AuthButton";
-import { WhiteLogo } from "@/assets";
 import { Buttons } from "./Auth.data";
 
 type Props = {
@@ -14,9 +13,7 @@ export default async function AuthPage({
   const providers = await getProviders();
 
   return (
-    <article className=" w-full z-10 flex-col-center text-white">
-      <WhiteLogo className="mb-20pxr" />
-      <h1 className="mb-20pxr">Interval Pomodoro Planner</h1>
+    <>
       {providers &&
         Buttons.map(({ title, icon, provider }, i) => (
           <AuthButton
@@ -27,6 +24,6 @@ export default async function AuthPage({
             callbackUrl={callbackUrl ?? "/"}
           />
         ))}
-    </article>
+    </>
   );
 }

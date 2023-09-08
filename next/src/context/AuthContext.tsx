@@ -14,7 +14,7 @@ export default function AuthContext({ children }: Props) {
 
   return (
     <SessionProvider>
-      {children}
+      <div className={`${isAuth ? "h-full" : "h-[90%]"}`}>{children}</div>
       {!isAuth && <Navbar />}
     </SessionProvider>
   );
