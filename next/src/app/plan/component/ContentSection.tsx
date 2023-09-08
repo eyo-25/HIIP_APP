@@ -9,12 +9,26 @@ function ContentSection() {
   const [isWeekly, setIsWeekly] = useState(false);
   const [mouseDownClientY, setMouseDownClientY] = useState(0);
   const [mouseUpClientY, setMouseUpClientY] = useState(0);
+  const [tochedY, setTochedY] = useState(0);
 
   const onMouseUp = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     setMouseUpClientY(e.clientY);
   };
   const onMouseDown = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     setMouseDownClientY(e.clientY);
+  };
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTochedY(e.changedTouches[0].pageY);
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const distanceY = tochedY - e.changedTouches[0].pageY;
+    if (distanceY < -30) {
+      setIsWeekly(false);
+    }
+    if (distanceY > 30) {
+      setIsWeekly(true);
+    }
   };
 
   useEffect(() => {
@@ -32,6 +46,8 @@ function ContentSection() {
       <article
         onMouseDown={onMouseDown}
         onMouseUp={onMouseUp}
+        onTouchEnd={onTouchEnd}
+        onTouchStart={onTouchStart}
         className={isWeekly ? "h-[19%]" : "h-full"}
       >
         <Calendar isWeekly={isWeekly} />
