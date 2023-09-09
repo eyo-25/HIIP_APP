@@ -36,7 +36,7 @@ function ContentSection() {
     if (isWeekly && distanceY < -20) {
       setIsWeekly(false);
     }
-    if (!isWeekly && distanceY > 40) {
+    if (!isWeekly && distanceY > 30) {
       setIsWeekly(true);
     }
   }, [mouseUpClientY]);
@@ -48,7 +48,7 @@ function ContentSection() {
         onMouseUp={onMouseUp}
         onTouchEnd={onTouchEnd}
         onTouchStart={onTouchStart}
-        className={isWeekly ? "h-[19%]" : "h-full"}
+        className={isWeekly ? "h-[22%]" : "h-full"}
       >
         <Calendar isWeekly={isWeekly} />
       </article>
