@@ -3,33 +3,36 @@ import dayjs from "dayjs";
 
 type Props = {
   displayDate: dayjs.Dayjs;
+  clickedDate: dayjs.Dayjs;
+  setClickedDate: React.Dispatch<React.SetStateAction<dayjs.Dayjs>>;
 };
 
-export default function MonthCalendar({ displayDate }: Props) {
+export default function MonthCalendar({
+  displayDate,
+  clickedDate,
+  setClickedDate,
+}: Props) {
   const [monthArray, setMonthArray] = useState<string[]>([]);
   const nowMonth = displayDate.month() + 1;
+  const today = clickedDate.format("YYYY-MM-DD");
+
+  const onDateClick = (clickedDate: string) => {
+    setClickedDate(dayjs(clickedDate));
+  };
 
   useEffect(() => {
     setMonthArray(() => {
       const newMonthArray = [];
+      let monthStartDate = displayDate.startOf("month");
+      let monthStartDay = monthStartDate.day();
 
-      let nowMonthLast = Number(displayDate.endOf("month").format("DD"));
-      let nowMonthStartDay = displayDate.startOf("month").day();
-      let prevMonthLast = displayDate.subtract(1, "month").endOf("month");
-      let prevMonthLastDate = Number(prevMonthLast.format("D"));
-      let nextMonthLastDate = displayDate.add(1, "month");
-
-      for (let i = 1; i <= nowMonthStartDay; i++) {
+      for (let i = monthStartDay; i >= 1; i--) {
         newMonthArray.push(
-          prevMonthLast.format("YYYY-MM-") +
-            (prevMonthLastDate - (nowMonthStartDay - i))
+          monthStartDate.subtract(i, "d").format("YYYY-MM-DD")
         );
       }
-      for (let i = 1; i <= nowMonthLast; i++) {
-        newMonthArray.push(displayDate.format("YYYY-MM-") + i);
-      }
-      for (let i = 1; i <= 42 - (nowMonthStartDay + nowMonthLast); i++) {
-        newMonthArray.push(nextMonthLastDate.format("YYYY-MM-") + i);
+      for (let i = 0; i < 42 - monthStartDay; i++) {
+        newMonthArray.push(monthStartDate.add(i, "d").format("YYYY-MM-DD"));
       }
 
       return newMonthArray;
@@ -40,12 +43,19 @@ export default function MonthCalendar({ displayDate }: Props) {
     <>
       {monthArray.map((date: string) => (
         <li
-          className={`flex-center mx-auto ${
+          onClick={() => onDateClick(date)}
+          className={`flex-center mx-auto cursor-pointer w-full ${
             Number(date.split("-")[1]) !== nowMonth && "text-gray-600"
           }`}
           key={date}
         >
-          {date.split("-")[2]}
+          <div
+            className={`flex-center w-34pxr h-34pxr ${
+              today === date && "bg-black rounded-full text-white"
+            }`}
+          >
+            {date.split("-")[2]}
+          </div>
         </li>
       ))}
     </>

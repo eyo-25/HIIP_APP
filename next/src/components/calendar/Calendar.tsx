@@ -14,24 +14,25 @@ const Days = ["일", "월", "화", "수", "목", "금", "토"];
 
 function Calendar({ isWeekly }: Props) {
   const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(dayjs());
-  const [clickedDate, setClickedDate] = useState();
+  const [clickedDate, setClickedDate] = useState<dayjs.Dayjs>(dayjs());
 
   const onPrevClick = () => {
     if (isWeekly) {
+      setDisplayDate(displayDate.subtract(7, "d"));
     } else {
-      const prevMonth = displayDate.subtract(1, "M");
-      setDisplayDate(prevMonth);
+      setDisplayDate(displayDate.subtract(1, "M"));
     }
   };
   const onNextClick = () => {
     if (isWeekly) {
+      setDisplayDate(displayDate.add(7, "d"));
     } else {
-      const nextMonth = displayDate.add(1, "M");
-      setDisplayDate(nextMonth);
+      setDisplayDate(displayDate.add(1, "M"));
     }
   };
   const onTodayClick = () => {
     setDisplayDate(dayjs());
+    setClickedDate(dayjs());
   };
 
   return (
@@ -65,9 +66,17 @@ function Calendar({ isWeekly }: Props) {
           }`}
         >
           {isWeekly ? (
-            <WeeklyCalendar displayDate={displayDate} />
+            <WeeklyCalendar
+              displayDate={displayDate}
+              clickedDate={clickedDate}
+              setClickedDate={setClickedDate}
+            />
           ) : (
-            <MonthCalendar displayDate={displayDate} />
+            <MonthCalendar
+              displayDate={displayDate}
+              clickedDate={clickedDate}
+              setClickedDate={setClickedDate}
+            />
           )}
         </ul>
       </section>
