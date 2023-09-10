@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 import { IoChevronForward, IoChevronBack } from "react-icons/io5";
-import MonthCalendar from "./MonthCalendar";
-import WeeklyCalendar from "./WeeklyCalendar";
+import CalendarPiker from "./CalendarPiker";
 
 type Props = {
   isWeekly: boolean;
@@ -35,6 +34,10 @@ function Calendar({ isWeekly }: Props) {
     setClickedDate(dayjs());
   };
 
+  useEffect(() => {
+    setDisplayDate(clickedDate);
+  }, [isWeekly]);
+
   return (
     <article className="flex flex-col items-center w-full h-full">
       <section className="flex w-[88%] justify-between mb-18pxr">
@@ -60,25 +63,15 @@ function Calendar({ isWeekly }: Props) {
             </li>
           ))}
         </ul>
-        <ul
-          className={`grid grid-cols-7 text-sm ${
-            isWeekly ? "h-[60%]" : "h-[84%]"
-          }`}
-        >
-          {isWeekly ? (
-            <WeeklyCalendar
-              displayDate={displayDate}
-              clickedDate={clickedDate}
-              setClickedDate={setClickedDate}
-            />
-          ) : (
-            <MonthCalendar
-              displayDate={displayDate}
-              clickedDate={clickedDate}
-              setClickedDate={setClickedDate}
-            />
-          )}
-        </ul>
+        {
+          <CalendarPiker
+            displayDate={displayDate}
+            clickedDate={clickedDate}
+            setClickedDate={setClickedDate}
+            setDisplayDate={setDisplayDate}
+            isWeekly={isWeekly}
+          />
+        }
       </section>
     </article>
   );

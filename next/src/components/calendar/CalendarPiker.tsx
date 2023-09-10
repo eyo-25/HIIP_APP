@@ -1,47 +1,45 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { getMonthCalendar, getWeeklyCalendar } from "@/utils/calendar";
 
 type Props = {
   displayDate: dayjs.Dayjs;
   clickedDate: dayjs.Dayjs;
   setClickedDate: React.Dispatch<React.SetStateAction<dayjs.Dayjs>>;
+  setDisplayDate: React.Dispatch<React.SetStateAction<dayjs.Dayjs>>;
+  isWeekly: boolean;
 };
 
-export default function MonthCalendar({
+function CalendarPiker({
   displayDate,
   clickedDate,
   setClickedDate,
+  setDisplayDate,
+  isWeekly,
 }: Props) {
-  const [monthArray, setMonthArray] = useState<string[]>([]);
+  const [dateArray, setDateArray] = useState<string[]>([]);
   const nowMonth = displayDate.month() + 1;
   const today = clickedDate.format("YYYY-MM-DD");
 
   const onDateClick = (clickedDate: string) => {
-    setClickedDate(dayjs(clickedDate));
+    const date = dayjs(clickedDate);
+    setClickedDate(date);
+    if (!isWeekly && nowMonth !== Number(date.format("M"))) {
+      setDisplayDate(date);
+    }
   };
 
   useEffect(() => {
-    setMonthArray(() => {
-      const newMonthArray = [];
-      let monthStartDate = displayDate.startOf("month");
-      let monthStartDay = monthStartDate.day();
-
-      for (let i = monthStartDay; i >= 1; i--) {
-        newMonthArray.push(
-          monthStartDate.subtract(i, "d").format("YYYY-MM-DD")
-        );
-      }
-      for (let i = 0; i < 42 - monthStartDay; i++) {
-        newMonthArray.push(monthStartDate.add(i, "d").format("YYYY-MM-DD"));
-      }
-
-      return newMonthArray;
-    });
-  }, [displayDate]);
+    setDateArray(() =>
+      isWeekly ? getWeeklyCalendar(displayDate) : getMonthCalendar(displayDate)
+    );
+  }, [displayDate, isWeekly]);
 
   return (
-    <>
-      {monthArray.map((date: string) => (
+    <ul
+      className={`grid grid-cols-7 text-sm ${isWeekly ? "h-[60%]" : "h-[84%]"}`}
+    >
+      {dateArray.map((date: string) => (
         <li
           onClick={() => onDateClick(date)}
           className={`flex-center mx-auto cursor-pointer w-full ${
@@ -58,6 +56,8 @@ export default function MonthCalendar({
           </div>
         </li>
       ))}
-    </>
+    </ul>
   );
 }
+
+export default CalendarPiker;
