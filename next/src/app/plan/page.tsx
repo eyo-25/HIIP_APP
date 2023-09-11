@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useState } from "react";
 
 import Calendar from "@/components/calendar/Calendar";
 import PlanHeader from "./component/PlanHeader";
@@ -9,27 +9,18 @@ import { useMouseHandlers } from "./utils/MouseHandlers";
 import { useTouchHandlers } from "./utils/TouchHandlers";
 import { fakePlanList } from "./FakePlanListData";
 
-export default function PlanPage() {
-  const [isWeekly, setIsWeekly] = useState<boolean>(false);
-  const [selectPlanId, setSelectPlanId] = useState<string>("");
+function PlanPage() {
   const data = fakePlanList;
+  const [isWeekly, setIsWeekly] = useState<boolean>(false);
+  const [selectPlanId, setSelectPlanId] = useState<string>(
+    0 < fakePlanList.length ? fakePlanList[0].id : ""
+  );
 
-  const { handleTouchStart, handleTouchEnd, tochedY } =
-    useTouchHandlers(setIsWeekly);
-  const { handleMouseUp, handleMouseDown, mouseUpClientY, mouseDownClientY } =
-    useMouseHandlers();
-
-  useLayoutEffect(() => {}, []);
-
-  useEffect(() => {
-    const distanceY = mouseDownClientY - mouseUpClientY;
-    if (isWeekly && distanceY < -20) {
-      setIsWeekly(false);
-    }
-    if (!isWeekly && distanceY > 30) {
-      setIsWeekly(true);
-    }
-  }, [mouseUpClientY]);
+  const { handleTouchStart, handleTouchEnd } = useTouchHandlers(setIsWeekly);
+  const { handleMouseUp, handleMouseDown } = useMouseHandlers(
+    setIsWeekly,
+    isWeekly
+  );
 
   return (
     <div className="h-[90%] overflow-hidden">
@@ -45,9 +36,15 @@ export default function PlanPage() {
           <Calendar isWeekly={isWeekly} />
         </article>
         <article className={isWeekly ? "h-[83%]" : "h-[50%]"}>
-          <PlanList data={data} />
+          <PlanList
+            data={data}
+            selectPlanId={selectPlanId}
+            setSelectPlanId={setSelectPlanId}
+          />
         </article>
       </section>
     </div>
   );
 }
+
+export default PlanPage;

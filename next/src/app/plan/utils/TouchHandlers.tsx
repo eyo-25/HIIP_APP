@@ -20,5 +20,5 @@ export function useTouchHandlers(
     }
   };
 
-  return { handleTouchStart, handleTouchEnd, tochedY };
+  return { handleTouchStart, handleTouchEnd };
 }

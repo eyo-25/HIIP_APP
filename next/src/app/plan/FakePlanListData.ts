@@ -9,7 +9,7 @@ export const fakePlanList = [
     startDate: "2023-09-10",
     endDate: "2023-09-20",
     interval: 4,
-    status: SUCCESS,
+    status: PENDING,
   },
   {
     id: "iGfti58QZg",
@@ -19,7 +19,7 @@ export const fakePlanList = [
     startDate: "2023-09-10",
     endDate: "2023-10-20",
     interval: 3,
-    status: FAIL,
+    status: PENDING,
   },
   {
     id: "QUVj9Zu8v6",
@@ -30,5 +30,25 @@ export const fakePlanList = [
     endDate: "2023-09-11",
     interval: 5,
     status: PENDING,
+  },
+  {
+    id: "SAVj9Zu8v6",
+    title: "블로그 글정리",
+    memo: "언제해 ㅠㅠ",
+    days: [0, 6],
+    startDate: "2023-09-11",
+    endDate: "2023-09-11",
+    interval: 5,
+    status: FAIL,
+  },
+  {
+    id: "SAVj9Zu8v6",
+    title: "블로그 글정리",
+    memo: "언제해 ㅠㅠ",
+    days: [0, 6],
+    startDate: "2023-09-11",
+    endDate: "2023-09-11",
+    interval: 5,
+    status: SUCCESS,
   },
 ];

@@ -8,3 +8,7 @@ export type PlanType = {
   interval: number;
   status: string;
 };
+
+export type PlanListType = {
+  [key: string]: PlanType;
+};
