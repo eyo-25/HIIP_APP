@@ -14,38 +14,47 @@ const Days = ["일", "월", "화", "수", "목", "금", "토"];
 function Calendar({ isWeekly }: Props) {
   const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(dayjs());
   const [clickedDate, setClickedDate] = useState<dayjs.Dayjs>(dayjs());
+  const nowMonth = displayDate.month() + 1;
 
-  const onPrevClick = () => {
+  const handlePrevClick = () => {
     if (isWeekly) {
       setDisplayDate(displayDate.subtract(7, "d"));
     } else {
       setDisplayDate(displayDate.subtract(1, "M"));
     }
   };
-  const onNextClick = () => {
+  const handleNextClick = () => {
     if (isWeekly) {
       setDisplayDate(displayDate.add(7, "d"));
     } else {
       setDisplayDate(displayDate.add(1, "M"));
     }
   };
-  const onTodayClick = () => {
+  const handleTodayClick = () => {
     setDisplayDate(dayjs());
     setClickedDate(dayjs());
   };
+  const handleDateClick = (date: string) => {
+    const selectedDate = dayjs(date);
+    setClickedDate(selectedDate);
+    if (!isWeekly && nowMonth !== Number(selectedDate.format("M"))) {
+      setDisplayDate(selectedDate);
+    }
+  };
 
   useEffect(() => {
+    console.log("use Effect");
     setDisplayDate(clickedDate);
   }, [isWeekly]);
 
   return (
     <article className="flex flex-col items-center w-full h-full">
       <section className="flex w-[88%] justify-between mb-18pxr">
-        <IoChevronBack onClick={onPrevClick} className={ButtonClass} />
-        <p onClick={onTodayClick} className="font-medium cursor-pointer">
+        <IoChevronBack onClick={handlePrevClick} className={ButtonClass} />
+        <p onClick={handleTodayClick} className="font-medium cursor-pointer">
           {displayDate.format("M")} 월
         </p>
-        <IoChevronForward onClick={onNextClick} className={ButtonClass} />
+        <IoChevronForward onClick={handleNextClick} className={ButtonClass} />
       </section>
       <section
         className={`w-full px-7pxr font-medium ${
@@ -67,9 +76,8 @@ function Calendar({ isWeekly }: Props) {
           <CalendarPiker
             displayDate={displayDate}
             clickedDate={clickedDate}
-            setClickedDate={setClickedDate}
-            setDisplayDate={setDisplayDate}
             isWeekly={isWeekly}
+            handleDateClick={handleDateClick}
           />
         }
       </section>

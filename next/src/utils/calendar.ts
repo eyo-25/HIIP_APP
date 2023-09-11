@@ -1,36 +1,28 @@
 import dayjs from "dayjs";
 
 export const getWeeklyCalendar = (displayDate: dayjs.Dayjs) => {
-  console.log(displayDate.format("YYYY MM DD"));
+  const startDate = displayDate.startOf("week");
+  const calendarArray = Array.from({ length: 7 }, (_, index) => {
+    const currentDate = startDate.add(index, "d");
+    return currentDate.format("YYYY-MM-DD");
+  });
 
-  const newCalendarArray = [];
-  const todayDay = displayDate.day();
-  console.log(todayDay);
-
-  for (let i = 0; i < todayDay; i++) {
-    newCalendarArray.push(
-      displayDate.subtract(todayDay - i, "d").format("YYYY-MM-DD")
-    );
-  }
-  for (let i = 0; i < 7 - todayDay; i++) {
-    newCalendarArray.push(displayDate.add(i, "d").format("YYYY-MM-DD"));
-  }
-
-  console.log(newCalendarArray);
-  return newCalendarArray;
+  return [calendarArray];
 };
 
 export const getMonthCalendar = (displayDate: dayjs.Dayjs) => {
-  const newCalendarArray = [];
-  let startDate = displayDate.startOf("month");
-  let startDay = startDate.day();
+  const startDate = displayDate.startOf("month");
+  const startDay = startDate.day();
 
-  for (let i = startDay; i >= 1; i--) {
-    newCalendarArray.push(startDate.subtract(i, "d").format("YYYY-MM-DD"));
-  }
-  for (let i = 0; i < 42 - startDay; i++) {
-    newCalendarArray.push(startDate.add(i, "d").format("YYYY-MM-DD"));
+  const calendarArray = Array.from({ length: 42 }, (_, index) => {
+    const currentDate = startDate.add(index - startDay, "d");
+    return currentDate.format("YYYY-MM-DD");
+  });
+
+  const doubleArray = [];
+  for (let i = 0; i < calendarArray.length; i += 7) {
+    doubleArray.push(calendarArray.slice(i, i + 7));
   }
 
-  return newCalendarArray;
+  return doubleArray;
 };
