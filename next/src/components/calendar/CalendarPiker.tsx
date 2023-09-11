@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { getMonthCalendar, getWeeklyCalendar } from "@/utils/calendar";
+import { getMonthCalendar, getWeeklyCalendar } from "@/comman/utils/calendar";
 
 type Props = {
   displayDate: dayjs.Dayjs;
@@ -45,12 +45,12 @@ function CalendarPiker({
     return false;
   };
 
-  const liClass = (date: string) => {
+  const liClassFn = (date: string) => {
     return `relative flex-center mx-auto my-[8%] cursor-pointer w-full ${
       Number(date.split("-")[1]) !== nowMonth && "text-gray-600"
     }`;
   };
-  const circleClass = (date: string) => {
+  const circleClassFn = (date: string) => {
     return `z-10 flex-center h-full w-[64%] rounded-full ${getDateStyle(date)}`;
   };
 
@@ -68,7 +68,7 @@ function CalendarPiker({
         week.map((date: string, idx: number) => (
           <li
             onClick={() => handleDateClick(date)}
-            className={liClass(date)}
+            className={liClassFn(date)}
             key={date}
           >
             {idx !== 0 && isEdgeDate(date) && fakePlan.startDate !== date && (
@@ -76,7 +76,7 @@ function CalendarPiker({
                 className={`absolute h-full w-[50%] left-0pxr bg-gray-300`}
               ></div>
             )}
-            <div className={circleClass(date)}>{date.split("-")[2]}</div>
+            <div className={circleClassFn(date)}>{date.split("-")[2]}</div>
             {idx !== 6 && isEdgeDate(date) && fakePlan.endDate !== date && (
               <div
                 className={`absolute h-full w-[50%] right-0pxr bg-gray-300`}

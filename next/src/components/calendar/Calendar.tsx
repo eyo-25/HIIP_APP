@@ -8,8 +8,8 @@ type Props = {
   isWeekly: boolean;
 };
 
-const ButtonClass = "w-23pxr h-23pxr cursor-pointer";
-const Days = ["일", "월", "화", "수", "목", "금", "토"];
+const BUTTONCLASS = "w-23pxr h-23pxr cursor-pointer";
+const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
 function Calendar({ isWeekly }: Props) {
   const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(dayjs());
@@ -43,22 +43,21 @@ function Calendar({ isWeekly }: Props) {
   };
 
   useEffect(() => {
-    console.log("use Effect");
     setDisplayDate(clickedDate);
   }, [isWeekly]);
 
   return (
-    <article className="flex flex-col items-center w-full h-full">
+    <div className="flex flex-col items-center w-full h-full bg-white">
       <section className="flex w-[88%] justify-between mb-18pxr">
-        <IoChevronBack onClick={handlePrevClick} className={ButtonClass} />
+        <IoChevronBack onClick={handlePrevClick} className={BUTTONCLASS} />
         <p onClick={handleTodayClick} className="font-medium cursor-pointer">
           {displayDate.format("M")} 월
         </p>
-        <IoChevronForward onClick={handleNextClick} className={ButtonClass} />
+        <IoChevronForward onClick={handleNextClick} className={BUTTONCLASS} />
       </section>
       <section
         className={`w-full px-7pxr font-medium ${
-          isWeekly ? "h-[60%]" : "h-[88%]"
+          isWeekly ? "h-[59%]" : "h-[88%]"
         }`}
       >
         <ul
@@ -66,7 +65,7 @@ function Calendar({ isWeekly }: Props) {
             isWeekly ? "h-[40%]" : "h-[9%]"
           }`}
         >
-          {Days.map((day) => (
+          {DAYS.map((day) => (
             <li className="mx-auto" key={day}>
               {day}
             </li>
@@ -81,7 +80,7 @@ function Calendar({ isWeekly }: Props) {
           />
         }
       </section>
-    </article>
+    </div>
   );
 }
 

@@ -7,7 +7,7 @@ import {
   SelectPlan,
   SelectStart,
   Start,
-} from "@/assets";
+} from "@/comman/assets";
 
 export const LINKS = [
   {

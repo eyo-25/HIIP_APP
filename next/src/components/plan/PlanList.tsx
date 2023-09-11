@@ -1,8 +1,19 @@
 import React from "react";
+import PlanCard from "./PlanCard";
+import { PlanType } from "@/comman/types";
 
-function PlanList() {
-  console.log("플랜 렌더링");
-  return <div className="h-full w-full bg-gray-800"></div>;
+type Props = {
+  data: PlanType[];
+};
+
+function PlanList({ data }: Props) {
+  return (
+    <ul className="pb-40pxr sroll h-full w-full px-[5%] mx-auto overflow-hidden">
+      {data.map((plan, i) => (
+        <PlanCard key={i} data={plan} />
+      ))}
+    </ul>
+  );
 }
 
 export default React.memo(PlanList);
