@@ -24,6 +24,16 @@ body {
     white-space: nowrap;
   }
 
+  .ellipsis-2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: -webkit-box;
+    white-space: normal;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
   .flex-col-center {
     display: flex;
     flex-direction: column;
@@ -41,5 +51,16 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
+  }
+
+  .sroll {
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .sroll::-webkit-scrollbar {
+    width: 0;
+    display: none;
   }
 }

@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={roboto.className}>
       <body className="bg-gray-400 w-full h-screen">
-        <main className="relative overflow-hidden mx-auto h-screen w-full max-w-md bg-gray-100">
+        <main className="relative overflow-hidden mx-auto h-screen w-full max-w-md bg-gray-200">
           <AuthContext>{children}</AuthContext>
         </main>
       </body>
