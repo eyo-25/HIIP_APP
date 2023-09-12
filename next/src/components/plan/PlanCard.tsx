@@ -1,40 +1,41 @@
-import React, { Dispatch, SetStateAction } from "react";
 import { PlanType } from "@/comman/types";
 import { IoPlaySharp } from "react-icons/io5";
 import { FAIL, PENDING, SUCCESS, ACTIVE } from "@/comman/constants";
 import { DEFAULTMEMO, PlanModeClass } from "./PlanCard.data";
+import { useAtomValue, useSetAtom } from "jotai";
+import { selectPlanAtom, selected_planId_atom } from "@/store";
 
 type Props = {
   data: PlanType;
-  selectPlanId: string;
-  setSelectPlanId: Dispatch<SetStateAction<string>>;
 };
 
-export default function PlanCard({
-  data,
-  selectPlanId,
-  setSelectPlanId,
-}: Props) {
+export default function PlanCard({ data }: Props) {
   const { title, memo, interval, status, id } = data;
+  const selectPlanId = useAtomValue(selected_planId_atom);
+  const setSelectedPlan = useSetAtom(selectPlanAtom);
   const intervalArray = Array.from({ length: interval }, (_, index) => index);
+  const isActive = selectPlanId === id;
+
   const getPlanMode = () => {
     if (status === SUCCESS) return SUCCESS;
     if (status === FAIL) return FAIL;
-    if (selectPlanId === id) return ACTIVE;
+    if (isActive) return ACTIVE;
     return PENDING;
   };
   const mode = getPlanMode();
 
   const handleCardClick = () => {
-    if (mode === PENDING) {
-      setSelectPlanId(id);
+    if (!isActive) {
+      setSelectedPlan(data);
     }
   };
 
   return (
     <li
       onClick={handleCardClick}
-      className={`relative flex flex-col mt-18pxr px-35pxr bg-white rounded-md ${PlanModeClass[mode].shadow}`}
+      className={`relative flex flex-col mt-18pxr px-35pxr rounded-md ${
+        isActive ? PlanModeClass[ACTIVE].shadow : PlanModeClass[mode].shadow
+      } ${isActive || mode === PENDING ? "bg-white" : "bg-gray-400"}`}
     >
       <div className="relative py-35pxr">
         <div className="flex justify-between mb-15pxr">

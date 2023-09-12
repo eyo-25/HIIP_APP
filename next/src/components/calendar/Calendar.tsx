@@ -3,6 +3,8 @@ import dayjs from "dayjs";
 
 import { IoChevronForward, IoChevronBack } from "react-icons/io5";
 import CalendarPiker from "./CalendarPiker";
+import { useAtomValue, useSetAtom } from "jotai";
+import { clickDateAtom, clicked_date_atom } from "@/store";
 
 type Props = {
   isWeekly: boolean;
@@ -13,8 +15,9 @@ const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
 function Calendar({ isWeekly }: Props) {
   const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(dayjs());
-  const [clickedDate, setClickedDate] = useState<dayjs.Dayjs>(dayjs());
   const nowMonth = displayDate.month() + 1;
+  const clickedDate = useAtomValue(clicked_date_atom);
+  const setClickedDate = useSetAtom(clickDateAtom);
 
   const handlePrevClick = () => {
     if (isWeekly) {
@@ -46,8 +49,12 @@ function Calendar({ isWeekly }: Props) {
     setDisplayDate(clickedDate);
   }, [isWeekly]);
 
+  useEffect(() => {
+    setClickedDate(dayjs());
+  }, []);
+
   return (
-    <div className="flex flex-col items-center w-full h-full bg-white">
+    <div className="flex flex-col items-center w-full h-full bg-white drop-shadow-sm">
       <section className="flex w-[88%] justify-between mb-18pxr">
         <IoChevronBack onClick={handlePrevClick} className={BUTTONCLASS} />
         <p onClick={handleTodayClick} className="font-medium cursor-pointer">
@@ -74,7 +81,6 @@ function Calendar({ isWeekly }: Props) {
         {
           <CalendarPiker
             displayDate={displayDate}
-            clickedDate={clickedDate}
             isWeekly={isWeekly}
             handleDateClick={handleDateClick}
           />
