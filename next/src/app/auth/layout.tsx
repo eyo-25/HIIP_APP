@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { AuthBackground, WhiteLogo } from "@/assets";
+import { AuthBackground, WhiteLogo } from "@/comman/assets";
 
 type Props = {
   children: React.ReactNode;

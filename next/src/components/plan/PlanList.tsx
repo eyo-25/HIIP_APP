@@ -2,33 +2,30 @@ import React, { useEffect, useState } from "react";
 import PlanCard from "./PlanCard";
 import { useAtomValue, useSetAtom } from "jotai";
 import { clicked_date_atom, selectPlanAtom, selected_plan_atom } from "@/store";
-import { fakePlanList } from "@/app/plan/FakePlanListData";
-import { PlanType } from "@/comman/types";
+import { usePlanList } from "@/comman/hooks/plan";
 
 function PlanList() {
   // TO-DO: 나중에 swr로 패치
-  const [data, setData] = useState<PlanType[] | null>(fakePlanList);
   const selectedPlan = useAtomValue(selected_plan_atom);
   const setSelectedPlan = useSetAtom(selectPlanAtom);
   const clickedDate = useAtomValue(clicked_date_atom);
 
-  // TO-DO: clickedDate가 이전이랑 다르면 해당 날짜의 DATA GET하고 selectPlan도 설정
-  useEffect(() => {
-    const clickDate = clickedDate.format("YYYY-MM-DD");
+  const { planListData, isLoading, error } = usePlanList(
+    clickedDate.format("YYYY-MM-DD")
+  );
 
+  useEffect(() => {
     if (!selectedPlan) {
-      setSelectedPlan(data && data[0]);
-    } else if (
-      selectedPlan &&
-      (clickDate < selectedPlan.startDate || clickDate > selectedPlan.endDate)
-    ) {
-      data && setSelectedPlan(data[0]);
+      setSelectedPlan(planListData && planListData[0]);
     }
-  }, [clickedDate]);
+  }, [clickedDate, planListData]);
 
   return (
     <ul className="pb-40pxr sroll h-full w-full px-[5%] mx-auto overflow-hidden">
-      {data && data.map((plan, i) => <PlanCard key={i} data={plan} />)}
+      {planListData &&
+        planListData.map((plan: any, i: number) => (
+          <PlanCard key={i} data={plan} />
+        ))}
     </ul>
   );
 }
