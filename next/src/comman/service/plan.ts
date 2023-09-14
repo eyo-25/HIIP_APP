@@ -1,17 +1,22 @@
 import dayjs from "dayjs";
+import { PlanModel } from "../model/plan";
 import { client } from "./sanity";
 
-export async function getPlanList(userId: string, date: string) {
-  const convertDate = date.replace(/[\{\}]/g, "").trim();
-  const day = dayjs(convertDate).day();
-  const searchDate = new Date(convertDate);
+export async function getPlanList(userId: string) {
+  return await client
+    .fetch(
+      `*[_type == "plan" && author._ref == $userId] | order(_createdAt desc)`,
+      {
+        userId,
+      }
+    )
+    .then(mapPlanList);
+}
 
-  return await client.fetch(
-    `*[_type == "plan" && author._ref == $userId && startdate <= $searchDate && enddate >= $searchDate && $day in days[]] | order(_createdAt desc)`,
-    {
-      userId,
-      searchDate,
-      day,
-    }
-  );
+function mapPlanList(planList: PlanModel[]) {
+  return planList.map((plan: PlanModel) => ({
+    ...plan,
+    startDate: dayjs(plan.startDate).format("YYYY-MM-DD"),
+    endDate: dayjs(plan.endDate).format("YYYY-MM-DD"),
+  }));
 }

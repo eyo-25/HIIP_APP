@@ -7,6 +7,7 @@ import PlanHeader from "./component/PlanHeader";
 import PlanList from "@/components/plan/PlanList";
 import { useMouseHandlers } from "./utils/MouseHandlers";
 import { useTouchHandlers } from "./utils/TouchHandlers";
+import MetaButton from "@/components/ui/MetaButton";
 
 function PlanPage() {
   const [isWeekly, setIsWeekly] = useState<boolean>(false);
@@ -18,7 +19,7 @@ function PlanPage() {
   );
 
   return (
-    <div className="h-[90%] overflow-hidden">
+    <div className="relative h-[90%] w-full overflow-hidden">
       <PlanHeader />
       <section className="relative flex flex-col w-full overflow-hidden h-[92%]">
         <article
@@ -34,6 +35,7 @@ function PlanPage() {
           <PlanList />
         </article>
       </section>
+      <MetaButton />
     </div>
   );
 }

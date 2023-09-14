@@ -21,12 +21,12 @@ export default {
     },
     {
       title: 'StartDate',
-      name: 'startdate',
+      name: 'startDate',
       type: 'datetime',
     },
     {
       title: 'EndDate',
-      name: 'enddate',
+      name: 'endDate',
       type: 'datetime',
     },
     {
@@ -35,12 +35,59 @@ export default {
       type: 'number',
     },
     {
+      title: 'IsStart',
+      name: 'isStart',
+      type: 'boolean',
+    },
+    {
       title: 'Days',
       name: 'days',
       type: 'array',
       of: [
         {
           type: 'number',
+        },
+      ],
+    },
+    {
+      title: 'History',
+      name: 'history',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              title: 'FocusSet',
+              name: 'focusSet',
+              type: 'number',
+            },
+            {
+              title: 'BreakSet',
+              name: 'breakSet',
+              type: 'number',
+            },
+            {
+              title: 'FocusTime',
+              name: 'focusTime',
+              type: 'number',
+            },
+            {
+              title: 'BreakTime',
+              name: 'breakTime',
+              type: 'number',
+            },
+            {
+              title: 'IsSuccess',
+              name: 'isSuccess',
+              type: 'boolean',
+            },
+            {
+              title: 'Date',
+              name: 'date',
+              type: 'datetime',
+            },
+          ],
         },
       ],
     },

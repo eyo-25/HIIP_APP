@@ -4,30 +4,31 @@ import { FAIL, PENDING, SUCCESS, ACTIVE } from "@/comman/constants";
 import { DEFAULTMEMO, PlanModeClass } from "./PlanCard.data";
 import { useAtomValue, useSetAtom } from "jotai";
 import { selectPlanAtom, selected_planId_atom } from "@/store";
+import { PlanModel } from "@/comman/model/plan";
 
 type Props = {
-  data: PlanType;
+  data: PlanModel;
 };
 
 export default function PlanCard({ data }: Props) {
-  const { title, memo, interval, status, id } = data;
+  const { title, memo, interval, _id } = data;
   const selectPlanId = useAtomValue(selected_planId_atom);
   const setSelectedPlan = useSetAtom(selectPlanAtom);
   const intervalArray = Array.from({ length: interval }, (_, index) => index);
-  const isActive = selectPlanId === id;
+  const isActive = selectPlanId === _id;
 
   const getPlanMode = () => {
-    if (status === SUCCESS) return SUCCESS;
-    if (status === FAIL) return FAIL;
+    // if (status === SUCCESS) return SUCCESS;
+    // if (status === FAIL) return FAIL;
     if (isActive) return ACTIVE;
     return PENDING;
   };
   const mode = getPlanMode();
 
   const handleCardClick = () => {
-    if (!isActive) {
-      setSelectedPlan(data);
-    }
+    // if (!isActive) {
+    //   setSelectedPlan(data);
+    // }
   };
 
   return (

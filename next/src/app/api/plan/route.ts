@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
 
-export async function GET(req: NextRequest) {
+export async function GET(_: NextRequest) {
   const session = await getServerSession(authOptions);
   const user = session?.user;
 
@@ -11,7 +11,5 @@ export async function GET(req: NextRequest) {
     return new Response("Authentication Error", { status: 401 });
   }
 
-  const date = req.nextUrl.searchParams.get("date") as string;
-
-  return getPlanList(user.id, date).then((data) => NextResponse.json(data));
+  return getPlanList(user.id).then((data) => NextResponse.json(data));
 }
