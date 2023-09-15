@@ -2,26 +2,32 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { getMonthCalendar, getWeeklyCalendar } from "@/comman/utils/calendar";
 import { useAtomValue } from "jotai";
-import { clicked_date_atom, selected_plan_atom } from "@/store";
+import { clicked_date_atom } from "@/store";
+import { SimplePlanModel } from "@/comman/model/plan";
 
 type Props = {
   displayDate: dayjs.Dayjs;
   isWeekly: boolean;
   handleDateClick: (date: string) => void;
+  selectedPlan?: SimplePlanModel;
 };
 
-function CalendarPiker({ displayDate, handleDateClick, isWeekly }: Props) {
+function CalendarPiker({
+  displayDate,
+  handleDateClick,
+  isWeekly,
+  selectedPlan,
+}: Props) {
   const [dateArray, setDateArray] = useState<string[][]>([]);
   const clickedDate = useAtomValue(clicked_date_atom);
-  const plan = useAtomValue(selected_plan_atom);
   const nowMonth = displayDate.month() + 1;
   const today = clickedDate.format("YYYY-MM-DD");
 
   const getDateStyle = (date: string) => {
     if (date === today) return "bg-black text-white z-20";
     if (
-      dayjs(plan?.startDate) <= dayjs(date) &&
-      dayjs(date) <= dayjs(plan?.endDate)
+      dayjs(selectedPlan?.startDate) <= dayjs(date) &&
+      dayjs(date) <= dayjs(selectedPlan?.endDate)
     ) {
       return "bg-gray-300";
     }
@@ -38,8 +44,8 @@ function CalendarPiker({ displayDate, handleDateClick, isWeekly }: Props) {
 
   const isEdgeDate = (date: string) => {
     if (
-      dayjs(plan?.startDate) <= dayjs(date) &&
-      dayjs(date) <= dayjs(plan?.endDate)
+      dayjs(selectedPlan?.startDate) <= dayjs(date) &&
+      dayjs(date) <= dayjs(selectedPlan?.endDate)
     ) {
       return true;
     }
@@ -63,20 +69,24 @@ function CalendarPiker({ displayDate, handleDateClick, isWeekly }: Props) {
             className={liClassFn(date)}
             key={date}
           >
-            {idx !== 0 && isEdgeDate(date) && plan?.startDate !== date && (
-              <div
-                className={`absolute h-full w-[50%] left-0pxr bg-gray-300`}
-              ></div>
-            )}
+            {idx !== 0 &&
+              isEdgeDate(date) &&
+              selectedPlan?.startDate !== date && (
+                <div
+                  className={`absolute h-full w-[50%] left-0pxr bg-gray-300`}
+                ></div>
+              )}
             <div className={circleClassFn(date)}>{date.split("-")[2]}</div>
-            {idx !== 6 && isEdgeDate(date) && plan?.endDate !== date && (
-              <div
-                className={`absolute h-full w-[50%] right-0pxr bg-gray-300`}
-              ></div>
-            )}
-            {plan?.days.includes(idx) && isEdgeDate(date) && (
+            {idx !== 6 &&
+              isEdgeDate(date) &&
+              selectedPlan?.endDate !== date && (
+                <div
+                  className={`absolute h-full w-[50%] right-0pxr bg-gray-300`}
+                ></div>
+              )}
+            {/* {selectedPlan?.days.includes(idx) && isEdgeDate(date) && (
               <span className="bg-red w-4pxr h-4pxr absolute z-10 bottom-[10%] rounded-full"></span>
-            )}
+            )} */}
           </li>
         ))
       )}

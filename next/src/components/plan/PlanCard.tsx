@@ -1,50 +1,50 @@
-import { PlanType } from "@/comman/types";
 import { IoPlaySharp } from "react-icons/io5";
-import { FAIL, PENDING, SUCCESS, ACTIVE } from "@/comman/constants";
-import { DEFAULTMEMO, PlanModeClass } from "./PlanCard.data";
-import { useAtomValue, useSetAtom } from "jotai";
-import { selectPlanAtom, selected_planId_atom } from "@/store";
-import { PlanModel } from "@/comman/model/plan";
+import { DEFAULTMEMO, planColor } from "./PlanCard.data";
+import { FullPlanModel, SimplePlanModel } from "@/comman/model/plan";
+import { CheckBox } from "@/comman/assets";
+import { SUCCESS } from "@/comman/constants";
 
 type Props = {
-  data: PlanModel;
+  data: FullPlanModel;
+  selectedPlanId?: string;
+  selectPlan: (data: SimplePlanModel) => void;
 };
 
-export default function PlanCard({ data }: Props) {
-  const { title, memo, interval, _id } = data;
-  const selectPlanId = useAtomValue(selected_planId_atom);
-  const setSelectedPlan = useSetAtom(selectPlanAtom);
+export default function PlanCard({ data, selectedPlanId, selectPlan }: Props) {
+  const { title, memo, interval, _id, startDate, endDate, status, color } =
+    data;
   const intervalArray = Array.from({ length: interval }, (_, index) => index);
-  const isActive = selectPlanId === _id;
-
-  const getPlanMode = () => {
-    // if (status === SUCCESS) return SUCCESS;
-    // if (status === FAIL) return FAIL;
-    if (isActive) return ACTIVE;
-    return PENDING;
-  };
-  const mode = getPlanMode();
-
-  const handleCardClick = () => {
-    // if (!isActive) {
-    //   setSelectedPlan(data);
-    // }
-  };
+  const isActive = selectedPlanId === _id;
 
   return (
     <li
-      onClick={handleCardClick}
-      className={`relative flex flex-col mt-18pxr px-35pxr rounded-md ${
-        isActive ? PlanModeClass[ACTIVE].shadow : PlanModeClass[mode].shadow
-      } ${isActive || mode === PENDING ? "bg-white" : "bg-gray-400"}`}
+      onClick={() =>
+        !isActive && selectPlan({ _id, startDate, endDate, title })
+      }
+      className={`relative cursor-pointer flex flex-col mt-18pxr px-35pxr rounded-md bg-white ${
+        isActive ? "drop-shadow-xl" : "drop-shadow-sm"
+      }`}
     >
       <div className="relative py-35pxr">
         <div className="flex justify-between mb-15pxr">
-          <h4 className={`ellipsis font-semibold max-w-[190px] text-gray-800`}>
-            {title}
-          </h4>
+          <div className="flex">
+            <h4
+              className={`ellipsis mr-9pxr font-semibold max-w-[180px] ${
+                isActive ? "text-gray-900" : "text-gray-700"
+              }`}
+            >
+              {title.slice(0, 12)}
+            </h4>
+            {status === SUCCESS && (
+              <CheckBox className={`mt-2pxr ${!isActive && "opacity-50"}`} />
+            )}
+          </div>
           <div className="flex items-center">
-            <p className={`mr-12pxr text-lg ${PlanModeClass[mode].text}`}>
+            <p
+              className={`mr-12pxr text-lg ${
+                isActive ? "text-gray-900" : "text-gray-700"
+              }`}
+            >
               {interval}{" "}
               <span className="text-base text-gray-700 font-normal">SET</span>
             </p>
@@ -57,7 +57,9 @@ export default function PlanCard({ data }: Props) {
         <ul className="absolute flex gap-[1%] bottom-0pxr w-full h-7pxr">
           {intervalArray.map((index) => (
             <li
-              className={`w-full ${PlanModeClass[mode].accent}`}
+              className={`w-full ${planColor[color]} ${
+                !isActive && "opacity-50"
+              }`}
               key={index}
             ></li>
           ))}

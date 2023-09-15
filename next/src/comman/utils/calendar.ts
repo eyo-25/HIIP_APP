@@ -26,3 +26,15 @@ export const getMonthCalendar = (displayDate: dayjs.Dayjs) => {
 
   return doubleArray;
 };
+
+export const getCalendar = (displayMonth: number) => {
+  const startDate = dayjs().month(displayMonth).startOf("month");
+  const startDay = startDate.day();
+
+  const calendarArray = Array.from({ length: 42 }, (_, index) => {
+    const currentDate = startDate.add(index - startDay, "d");
+    return currentDate.format("YYYY-MM-DD");
+  });
+
+  return calendarArray;
+};

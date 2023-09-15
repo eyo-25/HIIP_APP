@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import dayjs from "dayjs";
 
 import { IoChevronForward, IoChevronBack } from "react-icons/io5";
 import CalendarPiker from "./CalendarPiker";
 import { useAtomValue, useSetAtom } from "jotai";
 import { clickDateAtom, clicked_date_atom } from "@/store";
+import { CalendarModel, SimplePlanModel } from "@/comman/model/plan";
 
 type Props = {
   isWeekly: boolean;
+  selectedPlan?: SimplePlanModel;
+  calendarArray: CalendarModel[];
 };
 
 const BUTTONCLASS = "w-23pxr h-23pxr cursor-pointer";
 const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
-function Calendar({ isWeekly }: Props) {
+function Calendar({ isWeekly, selectedPlan }: Props) {
   const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(dayjs());
   const nowMonth = displayDate.month() + 1;
   const clickedDate = useAtomValue(clicked_date_atom);
@@ -45,13 +48,13 @@ function Calendar({ isWeekly }: Props) {
     }
   };
 
+  useLayoutEffect(() => {
+    setClickedDate(dayjs());
+  }, []);
+
   useEffect(() => {
     setDisplayDate(clickedDate);
   }, [isWeekly]);
-
-  useEffect(() => {
-    setClickedDate(dayjs());
-  }, []);
 
   return (
     <div className="flex flex-col items-center w-full h-full bg-white drop-shadow-sm">
@@ -81,6 +84,7 @@ function Calendar({ isWeekly }: Props) {
         {
           <CalendarPiker
             displayDate={displayDate}
+            selectedPlan={selectedPlan}
             isWeekly={isWeekly}
             handleDateClick={handleDateClick}
           />
