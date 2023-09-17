@@ -1,8 +1,8 @@
 import useSWR from "swr";
-import { PlanModel } from "../model/plan";
+import { PlanDataModel } from "../model/plan";
 
 export const usePlanList = () => {
-  const { data, error, isLoading } = useSWR<PlanModel[]>(`/api/plan`);
+  const { data, error, isLoading } = useSWR<PlanDataModel[]>(`/api/plan`);
 
   return { data, isLoading, error };
 };

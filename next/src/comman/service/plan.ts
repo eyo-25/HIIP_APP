@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { PlanModel } from "../model/plan";
+import { PlanDataModel, PlanHistory, PlanModel } from "../model/plan";
 import { client } from "./sanity";
 
 export async function getPlanList(userId: string) {
@@ -13,10 +13,22 @@ export async function getPlanList(userId: string) {
     .then(mapPlanList);
 }
 
-function mapPlanList(planList: PlanModel[]) {
-  return planList.map((plan: PlanModel) => ({
-    ...plan,
-    startDate: dayjs(plan.startDate).format("YYYY-MM-DD"),
-    endDate: dayjs(plan.endDate).format("YYYY-MM-DD"),
-  }));
+function mapPlanList(planList: PlanDataModel[]): PlanModel[] {
+  return planList.map((plan) => {
+    const transformedObject = plan?.history?.reduce(
+      (result: { [key: string]: PlanHistory }, item) => {
+        const formatDate = dayjs(item.date).format("YYYY-MM-DD");
+        result[formatDate] = item;
+        return result;
+      },
+      {}
+    );
+
+    return {
+      ...plan,
+      startDate: dayjs(plan.startDate).format("YYYY-MM-DD"),
+      endDate: dayjs(plan.endDate).format("YYYY-MM-DD"),
+      history: transformedObject,
+    };
+  });
 }

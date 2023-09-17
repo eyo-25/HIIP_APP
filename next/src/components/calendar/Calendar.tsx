@@ -1,67 +1,122 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 import { IoChevronForward, IoChevronBack } from "react-icons/io5";
 import CalendarPiker from "./CalendarPiker";
-import { useAtomValue, useSetAtom } from "jotai";
-import { clickDateAtom, clicked_date_atom } from "@/store";
-import { CalendarModel, SimplePlanModel } from "@/comman/model/plan";
+import {
+  CalendarModel,
+  SelectPlanModel,
+  SimplePlanModel,
+} from "@/comman/model/plan";
 
 type Props = {
   isWeekly: boolean;
-  selectedPlan?: SimplePlanModel;
-  calendarArray: CalendarModel[];
+  selectedPlan: SelectPlanModel | null;
+  calendarArray: CalendarModel[][];
+  displayDate: dayjs.Dayjs;
+  setDisplayDate: Dispatch<SetStateAction<dayjs.Dayjs>>;
+  setClickedDate: Dispatch<SetStateAction<dayjs.Dayjs>>;
+  setPlanList: Dispatch<SetStateAction<SimplePlanModel[]>>;
+  clickedDate: dayjs.Dayjs;
+  setDisplayMonth: Dispatch<SetStateAction<number>>;
 };
 
 const BUTTONCLASS = "w-23pxr h-23pxr cursor-pointer";
 const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
-function Calendar({ isWeekly, selectedPlan }: Props) {
-  const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(dayjs());
-  const nowMonth = displayDate.month() + 1;
-  const clickedDate = useAtomValue(clicked_date_atom);
-  const setClickedDate = useSetAtom(clickDateAtom);
+function Calendar({
+  isWeekly,
+  selectedPlan,
+  calendarArray,
+  displayDate,
+  setDisplayDate,
+  setClickedDate,
+  setPlanList,
+  setDisplayMonth,
+  clickedDate,
+}: Props) {
+  const [weekIndex, setWeekIndex] = useState(
+    Math.ceil((clickedDate.date() + clickedDate.startOf("month").day()) / 7) - 1
+  );
 
   const handlePrevClick = () => {
     if (isWeekly) {
-      setDisplayDate(displayDate.subtract(7, "d"));
+      if (
+        weekIndex === 0 ||
+        dayjs(calendarArray[weekIndex][0].date).month() !== displayDate.month()
+      ) {
+        const prevMonth = displayDate.subtract(1, "M");
+        const index =
+          Math.floor(
+            (prevMonth.startOf("month").day() +
+              prevMonth.endOf("month").date()) /
+              7
+          ) - 1;
+        setDisplayDate(prevMonth);
+        setDisplayMonth(prevMonth.month());
+        setWeekIndex(index);
+      } else {
+        setWeekIndex((prev) => prev - 1);
+      }
     } else {
-      setDisplayDate(displayDate.subtract(1, "M"));
+      const prevMonth = displayDate.subtract(1, "M");
+      setDisplayDate(prevMonth);
+      setDisplayMonth(prevMonth.month());
+      setWeekIndex(0);
     }
   };
   const handleNextClick = () => {
     if (isWeekly) {
-      setDisplayDate(displayDate.add(7, "d"));
+      if (
+        weekIndex === 5 ||
+        dayjs(calendarArray[weekIndex + 1][0].date).month() !==
+          displayDate.month()
+      ) {
+        const nextMonth = displayDate.add(1, "M");
+        const index = nextMonth.startOf("month").day() === 0 ? 0 : 1;
+        setDisplayDate(nextMonth);
+        setDisplayMonth(nextMonth.month());
+        setWeekIndex(index);
+      } else {
+        setWeekIndex((prev) => prev + 1);
+      }
     } else {
-      setDisplayDate(displayDate.add(1, "M"));
+      const nextMonth = displayDate.add(1, "M");
+      setDisplayDate(nextMonth);
+      setDisplayMonth(nextMonth.month());
+      setWeekIndex(0);
     }
   };
   const handleTodayClick = () => {
     setDisplayDate(dayjs());
     setClickedDate(dayjs());
-  };
-  const handleDateClick = (date: string) => {
-    const selectedDate = dayjs(date);
-    setClickedDate(selectedDate);
-    if (!isWeekly && nowMonth !== Number(selectedDate.format("M"))) {
-      setDisplayDate(selectedDate);
-    }
+    setDisplayMonth(dayjs().month());
   };
 
-  useLayoutEffect(() => {
-    setClickedDate(dayjs());
-  }, []);
+  const handleDateClick = (date: string, planList: SimplePlanModel[]) => {
+    const selectDate = dayjs(date);
+    const selectMonth = selectDate.month();
+    setClickedDate(selectDate);
+    if (selectMonth + 1 !== selectMonth) {
+      setDisplayDate(selectDate);
+      setDisplayMonth(selectMonth);
+    }
+    setPlanList(planList);
+  };
 
   useEffect(() => {
-    setDisplayDate(clickedDate);
-  }, [isWeekly]);
+    setWeekIndex(
+      Math.ceil((clickedDate.date() + clickedDate.startOf("month").day()) / 7) -
+        1
+    );
+  }, [clickedDate]);
 
   return (
     <div className="flex flex-col items-center w-full h-full bg-white drop-shadow-sm">
       <section className="flex w-[88%] justify-between mb-18pxr">
         <IoChevronBack onClick={handlePrevClick} className={BUTTONCLASS} />
         <p onClick={handleTodayClick} className="font-medium cursor-pointer">
-          {displayDate.format("M")} 월
+          {displayDate.month() + 1} 월
         </p>
         <IoChevronForward onClick={handleNextClick} className={BUTTONCLASS} />
       </section>
@@ -83,10 +138,13 @@ function Calendar({ isWeekly, selectedPlan }: Props) {
         </ul>
         {
           <CalendarPiker
-            displayDate={displayDate}
+            calendarArray={calendarArray}
             selectedPlan={selectedPlan}
             isWeekly={isWeekly}
             handleDateClick={handleDateClick}
+            displayDate={displayDate}
+            clickedDate={clickedDate}
+            weekIndex={weekIndex}
           />
         }
       </section>

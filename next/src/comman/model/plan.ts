@@ -1,6 +1,6 @@
 type ColorType = "red" | "blue";
 
-export interface PlanModel {
+export interface PlanDataModel {
   _id: string;
   title: string;
   memo: string;
@@ -13,6 +13,19 @@ export interface PlanModel {
   history: PlanHistory[];
 }
 
+export interface PlanModel {
+  _id: string;
+  title: string;
+  memo: string;
+  startDate: string;
+  endDate: string;
+  interval: number;
+  isStart: boolean;
+  days: number[];
+  color: ColorType;
+  history: { [key: string]: PlanHistory };
+}
+
 export interface PlanHistory {
   focusSet: number;
   breakSet: number;
@@ -22,7 +35,7 @@ export interface PlanHistory {
   date: string;
 }
 
-export interface FullPlanModel extends PlanModel {
+export interface FullPlanModel extends PlanDataModel {
   status: "pending" | "success" | "fail";
 }
 
@@ -33,6 +46,15 @@ export interface SimplePlanModel {
   color: ColorType;
   _id: string;
   status: string;
+  startDate: string;
+  endDate: string;
+}
+
+export interface SelectPlanModel {
+  title: string;
+  _id: string;
+  startDate: string;
+  endDate: string;
 }
 
 export interface CalendarModel {

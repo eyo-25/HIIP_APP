@@ -1,13 +1,13 @@
 import { IoPlaySharp } from "react-icons/io5";
 import { DEFAULTMEMO, planColor } from "./PlanCard.data";
-import { FullPlanModel, SimplePlanModel } from "@/comman/model/plan";
+import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
 import { CheckBox } from "@/comman/assets";
 import { SUCCESS } from "@/comman/constants";
 
 type Props = {
-  data: FullPlanModel;
+  data: SimplePlanModel;
   selectedPlanId?: string;
-  selectPlan: (data: SimplePlanModel) => void;
+  selectPlan: (data: SelectPlanModel) => void;
 };
 
 export default function PlanCard({ data, selectedPlanId, selectPlan }: Props) {
@@ -19,7 +19,7 @@ export default function PlanCard({ data, selectedPlanId, selectPlan }: Props) {
   return (
     <li
       onClick={() =>
-        !isActive && selectPlan({ _id, startDate, endDate, title })
+        !isActive && selectPlan({ title, _id, startDate, endDate })
       }
       className={`relative cursor-pointer flex flex-col mt-18pxr px-35pxr rounded-md bg-white ${
         isActive ? "drop-shadow-xl" : "drop-shadow-sm"
@@ -29,9 +29,9 @@ export default function PlanCard({ data, selectedPlanId, selectPlan }: Props) {
         <div className="flex justify-between mb-15pxr">
           <div className="flex">
             <h4
-              className={`ellipsis mr-9pxr font-semibold max-w-[180px] ${
-                isActive ? "text-gray-900" : "text-gray-700"
-              }`}
+              className={
+                "ellipsis mr-9pxr font-semibold max-w-[180px] text-gray-900"
+              }
             >
               {title.slice(0, 12)}
             </h4>
@@ -40,11 +40,7 @@ export default function PlanCard({ data, selectedPlanId, selectPlan }: Props) {
             )}
           </div>
           <div className="flex items-center">
-            <p
-              className={`mr-12pxr text-lg ${
-                isActive ? "text-gray-900" : "text-gray-700"
-              }`}
-            >
+            <p className={"mr-12pxr text-lg text-gray-900"}>
               {interval}{" "}
               <span className="text-base text-gray-700 font-normal">SET</span>
             </p>
