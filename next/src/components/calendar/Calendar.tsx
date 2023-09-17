@@ -1,154 +1,124 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import CalendarPicker from "./CalendarPicker";
 import dayjs from "dayjs";
-
-import { IoChevronForward, IoChevronBack } from "react-icons/io5";
-import CalendarPiker from "./CalendarPiker";
 import {
+  CalendaMemoModel,
   CalendarModel,
+  PlanModel,
   SelectPlanModel,
   SimplePlanModel,
 } from "@/comman/model/plan";
+import { getCalendar } from "@/comman/utils/calendar";
+import { calculatePlanStatus, filterPlansByDate } from "./calendarUtils";
 
 type Props = {
+  planListData: PlanModel[];
   isWeekly: boolean;
-  selectedPlan: SelectPlanModel | null;
-  calendarArray: CalendarModel[][];
-  displayDate: dayjs.Dayjs;
-  setDisplayDate: Dispatch<SetStateAction<dayjs.Dayjs>>;
-  setClickedDate: Dispatch<SetStateAction<dayjs.Dayjs>>;
+  selectedPlan?: SelectPlanModel;
   setPlanList: Dispatch<SetStateAction<SimplePlanModel[]>>;
-  clickedDate: dayjs.Dayjs;
-  setDisplayMonth: Dispatch<SetStateAction<number>>;
 };
 
-const BUTTONCLASS = "w-23pxr h-23pxr cursor-pointer";
-const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
-
 function Calendar({
+  planListData,
   isWeekly,
   selectedPlan,
-  calendarArray,
-  displayDate,
-  setDisplayDate,
-  setClickedDate,
   setPlanList,
-  setDisplayMonth,
-  clickedDate,
 }: Props) {
-  const [weekIndex, setWeekIndex] = useState(
-    Math.ceil((clickedDate.date() + clickedDate.startOf("month").day()) / 7) - 1
-  );
+  const today = useMemo(() => dayjs(), []);
+  const [calendarMemo, setCalendarMemo] = useState<CalendaMemoModel>({});
+  const [calendarArray, setCalendarArray] = useState<CalendarModel[][]>([]);
+  const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(today);
+  const [clickedDate, setClickedDate] = useState<dayjs.Dayjs>(today);
+  const [displayMonth, setDisplayMonth] = useState<number>(today.month());
 
-  const handlePrevClick = () => {
-    if (isWeekly) {
-      if (
-        weekIndex === 0 ||
-        dayjs(calendarArray[weekIndex][0].date).month() !== displayDate.month()
-      ) {
-        const prevMonth = displayDate.subtract(1, "M");
-        const index =
-          Math.floor(
-            (prevMonth.startOf("month").day() +
-              prevMonth.endOf("month").date()) /
-              7
-          ) - 1;
-        setDisplayDate(prevMonth);
-        setDisplayMonth(prevMonth.month());
-        setWeekIndex(index);
-      } else {
-        setWeekIndex((prev) => prev - 1);
-      }
-    } else {
-      const prevMonth = displayDate.subtract(1, "M");
-      setDisplayDate(prevMonth);
-      setDisplayMonth(prevMonth.month());
-      setWeekIndex(0);
+  const updateCalendar = () => {
+    const displayYear = displayDate.year();
+    const displayMonth = displayDate.month();
+    const memoKey = `${displayYear}-${displayMonth}`;
+    if (calendarMemo[memoKey]) {
+      setCalendarArray(calendarMemo[memoKey]);
+      return;
     }
-  };
-  const handleNextClick = () => {
-    if (isWeekly) {
-      if (
-        weekIndex === 5 ||
-        dayjs(calendarArray[weekIndex + 1][0].date).month() !==
-          displayDate.month()
-      ) {
-        const nextMonth = displayDate.add(1, "M");
-        const index = nextMonth.startOf("month").day() === 0 ? 0 : 1;
-        setDisplayDate(nextMonth);
-        setDisplayMonth(nextMonth.month());
-        setWeekIndex(index);
-      } else {
-        setWeekIndex((prev) => prev + 1);
-      }
-    } else {
-      const nextMonth = displayDate.add(1, "M");
-      setDisplayDate(nextMonth);
-      setDisplayMonth(nextMonth.month());
-      setWeekIndex(0);
-    }
-  };
-  const handleTodayClick = () => {
-    setDisplayDate(dayjs());
-    setClickedDate(dayjs());
-    setDisplayMonth(dayjs().month());
-  };
 
-  const handleDateClick = (date: string, planList: SimplePlanModel[]) => {
-    const selectDate = dayjs(date);
-    const selectMonth = selectDate.month();
-    setClickedDate(selectDate);
-    if (selectMonth + 1 !== selectMonth) {
-      setDisplayDate(selectDate);
-      setDisplayMonth(selectMonth);
+    const calendarDates = getCalendar(displayDate);
+
+    const updateCalendarArray = calendarDates.map((date: string) => {
+      const calendarDate = dayjs(date);
+
+      const filteredPlanList = filterPlansByDate(calendarDate, planListData);
+      const colors = filteredPlanList.map((plan) => plan.color);
+
+      const updatedPlans = filteredPlanList.map((plan) => {
+        let planStatus = calculatePlanStatus(plan, date, today);
+
+        const { title, memo, interval, color, _id, startDate, endDate } = plan;
+        return {
+          title,
+          memo,
+          interval,
+          color,
+          _id,
+          status: planStatus,
+          startDate,
+          endDate,
+        };
+      });
+
+      if (calendarDate.isSame(clickedDate, "day") && 0 < updatedPlans.length) {
+        setPlanList(updatedPlans);
+      }
+      return { date, list: updatedPlans, colors };
+    });
+
+    const doubleArray: CalendarModel[][] = [];
+    for (let i = 0; i < updateCalendarArray.length; i += 7) {
+      doubleArray.push(updateCalendarArray.slice(i, i + 7));
     }
-    setPlanList(planList);
+    setCalendarArray(doubleArray);
+
+    setCalendarMemo((memo) => {
+      const newArray = { ...memo };
+      newArray[memoKey] = doubleArray;
+      return newArray;
+    });
   };
 
   useEffect(() => {
-    setWeekIndex(
-      Math.ceil((clickedDate.date() + clickedDate.startOf("month").day()) / 7) -
-        1
-    );
-  }, [clickedDate]);
+    if (!planListData) return;
+    updateCalendar();
+  }, [planListData, displayMonth]);
+
+  const handleTodayClick = () => {
+    setDisplayDate(today);
+    setClickedDate(today);
+    setDisplayMonth(today.month());
+    const displayYear = today.year();
+    const displayMonth = today.month();
+    const memoKey = `${displayYear}-${displayMonth}`;
+    const index = Math.ceil((today.day() + today.date()) / 7);
+
+    setPlanList(calendarMemo[memoKey][index][today.day()].list);
+  };
 
   return (
-    <div className="flex flex-col items-center w-full h-full bg-white drop-shadow-sm">
-      <section className="flex w-[88%] justify-between mb-18pxr">
-        <IoChevronBack onClick={handlePrevClick} className={BUTTONCLASS} />
-        <p onClick={handleTodayClick} className="font-medium cursor-pointer">
-          {displayDate.month() + 1} 월
-        </p>
-        <IoChevronForward onClick={handleNextClick} className={BUTTONCLASS} />
-      </section>
-      <section
-        className={`w-full px-7pxr font-medium ${
-          isWeekly ? "h-[59%]" : "h-[88%]"
-        }`}
-      >
-        <ul
-          className={`grid grid-cols-7 text-sm ${
-            isWeekly ? "h-[40%]" : "h-[9%]"
-          }`}
-        >
-          {DAYS.map((day) => (
-            <li className="mx-auto" key={day}>
-              {day}
-            </li>
-          ))}
-        </ul>
-        {
-          <CalendarPiker
-            calendarArray={calendarArray}
-            selectedPlan={selectedPlan}
-            isWeekly={isWeekly}
-            handleDateClick={handleDateClick}
-            displayDate={displayDate}
-            clickedDate={clickedDate}
-            weekIndex={weekIndex}
-          />
-        }
-      </section>
-    </div>
+    <CalendarPicker
+      isWeekly={isWeekly}
+      selectedPlan={selectedPlan}
+      calendarArray={calendarArray}
+      displayDate={displayDate}
+      clickedDate={clickedDate}
+      setDisplayDate={setDisplayDate}
+      setClickedDate={setClickedDate}
+      setPlanList={setPlanList}
+      setDisplayMonth={setDisplayMonth}
+      handleTodayClick={handleTodayClick}
+    />
   );
 }
 

@@ -26,6 +26,17 @@ export interface PlanModel {
   history: { [key: string]: PlanHistory };
 }
 
+export interface SimplePlanModel {
+  title: string;
+  memo: string;
+  interval: number;
+  color: ColorType;
+  _id: string;
+  status: string;
+  startDate: string;
+  endDate: string;
+}
+
 export interface PlanHistory {
   focusSet: number;
   breakSet: number;
@@ -39,17 +50,6 @@ export interface FullPlanModel extends PlanDataModel {
   status: "pending" | "success" | "fail";
 }
 
-export interface SimplePlanModel {
-  title: string;
-  memo: string;
-  interval: number;
-  color: ColorType;
-  _id: string;
-  status: string;
-  startDate: string;
-  endDate: string;
-}
-
 export interface SelectPlanModel {
   title: string;
   _id: string;
@@ -61,4 +61,8 @@ export interface CalendarModel {
   date: string;
   list: SimplePlanModel[];
   colors: ColorType[];
+}
+
+export interface CalendaMemoModel {
+  [key: string]: CalendarModel[][];
 }

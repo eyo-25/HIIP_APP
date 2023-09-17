@@ -5,16 +5,16 @@ import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
 type Props = {
   planList: SimplePlanModel[];
   selectedPlanId?: string;
-  selectPlan: (data: SelectPlanModel) => void;
+  selectPlan: (planData: SelectPlanModel) => void;
 };
 
 function PlanListBoard({ planList, selectedPlanId, selectPlan }: Props) {
   return (
     <ul className="pb-[40%] sroll h-full w-full px-[5%] mx-auto overflow-hidden">
-      {planList.map((plan: SimplePlanModel, i: number) => (
+      {planList.map((planData: SimplePlanModel) => (
         <PlanCard
-          key={i}
-          data={plan}
+          key={planData._id}
+          planData={planData}
           selectedPlanId={selectedPlanId}
           selectPlan={selectPlan}
         />

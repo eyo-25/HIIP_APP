@@ -25,13 +25,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={roboto.className}>
       <body className="bg-gray-400 w-full h-screen">
-        <main className="relative overflow-hidden mx-auto h-screen w-full max-w-md bg-gray-200">
+        <div className="relative overflow-hidden mx-auto h-screen w-full max-w-md bg-gray-200">
           <AuthContext>
             <SwrconfigContext>
               <AuthGardContext>{children}</AuthGardContext>
             </SwrconfigContext>
           </AuthContext>
-        </main>
+        </div>
       </body>
     </html>
   );

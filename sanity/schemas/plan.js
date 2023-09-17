@@ -40,6 +40,11 @@ export default {
       type: 'boolean',
     },
     {
+      title: 'Color',
+      name: 'color',
+      type: 'string',
+    },
+    {
       title: 'Days',
       name: 'days',
       type: 'array',

@@ -5,14 +5,18 @@ import { CheckBox } from "@/comman/assets";
 import { SUCCESS } from "@/comman/constants";
 
 type Props = {
-  data: SimplePlanModel;
+  planData: SimplePlanModel;
   selectedPlanId?: string;
-  selectPlan: (data: SelectPlanModel) => void;
+  selectPlan: (planData: SelectPlanModel) => void;
 };
 
-export default function PlanCard({ data, selectedPlanId, selectPlan }: Props) {
+export default function PlanCard({
+  planData,
+  selectedPlanId,
+  selectPlan,
+}: Props) {
   const { title, memo, interval, _id, startDate, endDate, status, color } =
-    data;
+    planData;
   const intervalArray = Array.from({ length: interval }, (_, index) => index);
   const isActive = selectedPlanId === _id;
 
