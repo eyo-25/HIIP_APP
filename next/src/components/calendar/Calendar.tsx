@@ -1,92 +1,124 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import CalendarPicker from "./CalendarPicker";
 import dayjs from "dayjs";
-
-import { IoChevronForward, IoChevronBack } from "react-icons/io5";
-import CalendarPiker from "./CalendarPiker";
-import { useAtomValue, useSetAtom } from "jotai";
-import { clickDateAtom, clicked_date_atom } from "@/store";
+import {
+  CalendaMemoModel,
+  CalendarModel,
+  PlanModel,
+  SelectPlanModel,
+  SimplePlanModel,
+} from "@/comman/model/plan";
+import { getCalendar } from "@/comman/utils/calendar";
+import { calculatePlanStatus, filterPlansByDate } from "./calendarUtils";
 
 type Props = {
+  planListData: PlanModel[];
   isWeekly: boolean;
+  selectedPlan?: SelectPlanModel;
+  setPlanList: Dispatch<SetStateAction<SimplePlanModel[]>>;
 };
 
-const BUTTONCLASS = "w-23pxr h-23pxr cursor-pointer";
-const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
+function Calendar({
+  planListData,
+  isWeekly,
+  selectedPlan,
+  setPlanList,
+}: Props) {
+  const today = useMemo(() => dayjs(), []);
+  const [calendarMemo, setCalendarMemo] = useState<CalendaMemoModel>({});
+  const [calendarArray, setCalendarArray] = useState<CalendarModel[][]>([]);
+  const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(today);
+  const [clickedDate, setClickedDate] = useState<dayjs.Dayjs>(today);
+  const [displayMonth, setDisplayMonth] = useState<number>(today.month());
 
-function Calendar({ isWeekly }: Props) {
-  const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(dayjs());
-  const nowMonth = displayDate.month() + 1;
-  const clickedDate = useAtomValue(clicked_date_atom);
-  const setClickedDate = useSetAtom(clickDateAtom);
+  const updateCalendar = () => {
+    const displayYear = displayDate.year();
+    const displayMonth = displayDate.month();
+    const memoKey = `${displayYear}-${displayMonth}`;
+    if (calendarMemo[memoKey]) {
+      setCalendarArray(calendarMemo[memoKey]);
+      return;
+    }
 
-  const handlePrevClick = () => {
-    if (isWeekly) {
-      setDisplayDate(displayDate.subtract(7, "d"));
-    } else {
-      setDisplayDate(displayDate.subtract(1, "M"));
+    const calendarDates = getCalendar(displayDate);
+
+    const updateCalendarArray = calendarDates.map((date: string) => {
+      const calendarDate = dayjs(date);
+
+      const filteredPlanList = filterPlansByDate(calendarDate, planListData);
+      const colors = filteredPlanList.map((plan) => plan.color);
+
+      const updatedPlans = filteredPlanList.map((plan) => {
+        let planStatus = calculatePlanStatus(plan, date, today);
+
+        const { title, memo, interval, color, _id, startDate, endDate } = plan;
+        return {
+          title,
+          memo,
+          interval,
+          color,
+          _id,
+          status: planStatus,
+          startDate,
+          endDate,
+        };
+      });
+
+      if (calendarDate.isSame(clickedDate, "day") && 0 < updatedPlans.length) {
+        setPlanList(updatedPlans);
+      }
+      return { date, list: updatedPlans, colors };
+    });
+
+    const doubleArray: CalendarModel[][] = [];
+    for (let i = 0; i < updateCalendarArray.length; i += 7) {
+      doubleArray.push(updateCalendarArray.slice(i, i + 7));
     }
+    setCalendarArray(doubleArray);
+
+    setCalendarMemo((memo) => {
+      const newArray = { ...memo };
+      newArray[memoKey] = doubleArray;
+      return newArray;
+    });
   };
-  const handleNextClick = () => {
-    if (isWeekly) {
-      setDisplayDate(displayDate.add(7, "d"));
-    } else {
-      setDisplayDate(displayDate.add(1, "M"));
-    }
-  };
+
+  useEffect(() => {
+    if (!planListData) return;
+    updateCalendar();
+  }, [planListData, displayMonth]);
+
   const handleTodayClick = () => {
-    setDisplayDate(dayjs());
-    setClickedDate(dayjs());
-  };
-  const handleDateClick = (date: string) => {
-    const selectedDate = dayjs(date);
-    setClickedDate(selectedDate);
-    if (!isWeekly && nowMonth !== Number(selectedDate.format("M"))) {
-      setDisplayDate(selectedDate);
-    }
-  };
+    setDisplayDate(today);
+    setClickedDate(today);
+    setDisplayMonth(today.month());
+    const displayYear = today.year();
+    const displayMonth = today.month();
+    const memoKey = `${displayYear}-${displayMonth}`;
+    const index = Math.ceil((today.day() + today.date()) / 7);
 
-  useEffect(() => {
-    setDisplayDate(clickedDate);
-  }, [isWeekly]);
-
-  useEffect(() => {
-    setClickedDate(dayjs());
-  }, []);
+    setPlanList(calendarMemo[memoKey][index][today.day()].list);
+  };
 
   return (
-    <div className="flex flex-col items-center w-full h-full bg-white drop-shadow-sm">
-      <section className="flex w-[88%] justify-between mb-18pxr">
-        <IoChevronBack onClick={handlePrevClick} className={BUTTONCLASS} />
-        <p onClick={handleTodayClick} className="font-medium cursor-pointer">
-          {displayDate.format("M")} 월
-        </p>
-        <IoChevronForward onClick={handleNextClick} className={BUTTONCLASS} />
-      </section>
-      <section
-        className={`w-full px-7pxr font-medium ${
-          isWeekly ? "h-[59%]" : "h-[88%]"
-        }`}
-      >
-        <ul
-          className={`grid grid-cols-7 text-sm ${
-            isWeekly ? "h-[40%]" : "h-[9%]"
-          }`}
-        >
-          {DAYS.map((day) => (
-            <li className="mx-auto" key={day}>
-              {day}
-            </li>
-          ))}
-        </ul>
-        {
-          <CalendarPiker
-            displayDate={displayDate}
-            isWeekly={isWeekly}
-            handleDateClick={handleDateClick}
-          />
-        }
-      </section>
-    </div>
+    <CalendarPicker
+      isWeekly={isWeekly}
+      selectedPlan={selectedPlan}
+      calendarArray={calendarArray}
+      displayDate={displayDate}
+      clickedDate={clickedDate}
+      setDisplayDate={setDisplayDate}
+      setClickedDate={setClickedDate}
+      setPlanList={setPlanList}
+      setDisplayMonth={setDisplayMonth}
+      handleTodayClick={handleTodayClick}
+    />
   );
 }
 
