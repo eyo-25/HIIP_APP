@@ -13,7 +13,6 @@ export function useMouseHandlers(
   const handleMouseDown = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     setMouseDownClientY(e.clientY);
   };
-
   useEffect(() => {
     const distanceY = mouseDownClientY - mouseUpClientY;
     if (isWeekly && distanceY < -20) {

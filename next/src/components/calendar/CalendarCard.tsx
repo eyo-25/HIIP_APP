@@ -10,6 +10,7 @@ type Props = {
   handleDateClick: (date: string, planList: SimplePlanModel[]) => void;
   data: CalendarModel;
   idx: number;
+  weekIndex: number;
   selectedPlan?: SelectPlanModel;
   clickedDate: dayjs.Dayjs;
   displayDate: dayjs.Dayjs;
@@ -37,12 +38,12 @@ function CalendarCard({
     return "";
   };
 
-  const liClassFn = (date: string) => {
+  const liClassName = (date: string) => {
     return `relative flex-center mx-auto my-[8%] cursor-pointer w-full ${
       Number(date.split("-")[1]) !== displayDate.month() + 1 && "text-gray-600"
     }`;
   };
-  const circleClassFn = (date: string) => {
+  const circleClassName = (date: string) => {
     return `z-10 flex-center h-full w-[64%] rounded-full ${getDateStyle(date)}`;
   };
 
@@ -59,13 +60,13 @@ function CalendarCard({
   return (
     <li
       onClick={() => handleDateClick(date, list)}
-      className={liClassFn(date)}
+      className={liClassName(date)}
       key={date}
     >
       {idx !== 0 && isEdgeDate(date) && selectedPlan?.startDate !== date && (
         <div className={`absolute h-full w-[50%] left-0pxr bg-gray-300`}></div>
       )}
-      <div className={circleClassFn(date)}>{date.split("-")[2]}</div>
+      <div className={circleClassName(date)}>{date.split("-")[2]}</div>
       {idx !== 6 && isEdgeDate(date) && selectedPlan?.endDate !== date && (
         <div className={`absolute h-full w-[50%] right-0pxr bg-gray-300`}></div>
       )}

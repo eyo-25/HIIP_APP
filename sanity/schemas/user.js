@@ -22,6 +22,7 @@ export default {
   preview: {
     select: {
       title: 'email',
+      subtitle: 'name',
     },
   },
 }

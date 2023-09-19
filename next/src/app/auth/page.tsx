@@ -1,5 +1,4 @@
 import { getProviders } from "next-auth/react";
-
 import AuthButton from "@/components/ui/AuthButton";
 import { Buttons } from "./Auth.data";
 

@@ -5,7 +5,6 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import CalendarPicker from "./CalendarPicker";
 import dayjs from "dayjs";
 import {
   CalendaMemoModel,
@@ -14,8 +13,13 @@ import {
   SelectPlanModel,
   SimplePlanModel,
 } from "@/comman/model/plan";
+import CalendarPicker from "./CalendarPicker";
 import { getCalendar } from "@/comman/utils/calendar";
-import { calculatePlanStatus, filterPlansByDate } from "./calendarUtils";
+import {
+  calculatePlanStatus,
+  dateMemoKey,
+  filterPlansByDate,
+} from "./calendarUtils";
 
 type Props = {
   planListData: PlanModel[];
@@ -38,9 +42,7 @@ function Calendar({
   const [displayMonth, setDisplayMonth] = useState<number>(today.month());
 
   const updateCalendar = () => {
-    const displayYear = displayDate.year();
-    const displayMonth = displayDate.month();
-    const memoKey = `${displayYear}-${displayMonth}`;
+    const memoKey = dateMemoKey(displayDate);
     if (calendarMemo[memoKey]) {
       setCalendarArray(calendarMemo[memoKey]);
       return;
@@ -48,7 +50,7 @@ function Calendar({
 
     const calendarDates = getCalendar(displayDate);
 
-    const updateCalendarArray = calendarDates.map((date: string) => {
+    const updateCalendar = calendarDates.map((date: string) => {
       const calendarDate = dayjs(date);
 
       const filteredPlanList = filterPlansByDate(calendarDate, planListData);
@@ -76,15 +78,15 @@ function Calendar({
       return { date, list: updatedPlans, colors };
     });
 
-    const doubleArray: CalendarModel[][] = [];
-    for (let i = 0; i < updateCalendarArray.length; i += 7) {
-      doubleArray.push(updateCalendarArray.slice(i, i + 7));
+    const updateCalendarArray: CalendarModel[][] = [];
+    for (let i = 0; i < updateCalendar.length; i += 7) {
+      updateCalendarArray.push(updateCalendar.slice(i, i + 7));
     }
-    setCalendarArray(doubleArray);
+    setCalendarArray(updateCalendarArray);
 
     setCalendarMemo((memo) => {
       const newArray = { ...memo };
-      newArray[memoKey] = doubleArray;
+      newArray[memoKey] = updateCalendarArray;
       return newArray;
     });
   };
@@ -94,18 +96,6 @@ function Calendar({
     updateCalendar();
   }, [planListData, displayMonth]);
 
-  const handleTodayClick = () => {
-    setDisplayDate(today);
-    setClickedDate(today);
-    setDisplayMonth(today.month());
-    const displayYear = today.year();
-    const displayMonth = today.month();
-    const memoKey = `${displayYear}-${displayMonth}`;
-    const index = Math.ceil((today.day() + today.date()) / 7);
-
-    setPlanList(calendarMemo[memoKey][index][today.day()].list);
-  };
-
   return (
     <CalendarPicker
       isWeekly={isWeekly}
@@ -113,11 +103,11 @@ function Calendar({
       calendarArray={calendarArray}
       displayDate={displayDate}
       clickedDate={clickedDate}
+      calendarMemo={calendarMemo}
       setDisplayDate={setDisplayDate}
       setClickedDate={setClickedDate}
       setPlanList={setPlanList}
       setDisplayMonth={setDisplayMonth}
-      handleTodayClick={handleTodayClick}
     />
   );
 }
