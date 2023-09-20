@@ -13,7 +13,7 @@ export default function Navbar() {
         {LINKS.map(({ icon, href, title, selectIcon }, idx) => (
           <li key={idx}>
             <Link href={href} className="flex-col-center">
-              {path === href ? selectIcon : icon}
+              {path === `${href}` ? selectIcon : icon}
               <h2
                 className={`text-xs ${
                   path === href ? "text-black" : "text-gray-600"

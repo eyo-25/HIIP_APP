@@ -35,6 +35,16 @@ export default {
       type: 'number',
     },
     {
+      title: 'FocusTime',
+      name: 'focusTime',
+      type: 'number',
+    },
+    {
+      title: 'BreakTime',
+      name: 'breakTime',
+      type: 'number',
+    },
+    {
       title: 'IsStart',
       name: 'isStart',
       type: 'boolean',

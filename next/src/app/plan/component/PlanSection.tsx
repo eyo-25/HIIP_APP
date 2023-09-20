@@ -11,6 +11,7 @@ import {
   SelectPlanModel,
   SimplePlanModel,
 } from "@/comman/model/plan";
+import Link from "next/link";
 
 type Props = {
   planListData: PlanModel[];
@@ -20,12 +21,12 @@ function PlanSection({ planListData }: Props) {
   const [isWeekly, setIsWeekly] = useState<boolean>(false);
   const [planList, setPlanList] = useState<SimplePlanModel[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<SelectPlanModel>();
+
   const { handleTouchStart, handleTouchEnd } = useTouchHandlers(setIsWeekly);
   const { handleMouseUp, handleMouseDown } = useMouseHandlers(
     setIsWeekly,
     isWeekly
   );
-
   const selectPlan = (data: SelectPlanModel) => {
     setSelectedPlan(data);
   };
@@ -59,7 +60,9 @@ function PlanSection({ planListData }: Props) {
           />
         </section>
       </main>
-      <MetaButton />
+      <Link href={"/plan/creat"}>
+        <MetaButton />
+      </Link>
     </>
   );
 }

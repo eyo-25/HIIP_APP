@@ -5,3 +5,7 @@ export { default as EmptyBox } from "./empty-box.svg";
 export { default as XBox } from "./x-box.svg";
 export { default as PencilIcon } from "./pencil-icon.svg";
 export { default as XIcon } from "./x-icon.svg";
+export { default as MemoIcon } from "./memo-icon.svg";
+export { default as PaintIcon } from "./paint-icon.svg";
+export { default as CalendarIcon } from "./calendar-icon.svg";
+export { default as TimerIcon } from "./timer-icon.svg";

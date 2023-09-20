@@ -29,6 +29,7 @@ function mapPlanList(planList: PlanDataModel[]): PlanModel[] {
       startDate: dayjs(plan.startDate).format("YYYY-MM-DD"),
       endDate: dayjs(plan.endDate).format("YYYY-MM-DD"),
       history: transformedObject,
+      memo: plan.memo ? plan.memo : "",
     };
   });
 }

@@ -7,22 +7,22 @@ import dayjs from "dayjs";
 import { planColor } from "../plan/PlanCard.data";
 
 type Props = {
-  handleDateClick: (date: string, planList: SimplePlanModel[]) => void;
   data: CalendarModel;
-  idx: number;
-  weekIndex: number;
-  selectedPlan?: SelectPlanModel;
   clickedDate: dayjs.Dayjs;
   displayDate: dayjs.Dayjs;
+  idx?: number;
+  weekIndex?: number;
+  selectedPlan?: SelectPlanModel;
+  handleDateClick?: (date: string, planList: SimplePlanModel[]) => void;
 };
 
 function CalendarCard({
-  handleDateClick,
   data,
   idx,
   selectedPlan,
   clickedDate,
   displayDate,
+  handleDateClick,
 }: Props) {
   const { date, list, colors } = data;
   const today = clickedDate.format("YYYY-MM-DD");
@@ -59,7 +59,7 @@ function CalendarCard({
 
   return (
     <li
-      onClick={() => handleDateClick(date, list)}
+      onClick={() => handleDateClick && handleDateClick(date, list)}
       className={liClassName(date)}
       key={date}
     >

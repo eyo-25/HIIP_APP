@@ -4,6 +4,7 @@ import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
 import { useRef, useState } from "react";
 import { PencilIcon, XIcon } from "@/comman/assets";
 import useOnClickOutside from "@/comman/hooks/onClickOutside";
+import Link from "next/link";
 
 type Props = {
   planData: SimplePlanModel;
@@ -16,12 +17,11 @@ export default function PlanCard({
   selectedPlanId,
   selectPlan,
 }: Props) {
+  const { title, memo, interval, _id, startDate, endDate, status, color } =
+    planData;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [pressTimer, setPressTimer] = useState<NodeJS.Timeout | null>(null);
   const modalRef = useRef(null);
-
-  const { title, memo, interval, _id, startDate, endDate, status, color } =
-    planData;
   const intervalArray = Array.from({ length: interval }, (_, index) => index);
   const isActive = selectedPlanId === _id;
 
@@ -66,7 +66,9 @@ export default function PlanCard({
           <button
             className={`flex-center w-34pxr h-34pxr rounded-full ${planColor[color]}`}
           >
-            <PencilIcon />
+            <Link href={`/plan/${_id}`}>
+              <PencilIcon />
+            </Link>
           </button>
         </div>
       )}

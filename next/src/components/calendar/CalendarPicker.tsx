@@ -1,7 +1,6 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import dayjs from "dayjs";
 
-import { IoChevronForward, IoChevronBack } from "react-icons/io5";
 import CalendarList from "./CalendarList";
 import {
   CalendaMemoModel,
@@ -10,6 +9,8 @@ import {
   SimplePlanModel,
 } from "@/comman/model/plan";
 import { dateMemoKey } from "./calendarUtils";
+import CalendarHeader from "./CalendarHeader";
+import CalendarDays from "./CalendarDays";
 
 type Props = {
   isWeekly: boolean;
@@ -23,9 +24,6 @@ type Props = {
   setPlanList: Dispatch<SetStateAction<SimplePlanModel[]>>;
   setDisplayMonth: Dispatch<SetStateAction<number>>;
 };
-
-const BUTTONCLASSNAME = "w-23pxr h-23pxr cursor-pointer";
-const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
 function CalendarPicker({
   isWeekly,
@@ -49,7 +47,6 @@ function CalendarPicker({
     setDisplayMonth(newDate.month());
     setWeekIndex(index);
   };
-
   const handleWeeklyPrevClick = () => {
     if (
       weekIndex === 0 ||
@@ -79,7 +76,6 @@ function CalendarPicker({
       setWeekIndex((prev) => prev + 1);
     }
   };
-
   const handlePrevClick = () => {
     if (isWeekly) {
       handleWeeklyPrevClick();
@@ -123,43 +119,27 @@ function CalendarPicker({
 
   return (
     <div className="flex flex-col items-center w-full h-full bg-white drop-shadow-sm">
-      <section className="flex w-[88%] justify-between mb-18pxr">
-        <IoChevronBack onClick={handlePrevClick} className={BUTTONCLASSNAME} />
-        <p onClick={handleTodayClick} className="font-medium cursor-pointer">
-          {displayDate.month() + 1} 월
-        </p>
-        <IoChevronForward
-          onClick={handleNextClick}
-          className={BUTTONCLASSNAME}
-        />
-      </section>
+      <CalendarHeader
+        displayDate={displayDate}
+        handlePrevClick={handlePrevClick}
+        handleTodayClick={handleTodayClick}
+        handleNextClick={handleNextClick}
+      />
       <section
         className={`w-full px-7pxr font-medium ${
           isWeekly ? "h-[59%]" : "h-[88%]"
         }`}
       >
-        <ul
-          className={`grid grid-cols-7 text-sm ${
-            isWeekly ? "h-[40%]" : "h-[9%]"
-          }`}
-        >
-          {DAYS.map((day) => (
-            <li className="mx-auto" key={day}>
-              {day}
-            </li>
-          ))}
-        </ul>
-        {
-          <CalendarList
-            calendarArray={calendarArray}
-            selectedPlan={selectedPlan}
-            isWeekly={isWeekly}
-            displayDate={displayDate}
-            clickedDate={clickedDate}
-            weekIndex={weekIndex}
-            handleDateClick={handleDateClick}
-          />
-        }
+        <CalendarDays isWeekly={isWeekly} />
+        <CalendarList
+          calendarArray={calendarArray}
+          selectedPlan={selectedPlan}
+          isWeekly={isWeekly}
+          displayDate={displayDate}
+          clickedDate={clickedDate}
+          weekIndex={weekIndex}
+          handleDateClick={handleDateClick}
+        />
       </section>
     </div>
   );

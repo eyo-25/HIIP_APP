@@ -15,6 +15,8 @@ export interface PlanDataModel {
   endDate: string;
   interval: number;
   isStart: boolean;
+  focusTime: number;
+  breakTime: number;
   days: number[];
   color: ColorType;
   history: PlanHistory[];
