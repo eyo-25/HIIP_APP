@@ -94,7 +94,8 @@ function CalendarPicker({
   };
   const handleTodayClick = () => {
     const memoKey = dateMemoKey(today);
-    const index = Math.ceil((today.day() + today.date()) / 7);
+    const index = Math.ceil((today.day() + today.date()) / 7) - 1;
+    console.log(index);
     updateCalendarValue(today, index);
     setClickedDate(today);
     setPlanList(calendarMemo[memoKey][index][today.day()].list);

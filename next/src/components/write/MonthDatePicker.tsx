@@ -8,11 +8,17 @@ import { SimplePlanModel } from "@/comman/model/plan";
 
 type Props = {
   isStart: boolean;
+  startDate?: string;
   modalClose: () => void;
   handleDateSet: (date: string) => void;
 };
 
-function MonthDatePicker({ modalClose, handleDateSet, isStart }: Props) {
+function MonthDatePicker({
+  modalClose,
+  handleDateSet,
+  isStart,
+  startDate,
+}: Props) {
   const today = useMemo(() => dayjs(), []);
   const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(today);
   const [clickedDate, setClickedDate] = useState<dayjs.Dayjs>(today);
@@ -30,26 +36,29 @@ function MonthDatePicker({ modalClose, handleDateSet, isStart }: Props) {
   const handleNextClick = () => setDisplayDate((prev) => prev.add(1, "M"));
 
   const handleDateClick = (date: string, planList: SimplePlanModel[]) => {
-    const selectDate = dayjs(date).format("YYYY년 MM월 DD일");
-    handleDateSet(selectDate);
+    const selectDate = dayjs(date);
+    if (selectDate.isBefore(today, "d")) return;
+    handleDateSet(selectDate.format("YYYY-MM-DD"));
     modalClose();
   };
 
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="flex flex-col px-8pxr items-center fixed bg-white w-full h-400pxr bottom-0pxr rounded-t-3xl max-w-md"
+      className="flex flex-col px-8pxr items-center fixed bg-white w-full h-420pxr bottom-0pxr rounded-t-3xl max-w-md"
     >
-      <h5 className="py-25pxr text-gray-700">
-        {isStart ? "시작날짜" : "종료날짜"}를 설정해 주세요
-      </h5>
-      <CalendarHeader
-        handlePrevClick={handlePrevClick}
-        handleTodayClick={handleTodayClick}
-        handleNextClick={handleNextClick}
-        displayDate={displayDate}
-      />
-      <section className="w-full px-7pxr font-medium h-[88%]">
+      <div className="flex flex-col items-center max-w-sm w-full">
+        <h5 className="py-23pxr text-gray-700">
+          {isStart ? "시작날짜" : "종료날짜"}를 설정해 주세요
+        </h5>
+        <CalendarHeader
+          handlePrevClick={handlePrevClick}
+          handleTodayClick={handleTodayClick}
+          handleNextClick={handleNextClick}
+          displayDate={displayDate}
+        />
+      </div>
+      <section className="w-full px-7pxr font-medium h-[88%] max-w-sm">
         <CalendarDays />
         <ul className="grid grid-cols-7 text-sm h-[84%]">
           {calendarArray?.map((date) => (
@@ -57,6 +66,7 @@ function MonthDatePicker({ modalClose, handleDateSet, isStart }: Props) {
               handleDateClick={handleDateClick}
               clickedDate={clickedDate}
               displayDate={displayDate}
+              isModal={true}
               data={{ date: date, list: [], colors: [] }}
               key={date}
             />

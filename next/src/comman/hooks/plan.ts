@@ -8,5 +8,6 @@ export const usePlanList = () => {
     isLoading,
   } = useSWR<PlanModel[]>(`/api/plan`);
 
+  console.log("패치");
   return { planListData, isLoading, error };
 };

@@ -13,6 +13,7 @@ type Props = {
   idx?: number;
   weekIndex?: number;
   selectedPlan?: SelectPlanModel;
+  isModal?: boolean;
   handleDateClick?: (date: string, planList: SimplePlanModel[]) => void;
 };
 
@@ -22,6 +23,7 @@ function CalendarCard({
   selectedPlan,
   clickedDate,
   displayDate,
+  isModal,
   handleDateClick,
 }: Props) {
   const { date, list, colors } = data;
@@ -39,7 +41,15 @@ function CalendarCard({
   };
 
   const liClassName = (date: string) => {
-    return `relative flex-center mx-auto my-[8%] cursor-pointer w-full ${
+    const baseClass =
+      "relative flex-center mx-auto my-[8%] cursor-pointer w-full";
+    if (isModal) {
+      return dayjs().isAfter(dayjs(date))
+        ? `${baseClass} text-gray-600`
+        : baseClass;
+    }
+
+    return `${baseClass} ${
       Number(date.split("-")[1]) !== displayDate.month() + 1 && "text-gray-600"
     }`;
   };

@@ -22,6 +22,18 @@ export interface PlanDataModel {
   history: PlanHistory[];
 }
 
+export interface FormDataModel {
+  title: string;
+  memo: string;
+  startDate: string;
+  endDate: string;
+  interval: number;
+  focusTime: number;
+  breakTime: number;
+  color: ColorType;
+  days: number[];
+}
+
 export interface PlanModel {
   _id: string;
   title: string;

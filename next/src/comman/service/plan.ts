@@ -1,5 +1,10 @@
 import dayjs from "dayjs";
-import { PlanDataModel, PlanHistory, PlanModel } from "../model/plan";
+import {
+  PlanDataModel,
+  PlanHistory,
+  PlanModel,
+  FormDataModel,
+} from "../model/plan";
 import { client } from "./sanity";
 
 export async function getPlanList(userId: string) {
@@ -32,4 +37,18 @@ function mapPlanList(planList: PlanDataModel[]): PlanModel[] {
       memo: plan.memo ? plan.memo : "",
     };
   });
+}
+
+export async function createPlan(userId: string, formData: FormDataModel) {
+  console.log(formData);
+  return client.create(
+    {
+      _type: "plan",
+      author: { _ref: userId },
+      isStart: false,
+      history: [],
+      ...formData,
+    },
+    { autoGenerateArrayKeys: true }
+  );
 }

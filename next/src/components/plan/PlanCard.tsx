@@ -21,7 +21,7 @@ export default function PlanCard({
     planData;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [pressTimer, setPressTimer] = useState<NodeJS.Timeout | null>(null);
-  const modalRef = useRef(null);
+  const cardRef = useRef(null);
   const intervalArray = Array.from({ length: interval }, (_, index) => index);
   const isActive = selectedPlanId === _id;
 
@@ -41,10 +41,11 @@ export default function PlanCard({
       clearTimeout(pressTimer);
     }
   };
-  useOnClickOutside(modalRef, () => setIsModalOpen(false));
+  useOnClickOutside(cardRef, () => setIsModalOpen(false));
 
   return (
     <li
+      ref={cardRef}
       onContextMenu={(e) => e.preventDefault()}
       onClick={handleSelectPlan}
       onMouseDown={handleStartPress}
@@ -56,20 +57,25 @@ export default function PlanCard({
       }`}
     >
       {isModalOpen && (
-        <div
-          ref={modalRef}
-          className="absolute flex top-[-15px] right-20pxr gap-8pxr"
-        >
-          <button className="flex-center w-34pxr h-34pxr bg-gray-600 rounded-full">
-            <XIcon />
-          </button>
-          <button
-            className={`flex-center w-34pxr h-34pxr rounded-full ${planColor[color]}`}
+        <div className="absolute flex top-[-23px] right-20pxr">
+          <Link
+            className="z-20 flex-center w-45pxr h-45pxr"
+            href={`/plan/${_id}`}
           >
-            <Link href={`/plan/${_id}`}>
+            <div className="flex-center w-34pxr h-34pxr rounded-full bg-gray-600">
+              <XIcon />
+            </div>
+          </Link>
+          <Link
+            className="z-20 flex-center w-45pxr h-45pxr"
+            href={`/plan/${_id}`}
+          >
+            <div
+              className={`flex-center w-34pxr h-34pxr rounded-full ${planColor[color]}`}
+            >
               <PencilIcon />
-            </Link>
-          </button>
+            </div>
+          </Link>
         </div>
       )}
       <div className="relative py-35pxr">
