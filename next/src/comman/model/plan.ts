@@ -47,6 +47,21 @@ export interface PlanModel {
   history: { [key: string]: PlanHistory };
 }
 
+export interface PlanDetailModel {
+  _id: string;
+  title: string;
+  memo: string;
+  startDate: string;
+  focusTime: number;
+  breakTime: number;
+  endDate: string;
+  interval: number;
+  isStart: boolean;
+  days: number[];
+  color: ColorType;
+  history: { [key: string]: PlanHistory };
+}
+
 export interface SimplePlanModel {
   title: string;
   memo: string;

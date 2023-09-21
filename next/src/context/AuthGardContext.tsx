@@ -13,7 +13,7 @@ export default function AuthGardContext({ children }: Props) {
   const user = session?.user;
   const path = usePathname();
 
-  if (path === "/auth" || path.startsWith("/plan/")) return <>{children}</>;
+  if (path === "/auth" || path.startsWith("/write")) return <>{children}</>;
 
   return (
     <>

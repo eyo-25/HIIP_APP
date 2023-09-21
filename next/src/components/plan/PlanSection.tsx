@@ -1,17 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PlanHeader from "./PlanHeader";
 import PlanListBoard from "@/components/plan/PlanListBoard";
 import MetaButton from "@/components/ui/MetaButton";
-import { useMouseHandlers } from "../utils/mouseHandlers";
-import { useTouchHandlers } from "../utils/touchHandlers";
 import { booleanStyle } from "@/comman/utils/booleanStyle";
 import Calendar from "@/components/calendar/Calendar";
 import {
+  CalendaMemoModel,
   PlanModel,
   SelectPlanModel,
   SimplePlanModel,
 } from "@/comman/model/plan";
 import Link from "next/link";
+import { useTouchHandlers } from "./touchHandlers";
+import { useMouseHandlers } from "./mouseHandlers";
 
 type Props = {
   planListData: PlanModel[];
@@ -21,6 +22,7 @@ function PlanSection({ planListData }: Props) {
   const [isWeekly, setIsWeekly] = useState<boolean>(false);
   const [planList, setPlanList] = useState<SimplePlanModel[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<SelectPlanModel>();
+  const [calendarMemo, setCalendarMemo] = useState<CalendaMemoModel>({});
 
   const { handleTouchStart, handleTouchEnd } = useTouchHandlers(setIsWeekly);
   const { handleMouseUp, handleMouseDown } = useMouseHandlers(
@@ -50,6 +52,8 @@ function PlanSection({ planListData }: Props) {
             isWeekly={isWeekly}
             selectedPlan={selectedPlan}
             setPlanList={setPlanList}
+            calendarMemo={calendarMemo}
+            setCalendarMemo={setCalendarMemo}
           />
         </section>
         <section className={booleanStyle(isWeekly, "h-[83%]", "h-[50%]")}>
@@ -60,7 +64,7 @@ function PlanSection({ planListData }: Props) {
           />
         </section>
       </main>
-      <Link href={"/plan/creat"}>
+      <Link href={"/write/creat"}>
         <MetaButton />
       </Link>
     </>

@@ -25,29 +25,26 @@ type Props = {
   planListData: PlanModel[];
   isWeekly: boolean;
   selectedPlan?: SelectPlanModel;
+  calendarMemo: CalendaMemoModel;
   setPlanList: Dispatch<SetStateAction<SimplePlanModel[]>>;
+  setCalendarMemo: Dispatch<SetStateAction<CalendaMemoModel>>;
 };
 
 function Calendar({
   planListData,
   isWeekly,
   selectedPlan,
+  calendarMemo,
   setPlanList,
+  setCalendarMemo,
 }: Props) {
   const today = useMemo(() => dayjs(), []);
-  const [calendarMemo, setCalendarMemo] = useState<CalendaMemoModel>({});
   const [calendarArray, setCalendarArray] = useState<CalendarModel[][]>([]);
   const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(today);
   const [clickedDate, setClickedDate] = useState<dayjs.Dayjs>(today);
   const [displayMonth, setDisplayMonth] = useState<number>(today.month());
 
-  const updateCalendar = () => {
-    const memoKey = dateMemoKey(displayDate);
-    if (calendarMemo[memoKey]) {
-      setCalendarArray(calendarMemo[memoKey]);
-      return;
-    }
-
+  const updateCalendar = (isReset: boolean) => {
     const calendarDates = getCalendar(displayDate);
 
     const updateCalendar = calendarDates.map((date: string) => {
@@ -84,17 +81,37 @@ function Calendar({
     }
     setCalendarArray(updateCalendarArray);
 
-    setCalendarMemo((memo) => {
-      const newArray = { ...memo };
-      newArray[memoKey] = updateCalendarArray;
-      return newArray;
-    });
+    const memoKey = dateMemoKey(displayDate);
+    if (isReset) {
+      setCalendarMemo(() => {
+        const newArray: CalendaMemoModel = {};
+        newArray[memoKey] = updateCalendarArray;
+        return newArray;
+      });
+    } else {
+      setCalendarMemo((memo) => {
+        const newArray = { ...memo };
+        newArray[memoKey] = updateCalendarArray;
+        return newArray;
+      });
+    }
   };
 
   useEffect(() => {
+    updateCalendar(true);
+  }, [planListData]);
+
+  useEffect(() => {
     if (!planListData) return;
-    updateCalendar();
-  }, [planListData, displayMonth]);
+
+    const memoKey = dateMemoKey(displayDate);
+    if (calendarMemo[memoKey]) {
+      setCalendarArray(calendarMemo[memoKey]);
+      return;
+    }
+
+    updateCalendar(false);
+  }, [displayMonth]);
 
   return (
     <CalendarPicker

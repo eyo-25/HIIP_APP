@@ -58,17 +58,14 @@ export default function PlanCard({
     >
       {isModalOpen && (
         <div className="absolute flex top-[-23px] right-20pxr">
-          <Link
-            className="z-20 flex-center w-45pxr h-45pxr"
-            href={`/plan/${_id}`}
-          >
+          <button className="z-20 flex-center w-45pxr h-45pxr">
             <div className="flex-center w-34pxr h-34pxr rounded-full bg-gray-600">
               <XIcon />
             </div>
-          </Link>
+          </button>
           <Link
             className="z-20 flex-center w-45pxr h-45pxr"
-            href={`/plan/${_id}`}
+            href={`/write/edit/${_id}`}
           >
             <div
               className={`flex-center w-34pxr h-34pxr rounded-full ${planColor[color]}`}

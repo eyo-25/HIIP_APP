@@ -7,21 +7,14 @@ import CalendarCard from "../calendar/CalendarCard";
 import { SimplePlanModel } from "@/comman/model/plan";
 
 type Props = {
-  isStart: boolean;
-  startDate?: string;
+  isStartDate: boolean;
   modalClose: () => void;
   handleDateSet: (date: string) => void;
 };
 
-function MonthDatePicker({
-  modalClose,
-  handleDateSet,
-  isStart,
-  startDate,
-}: Props) {
+function MonthDatePicker({ modalClose, handleDateSet, isStartDate }: Props) {
   const today = useMemo(() => dayjs(), []);
   const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(today);
-  const [clickedDate, setClickedDate] = useState<dayjs.Dayjs>(today);
   const [calendarArray, setCalendarArray] = useState<string[]>();
 
   useEffect(() => {
@@ -49,7 +42,7 @@ function MonthDatePicker({
     >
       <div className="flex flex-col items-center max-w-sm w-full">
         <h5 className="py-23pxr text-gray-700">
-          {isStart ? "시작날짜" : "종료날짜"}를 설정해 주세요
+          {isStartDate ? "시작날짜" : "종료날짜"}를 설정해 주세요
         </h5>
         <CalendarHeader
           handlePrevClick={handlePrevClick}
@@ -64,9 +57,9 @@ function MonthDatePicker({
           {calendarArray?.map((date) => (
             <CalendarCard
               handleDateClick={handleDateClick}
-              clickedDate={clickedDate}
+              clickedDate={today}
               displayDate={displayDate}
-              isModal={true}
+              displayType="month"
               data={{ date: date, list: [], colors: [] }}
               key={date}
             />

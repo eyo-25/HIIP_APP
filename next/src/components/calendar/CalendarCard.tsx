@@ -13,7 +13,7 @@ type Props = {
   idx?: number;
   weekIndex?: number;
   selectedPlan?: SelectPlanModel;
-  isModal?: boolean;
+  displayType: "month" | "week-month";
   handleDateClick?: (date: string, planList: SimplePlanModel[]) => void;
 };
 
@@ -23,38 +23,33 @@ function CalendarCard({
   selectedPlan,
   clickedDate,
   displayDate,
-  isModal,
+  displayType,
   handleDateClick,
 }: Props) {
   const { date, list, colors } = data;
   const today = clickedDate.format("YYYY-MM-DD");
 
-  const getDateStyle = (date: string) => {
-    if (date === today) return "bg-black text-white z-20";
-    if (
-      dayjs(selectedPlan?.startDate) <= dayjs(date) &&
-      dayjs(date) <= dayjs(selectedPlan?.endDate)
-    ) {
-      return "bg-gray-300";
-    }
-    return "";
-  };
-
   const liClassName = (date: string) => {
-    const baseClass =
-      "relative flex-center mx-auto my-[8%] cursor-pointer w-full";
-    if (isModal) {
-      return dayjs().isAfter(dayjs(date))
-        ? `${baseClass} text-gray-600`
-        : baseClass;
+    const base = "relative flex-center mx-auto my-[8%] cursor-pointer w-full";
+    if (displayType === "month") {
+      return dayjs().isAfter(dayjs(date)) ? `${base} text-gray-600` : base;
     }
 
-    return `${baseClass} ${
+    return `${base} ${
       Number(date.split("-")[1]) !== displayDate.month() + 1 && "text-gray-600"
     }`;
   };
   const circleClassName = (date: string) => {
-    return `z-10 flex-center h-full w-[64%] rounded-full ${getDateStyle(date)}`;
+    const base = "z-10 flex-center h-full w-[64%] rounded-full";
+
+    if (date === today) return `bg-black text-white ${base}`;
+    if (
+      dayjs(selectedPlan?.startDate) <= dayjs(date) &&
+      dayjs(date) <= dayjs(selectedPlan?.endDate)
+    ) {
+      return `bg-gray-300 ${base}`;
+    }
+    return base;
   };
 
   const isEdgeDate = (date: string) => {
@@ -80,14 +75,16 @@ function CalendarCard({
       {idx !== 6 && isEdgeDate(date) && selectedPlan?.endDate !== date && (
         <div className={`absolute h-full w-[50%] right-0pxr bg-gray-300`}></div>
       )}
-      <ul className="absolute bottom-[10%] z-10 flex-center w-full gap-[5%]">
-        {colors.map((color, idx) => (
-          <li
-            key={idx}
-            className={`w-4pxr h-4pxr rounded-full ${planColor[color]}`}
-          ></li>
-        ))}
-      </ul>
+      {date !== today && (
+        <ul className="absolute bottom-[10%] flex-center w-full gap-[5%]">
+          {colors.slice(0, 5).map((color, idx) => (
+            <li
+              key={idx}
+              className={`z-10 w-4pxr h-4pxr rounded-full ${planColor[color]}`}
+            ></li>
+          ))}
+        </ul>
+      )}
     </li>
   );
 }

@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { PlanModel } from "../model/plan";
+import { PlanModel, PlanDetailModel } from "../model/plan";
 
 export const usePlanList = () => {
   const {
@@ -7,7 +7,14 @@ export const usePlanList = () => {
     error,
     isLoading,
   } = useSWR<PlanModel[]>(`/api/plan`);
-
-  console.log("패치");
   return { planListData, isLoading, error };
+};
+
+export const usePlan = (planId: string) => {
+  const {
+    data: planData,
+    error,
+    isLoading,
+  } = useSWR<PlanDetailModel>(`/api/plan/${planId}`);
+  return { planData, isLoading, error };
 };
