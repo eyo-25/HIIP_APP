@@ -35,6 +35,8 @@ function CalendarList({
               handleDateClick={handleDateClick}
               data={data}
               idx={idx}
+              displayType="week-month"
+              weekIndex={weekIndex}
               selectedPlan={selectedPlan}
               clickedDate={clickedDate}
               displayDate={displayDate}
@@ -47,6 +49,8 @@ function CalendarList({
                 handleDateClick={handleDateClick}
                 data={data}
                 idx={idx}
+                displayType="week-month"
+                weekIndex={weekIndex}
                 selectedPlan={selectedPlan}
                 clickedDate={clickedDate}
                 displayDate={displayDate}

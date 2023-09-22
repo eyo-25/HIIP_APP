@@ -1,6 +1,18 @@
+import { CheckBox, EmptyBox, XBox } from "@/comman/assets";
+
 export const planColor = {
   red: "bg-red",
+  orange: "bg-orange",
+  yellow: "bg-yellow",
+  green: "bg-green",
   blue: "bg-blue",
+  purple: "bg-purple",
+};
+
+export const StatusImg = {
+  fail: <XBox />,
+  success: <CheckBox />,
+  pending: <EmptyBox />,
 };
 
 export const DEFAULTMEMO = (

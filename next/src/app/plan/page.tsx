@@ -1,7 +1,7 @@
 "use client";
 
 import { usePlanList } from "@/comman/hooks/plan";
-import PlanContents from "./component/PlanSection";
+import PlanSection from "@/components/plan/PlanSection";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
@@ -14,7 +14,7 @@ function PlanPage() {
 
   return (
     <div className="relative h-[90%] w-full overflow-hidden">
-      {planListData && <PlanContents planListData={planListData} />}
+      {planListData && <PlanSection planListData={planListData} />}
     </div>
   );
 }

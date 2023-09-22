@@ -64,3 +64,9 @@ body {
     display: none;
   }
 }
+
+input,
+textarea {
+  background: none;
+  border: none;
+}

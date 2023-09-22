@@ -5,7 +5,6 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import CalendarPicker from "./CalendarPicker";
 import dayjs from "dayjs";
 import {
   CalendaMemoModel,
@@ -14,41 +13,41 @@ import {
   SelectPlanModel,
   SimplePlanModel,
 } from "@/comman/model/plan";
+import CalendarPicker from "./CalendarPicker";
 import { getCalendar } from "@/comman/utils/calendar";
-import { calculatePlanStatus, filterPlansByDate } from "./calendarUtils";
+import {
+  calculatePlanStatus,
+  dateMemoKey,
+  filterPlansByDate,
+} from "./calendarUtils";
 
 type Props = {
   planListData: PlanModel[];
   isWeekly: boolean;
   selectedPlan?: SelectPlanModel;
+  calendarMemo: CalendaMemoModel;
   setPlanList: Dispatch<SetStateAction<SimplePlanModel[]>>;
+  setCalendarMemo: Dispatch<SetStateAction<CalendaMemoModel>>;
 };
 
 function Calendar({
   planListData,
   isWeekly,
   selectedPlan,
+  calendarMemo,
   setPlanList,
+  setCalendarMemo,
 }: Props) {
   const today = useMemo(() => dayjs(), []);
-  const [calendarMemo, setCalendarMemo] = useState<CalendaMemoModel>({});
   const [calendarArray, setCalendarArray] = useState<CalendarModel[][]>([]);
   const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(today);
   const [clickedDate, setClickedDate] = useState<dayjs.Dayjs>(today);
   const [displayMonth, setDisplayMonth] = useState<number>(today.month());
 
-  const updateCalendar = () => {
-    const displayYear = displayDate.year();
-    const displayMonth = displayDate.month();
-    const memoKey = `${displayYear}-${displayMonth}`;
-    if (calendarMemo[memoKey]) {
-      setCalendarArray(calendarMemo[memoKey]);
-      return;
-    }
-
+  const updateCalendar = (isReset: boolean) => {
     const calendarDates = getCalendar(displayDate);
 
-    const updateCalendarArray = calendarDates.map((date: string) => {
+    const updateCalendar = calendarDates.map((date: string) => {
       const calendarDate = dayjs(date);
 
       const filteredPlanList = filterPlansByDate(calendarDate, planListData);
@@ -76,35 +75,43 @@ function Calendar({
       return { date, list: updatedPlans, colors };
     });
 
-    const doubleArray: CalendarModel[][] = [];
-    for (let i = 0; i < updateCalendarArray.length; i += 7) {
-      doubleArray.push(updateCalendarArray.slice(i, i + 7));
+    const updateCalendarArray: CalendarModel[][] = [];
+    for (let i = 0; i < updateCalendar.length; i += 7) {
+      updateCalendarArray.push(updateCalendar.slice(i, i + 7));
     }
-    setCalendarArray(doubleArray);
+    setCalendarArray(updateCalendarArray);
 
-    setCalendarMemo((memo) => {
-      const newArray = { ...memo };
-      newArray[memoKey] = doubleArray;
-      return newArray;
-    });
+    const memoKey = dateMemoKey(displayDate);
+    if (isReset) {
+      setCalendarMemo(() => {
+        const newArray: CalendaMemoModel = {};
+        newArray[memoKey] = updateCalendarArray;
+        return newArray;
+      });
+    } else {
+      setCalendarMemo((memo) => {
+        const newArray = { ...memo };
+        newArray[memoKey] = updateCalendarArray;
+        return newArray;
+      });
+    }
   };
 
   useEffect(() => {
+    updateCalendar(true);
+  }, [planListData]);
+
+  useEffect(() => {
     if (!planListData) return;
-    updateCalendar();
-  }, [planListData, displayMonth]);
 
-  const handleTodayClick = () => {
-    setDisplayDate(today);
-    setClickedDate(today);
-    setDisplayMonth(today.month());
-    const displayYear = today.year();
-    const displayMonth = today.month();
-    const memoKey = `${displayYear}-${displayMonth}`;
-    const index = Math.ceil((today.day() + today.date()) / 7);
+    const memoKey = dateMemoKey(displayDate);
+    if (calendarMemo[memoKey]) {
+      setCalendarArray(calendarMemo[memoKey]);
+      return;
+    }
 
-    setPlanList(calendarMemo[memoKey][index][today.day()].list);
-  };
+    updateCalendar(false);
+  }, [displayMonth]);
 
   return (
     <CalendarPicker
@@ -113,11 +120,11 @@ function Calendar({
       calendarArray={calendarArray}
       displayDate={displayDate}
       clickedDate={clickedDate}
+      calendarMemo={calendarMemo}
       setDisplayDate={setDisplayDate}
       setClickedDate={setClickedDate}
       setPlanList={setPlanList}
       setDisplayMonth={setDisplayMonth}
-      handleTodayClick={handleTodayClick}
     />
   );
 }

@@ -4,7 +4,7 @@ import { RiKakaoTalkFill } from "react-icons/ri";
 export const Buttons = [
   {
     title: "구글계정으로 시작",
-    icon: <BsGoogle className="w-22pxr h-22pxr" />,
+    icon: <BsGoogle className="ml-2pxr w-22pxr h-22pxr" />,
     provider: "google",
   },
   {
