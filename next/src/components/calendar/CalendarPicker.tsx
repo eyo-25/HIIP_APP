@@ -97,9 +97,11 @@ function CalendarPicker({
     const index = Math.ceil((today.day() + today.date()) / 7) - 1;
     updateCalendarValue(today, index);
     setClickedDate(today);
-    setPlanList(calendarMemo[memoKey][index][today.day()].list);
-  };
 
+    if (calendarMemo[memoKey]) {
+      setPlanList(calendarMemo[memoKey][index][today.day()].list);
+    }
+  };
   const handleDateClick = (date: string, planList: SimplePlanModel[]) => {
     const selectDate = dayjs(date);
     const selectMonth = selectDate.month();

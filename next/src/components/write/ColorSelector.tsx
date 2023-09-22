@@ -1,9 +1,10 @@
+import { ColorType } from "@/comman/model/plan";
 import React from "react";
 
 type Props = {
-  colors: string[];
-  selectedColor: string;
-  handleSelectColor: (color: string) => void;
+  colors: ColorType[];
+  selectedColor: ColorType;
+  handleSelectColor: (color: ColorType) => void;
 };
 
 function ColorSelector({ colors, selectedColor, handleSelectColor }: Props) {

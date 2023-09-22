@@ -11,8 +11,11 @@ type Props = {
 
 function EditPage({ params: { planId } }: Props) {
   const { planData, isLoading, error } = usePlan(planId);
-  console.log(planData);
-  return <>{planData && <PlanWriter planData={planData} />}</>;
+  return (
+    <>
+      <PlanWriter planData={planData} mode={"edit"} planId={planId} />
+    </>
+  );
 }
 
 export default EditPage;

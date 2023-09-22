@@ -5,6 +5,8 @@ import { useRef, useState } from "react";
 import { PencilIcon, XIcon } from "@/comman/assets";
 import useOnClickOutside from "@/comman/hooks/onClickOutside";
 import Link from "next/link";
+import { mutate } from "swr";
+import { removePlan } from "@/comman/hooks/plan";
 
 type Props = {
   planData: SimplePlanModel;
@@ -42,6 +44,14 @@ export default function PlanCard({
     }
   };
   useOnClickOutside(cardRef, () => setIsModalOpen(false));
+  const handleDeleteClick = () => {
+    const ok = confirm("플랜을 삭제하시겠습니까?");
+    if (ok) {
+      removePlan(_id)
+        .then((res) => mutate(`/api/plan`))
+        .catch((err) => alert(err.toString()));
+    }
+  };
 
   return (
     <li
@@ -57,9 +67,12 @@ export default function PlanCard({
       }`}
     >
       {isModalOpen && (
-        <div className="absolute flex top-[-23px] right-20pxr">
-          <button className="z-20 flex-center w-45pxr h-45pxr">
-            <div className="flex-center w-34pxr h-34pxr rounded-full bg-gray-600">
+        <div className="absolute flex top-[-22px] right-15pxr">
+          <button
+            onClick={handleDeleteClick}
+            className="z-20 flex-center w-45pxr h-45pxr"
+          >
+            <div className="flex-center w-34pxr h-34pxr rounded-full drop-shadow-md bg-gray-600">
               <XIcon />
             </div>
           </button>
@@ -68,7 +81,7 @@ export default function PlanCard({
             href={`/write/edit/${_id}`}
           >
             <div
-              className={`flex-center w-34pxr h-34pxr rounded-full ${planColor[color]}`}
+              className={`flex-center drop-shadow-md w-34pxr h-34pxr rounded-full ${planColor[color]}`}
             >
               <PencilIcon />
             </div>

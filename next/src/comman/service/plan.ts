@@ -78,3 +78,34 @@ export async function createPlan(userId: string, formData: FormDataModel) {
     { autoGenerateArrayKeys: true }
   );
 }
+
+export async function updatePlan(planId: string, formData: FormDataModel) {
+  const {
+    title,
+    memo,
+    startDate,
+    endDate,
+    interval,
+    focusTime,
+    breakTime,
+    color,
+    days,
+  } = formData;
+
+  return client
+    .patch(planId)
+    .set({ title: title })
+    .set({ memo: memo })
+    .set({ startDate: startDate })
+    .set({ endDate: endDate })
+    .set({ interval: interval })
+    .set({ focusTime: focusTime })
+    .set({ breakTime: breakTime })
+    .set({ color: color })
+    .set({ days: days })
+    .commit();
+}
+
+export async function deletePlan(planId: string) {
+  return client.transaction().delete(planId).commit();
+}

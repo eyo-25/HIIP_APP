@@ -28,6 +28,7 @@ function CalendarCard({
 }: Props) {
   const { date, list, colors } = data;
   const today = clickedDate.format("YYYY-MM-DD");
+  const isCurrentMonth = Number(date.split("-")[1]) === displayDate.month() + 1;
 
   const liClassName = (date: string) => {
     const base = "relative flex-center mx-auto my-[8%] cursor-pointer w-full";
@@ -35,9 +36,7 @@ function CalendarCard({
       return dayjs().isAfter(dayjs(date)) ? `${base} text-gray-600` : base;
     }
 
-    return `${base} ${
-      Number(date.split("-")[1]) !== displayDate.month() + 1 && "text-gray-600"
-    }`;
+    return `${base} ${!isCurrentMonth && "text-gray-600"}`;
   };
   const circleClassName = (date: string) => {
     const base = "z-10 flex-center h-full w-[64%] rounded-full";
@@ -76,11 +75,15 @@ function CalendarCard({
         <div className={`absolute h-full w-[50%] right-0pxr bg-gray-300`}></div>
       )}
       {date !== today && (
-        <ul className="absolute bottom-[10%] flex-center w-full gap-[5%]">
+        <ul
+          className={`absolute z-20 bottom-[10%] flex-center w-full gap-[5%] ${
+            !isCurrentMonth && "opacity-50"
+          }`}
+        >
           {colors.slice(0, 5).map((color, idx) => (
             <li
               key={idx}
-              className={`z-10 w-4pxr h-4pxr rounded-full ${planColor[color]}`}
+              className={`w-4pxr h-4pxr rounded-full ${planColor[color]}`}
             ></li>
           ))}
         </ul>

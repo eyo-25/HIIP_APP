@@ -4,6 +4,7 @@ import {
   Dispatch,
   FormEvent,
   SetStateAction,
+  useEffect,
   useState,
 } from "react";
 import IconTilte from "./IconTilte";
@@ -14,22 +15,30 @@ import IntervalSetter from "./IntervalSetter";
 import { useRouter } from "next/navigation";
 import ColorSelector from "./ColorSelector";
 import DaySelector from "./DaySelector";
-import { PlanDetailModel } from "@/comman/model/plan";
+import { ColorType, FormDataModel, PlanDetailModel } from "@/comman/model/plan";
+import { mutate } from "swr";
+import { createPlan, updatePlan } from "@/comman/hooks/plan";
 
 type IntervalType = "interval" | "focusTime" | "breakTime";
 type Props = {
+  mode: "edit" | "creat";
   planData?: PlanDetailModel;
   startDate: string;
   endDate: string;
+  isStart: boolean;
+  planId?: string;
   setIsStartDate: Dispatch<SetStateAction<boolean>>;
   setEndDate: Dispatch<SetStateAction<string>>;
   modalOpen: () => void;
 };
 
 function WriteForm({
+  planId,
+  mode,
   planData,
   startDate,
   endDate,
+  isStart,
   setIsStartDate,
   setEndDate,
   modalOpen,
@@ -37,23 +46,27 @@ function WriteForm({
   const router = useRouter();
   const [title, setTitle] = useState<string>(planData ? planData.title : "");
   const [memo, setMemo] = useState<string>(planData ? planData.memo : "");
-  const [selectedColor, setSelectedColor] = useState<string>(
-    planData ? planData.color : "red"
-  );
-  const [selectedDays, setSelectedDays] = useState<number[]>(
-    planData ? planData.days : [dayjs().day()]
-  );
-  const [interval, setInterval] = useState<number>(
-    planData ? planData.interval : 5
-  );
-  const [focusTime, setFocusTime] = useState<number>(
-    planData ? planData.focusTime : 25
-  );
-  const [breakTime, setBreakTime] = useState<number>(
-    planData ? planData.breakTime : 5
-  );
+  const [selectedColor, setSelectedColor] = useState<ColorType>("red");
+  const [selectedDays, setSelectedDays] = useState<number[]>([dayjs().day()]);
+  const [interval, setInterval] = useState<number>(5);
+  const [focusTime, setFocusTime] = useState<number>(25);
+  const [breakTime, setBreakTime] = useState<number>(5);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
+
+  useEffect(() => {
+    if (planData) {
+      const { title, memo, color, days, interval, focusTime, breakTime } =
+        planData;
+      setTitle(title);
+      setMemo(memo);
+      setSelectedColor(color);
+      setSelectedDays(days);
+      setInterval(interval);
+      setFocusTime(focusTime);
+      setBreakTime(breakTime);
+    }
+  }, [planData]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -67,11 +80,11 @@ function WriteForm({
     if (endDate === "") return alert("종료날짜를 설정해 주세요");
     if (dayjs(startDate).isAfter(endDate)) {
       setEndDate("");
-      return alert("시작날짜는 종료날짜와 같거나 적어야 합니다.");
+      return alert("종료날짜는 시작날짜와 같거나 이후로 설정해 주세요.");
     }
     if (selectedDays.length <= 0) return alert("요일을 하루이상 선택해 주세요");
 
-    const formData = {
+    const formData: FormDataModel = {
       title,
       memo,
       startDate,
@@ -83,24 +96,26 @@ function WriteForm({
       days: selectedDays,
     };
 
-    fetch("/api/plan/", {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }) //
-      .then((res) => {
-        if (!res.ok) {
-          setError(`${res.status} ${res.statusText}`);
-          return;
-        }
-        router.push("/plan");
-      })
-      .catch((err) => setError(err.toString()))
-      .finally(() => setLoading(false));
+    if (mode === "creat") {
+      createPlan(formData)
+        .then(() => router.push("/plan"))
+        .catch((err) => setError(err.toString()))
+        .finally(() => setLoading(false));
+    }
+    if (mode === "edit" && planId) {
+      updatePlan(planId, formData)
+        .then(() => {
+          mutate(`/api/plan/${planId}`);
+          router.push("/plan");
+        })
+        .catch((err) => setError(err.toString()))
+        .finally(() => setLoading(false));
+    }
   };
   const handleDayClick = (idx: number) => {
+    if (isStart) {
+      return alert("기록이 시작된 플랜은 날짜를 변경할 수 없습니다.");
+    }
     const isTrue = selectedDays.includes(idx);
 
     if (isTrue) {
@@ -110,6 +125,10 @@ function WriteForm({
     }
   };
   const handleCountUpClick = (value: number, type: IntervalType) => {
+    if (isStart) {
+      return alert("기록이 시작된 플랜은 인터벌 설정을 변경할 수 없습니다.");
+    }
+
     switch (type) {
       case "interval":
         if (value === 10) return;
@@ -128,6 +147,10 @@ function WriteForm({
     }
   };
   const handleCountDownClick = (value: number, type: IntervalType) => {
+    if (isStart) {
+      return alert("기록이 시작된 플랜은 인터벌 설정을 변경할 수 없습니다.");
+    }
+
     switch (type) {
       case "interval":
         if (value === 1) return;
@@ -163,8 +186,15 @@ function WriteForm({
         break;
     }
   };
-  const handleSelectColor = (color: string) => {
+  const handleSelectColor = (color: ColorType) => {
     setSelectedColor(color);
+  };
+  const handleStartDateClick = () => {
+    if (isStart) {
+      return alert("기록이 시작된 플랜은 시작날짜를 변경할 수 없습니다.");
+    }
+    modalOpen();
+    setIsStartDate(true);
   };
 
   return (
@@ -205,10 +235,7 @@ function WriteForm({
               id={"startDate"}
               value={startDate}
               readOnly
-              onClick={() => {
-                modalOpen();
-                setIsStartDate(true);
-              }}
+              onClick={handleStartDateClick}
               className="bg-gray-200 tracking-wide caret-transparent w-240pxr h-27pxr rounded-sm text-center font-normal"
             />
           </TitleContainer>

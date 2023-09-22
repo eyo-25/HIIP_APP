@@ -2,14 +2,8 @@
 
 import PlanWriter from "@/components/write/PlanWriter";
 
-type Props = {
-  params: {
-    slug: string;
-  };
-};
-
-function CreatPage({ params: { slug } }: Props) {
-  return <PlanWriter />;
+function CreatPage() {
+  return <PlanWriter mode={"creat"} />;
 }
 
 export default CreatPage;
