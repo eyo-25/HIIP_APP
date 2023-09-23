@@ -14,7 +14,7 @@ import CalendarDays from "./CalendarDays";
 
 type Props = {
   isWeekly: boolean;
-  selectedPlan?: SelectPlanModel;
+  selectedPlan: SelectPlanModel | null;
   calendarArray: CalendarModel[][];
   displayDate: dayjs.Dayjs;
   clickedDate: dayjs.Dayjs;
@@ -37,10 +37,10 @@ function CalendarPicker({
   setPlanList,
   setDisplayMonth,
 }: Props) {
-  const [weekIndex, setWeekIndex] = useState(
-    Math.floor((dayjs().day() + dayjs().date()) / 7)
-  );
   const today = useMemo(() => dayjs(), []);
+  const [weekIndex, setWeekIndex] = useState(
+    Math.ceil((today.startOf("month").day() + today.date()) / 7) - 1
+  );
 
   const updateCalendarValue = (newDate: dayjs.Dayjs, index: number) => {
     setDisplayDate(newDate);
@@ -54,10 +54,7 @@ function CalendarPicker({
     ) {
       const prevMonth = displayDate.subtract(1, "M");
       const index =
-        Math.floor(
-          (prevMonth.startOf("month").day() + prevMonth.endOf("month").date()) /
-            7
-        ) - 1;
+        Math.ceil((today.startOf("month").day() + today.date()) / 7) - 1;
       updateCalendarValue(prevMonth, index);
     } else {
       setWeekIndex((prev) => prev - 1);
@@ -94,7 +91,8 @@ function CalendarPicker({
   };
   const handleTodayClick = () => {
     const memoKey = dateMemoKey(today);
-    const index = Math.ceil((today.day() + today.date()) / 7) - 1;
+    const index =
+      Math.ceil((today.startOf("month").day() + today.date()) / 7) - 1;
     updateCalendarValue(today, index);
     setClickedDate(today);
 

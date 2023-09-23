@@ -9,7 +9,7 @@ import CalendarCard from "./CalendarCard";
 type Props = {
   isWeekly: boolean;
   handleDateClick: (date: string, planList: SimplePlanModel[]) => void;
-  selectedPlan?: SelectPlanModel;
+  selectedPlan: SelectPlanModel | null;
   calendarArray: CalendarModel[][];
   displayDate: dayjs.Dayjs;
   clickedDate: dayjs.Dayjs;

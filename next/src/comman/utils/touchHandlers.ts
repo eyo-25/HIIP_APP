@@ -1,8 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
-export function useTouchHandlers(
-  setIsWeekly: Dispatch<SetStateAction<boolean>>
-) {
+export function useTouchHandlers(setIsTrue: Dispatch<SetStateAction<boolean>>) {
   const [tochedY, setTochedY] = useState<number>(0);
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -13,10 +11,10 @@ export function useTouchHandlers(
     const distanceY = tochedY - e.changedTouches[0].pageY;
 
     if (distanceY < -30) {
-      setIsWeekly(false);
+      setIsTrue(false);
     }
     if (distanceY > 30) {
-      setIsWeekly(true);
+      setIsTrue(true);
     }
   };
 

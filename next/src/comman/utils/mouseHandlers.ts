@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export function useMouseHandlers(
-  setIsWeekly: Dispatch<SetStateAction<boolean>>,
-  isWeekly: boolean
+  setIsTrue: Dispatch<SetStateAction<boolean>>,
+  isTrue: boolean
 ) {
   const [mouseDownClientY, setMouseDownClientY] = useState<number>(0);
   const [mouseUpClientY, setMouseUpClientY] = useState<number>(0);
@@ -15,11 +15,11 @@ export function useMouseHandlers(
   };
   useEffect(() => {
     const distanceY = mouseDownClientY - mouseUpClientY;
-    if (isWeekly && distanceY < -20) {
-      setIsWeekly(false);
+    if (isTrue && distanceY < -20) {
+      setIsTrue(false);
     }
-    if (!isWeekly && distanceY > 30) {
-      setIsWeekly(true);
+    if (!isTrue && distanceY > 30) {
+      setIsTrue(true);
     }
   }, [mouseUpClientY]);
 

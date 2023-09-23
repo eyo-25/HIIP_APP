@@ -24,7 +24,7 @@ import {
 type Props = {
   planListData: PlanModel[];
   isWeekly: boolean;
-  selectedPlan?: SelectPlanModel;
+  selectedPlan: SelectPlanModel | null;
   calendarMemo: CalendaMemoModel;
   setPlanList: Dispatch<SetStateAction<SimplePlanModel[]>>;
   setCalendarMemo: Dispatch<SetStateAction<CalendaMemoModel>>;
@@ -69,7 +69,7 @@ function Calendar({
         };
       });
 
-      if (calendarDate.isSame(clickedDate, "day") && 0 < updatedPlans.length) {
+      if (calendarDate.isSame(clickedDate, "day")) {
         setPlanList(updatedPlans);
       }
       return { date, list: updatedPlans, colors };

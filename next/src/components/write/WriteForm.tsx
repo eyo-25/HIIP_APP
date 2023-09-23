@@ -17,7 +17,7 @@ import ColorSelector from "./ColorSelector";
 import DaySelector from "./DaySelector";
 import { ColorType, FormDataModel, PlanDetailModel } from "@/comman/model/plan";
 import { mutate } from "swr";
-import { createPlan, updatePlan } from "@/comman/hooks/plan";
+import { createPlan, updatePlan } from "@/comman/hooks";
 
 type IntervalType = "interval" | "focusTime" | "breakTime";
 type Props = {

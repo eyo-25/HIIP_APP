@@ -11,8 +11,8 @@ import {
   SimplePlanModel,
 } from "@/comman/model/plan";
 import Link from "next/link";
-import { useTouchHandlers } from "./touchHandlers";
-import { useMouseHandlers } from "./mouseHandlers";
+import { useMouseHandlers } from "@/comman/utils/mouseHandlers";
+import { useTouchHandlers } from "@/comman/utils/touchHandlers";
 
 type Props = {
   planListData: PlanModel[];
@@ -21,7 +21,9 @@ type Props = {
 function PlanSection({ planListData }: Props) {
   const [isWeekly, setIsWeekly] = useState<boolean>(false);
   const [planList, setPlanList] = useState<SimplePlanModel[]>([]);
-  const [selectedPlan, setSelectedPlan] = useState<SelectPlanModel>();
+  const [selectedPlan, setSelectedPlan] = useState<SelectPlanModel | null>(
+    null
+  );
   const [calendarMemo, setCalendarMemo] = useState<CalendaMemoModel>({});
 
   const { handleTouchStart, handleTouchEnd } = useTouchHandlers(setIsWeekly);
@@ -29,7 +31,7 @@ function PlanSection({ planListData }: Props) {
     setIsWeekly,
     isWeekly
   );
-  const selectPlan = (data: SelectPlanModel) => {
+  const selectPlan = (data: SelectPlanModel | null) => {
     setSelectedPlan(data);
   };
 
@@ -65,7 +67,7 @@ function PlanSection({ planListData }: Props) {
         </section>
       </main>
       <Link href={"/write/creat"}>
-        <MetaButton />
+        <MetaButton mode={"creat"} />
       </Link>
     </>
   );
