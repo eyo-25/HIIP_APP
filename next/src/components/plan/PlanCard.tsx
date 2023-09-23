@@ -3,15 +3,15 @@ import { DEFAULTMEMO, StatusImg, planColor } from "./PlanCard.data";
 import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
 import { useRef, useState } from "react";
 import { PencilIcon, XIcon } from "@/comman/assets";
-import useOnClickOutside from "@/comman/hooks/onClickOutside";
 import Link from "next/link";
 import { mutate } from "swr";
-import { removePlan } from "@/comman/hooks/plan";
+
+import { removePlan, useOnClickOutside } from "@/comman/hooks";
 
 type Props = {
   planData: SimplePlanModel;
   selectedPlanId?: string;
-  selectPlan: (planData: SelectPlanModel) => void;
+  selectPlan: (planData: SelectPlanModel | null) => void;
 };
 
 export default function PlanCard({
@@ -48,7 +48,10 @@ export default function PlanCard({
     const ok = confirm("플랜을 삭제하시겠습니까?");
     if (ok) {
       removePlan(_id)
-        .then((res) => mutate(`/api/plan`))
+        .then((res) => {
+          mutate(`/api/plan`);
+          selectPlan(null);
+        })
         .catch((err) => alert(err.toString()));
     }
   };

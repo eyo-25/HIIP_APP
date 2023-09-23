@@ -1,6 +1,6 @@
 "use client";
 
-import { usePlan } from "@/comman/hooks/plan";
+import { usePlan } from "@/comman/hooks";
 import PlanWriter from "@/components/write/PlanWriter";
 
 type Props = {

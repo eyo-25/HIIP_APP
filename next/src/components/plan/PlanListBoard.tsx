@@ -5,7 +5,7 @@ import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
 type Props = {
   planList: SimplePlanModel[];
   selectedPlanId?: string;
-  selectPlan: (planData: SelectPlanModel) => void;
+  selectPlan: (planData: SelectPlanModel | null) => void;
 };
 
 function PlanListBoard({ planList, selectedPlanId, selectPlan }: Props) {

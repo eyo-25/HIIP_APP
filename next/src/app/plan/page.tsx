@@ -1,6 +1,6 @@
 "use client";
 
-import { usePlanList } from "@/comman/hooks/plan";
+import { usePlanList } from "@/comman/hooks";
 import PlanSection from "@/components/plan/PlanSection";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
