@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HomeHeader from "./HomeHeader";
 import HomeInfo from "./HomeInfo";
 import HomePlanListBoard from "./HomePlanListBoard";
@@ -8,14 +8,41 @@ import { useTouchHandlers } from "@/comman/utils/touchHandlers";
 import { useMouseHandlers } from "@/comman/utils/mouseHandlers";
 import MetaButton from "../ui/MetaButton";
 import Link from "next/link";
+import dayjs from "dayjs";
+import { HomePlanModel } from "@/comman/model/plan";
 
-function HomeSection() {
+type Props = {
+  planListData: HomePlanModel[] | undefined;
+  clickedDate: dayjs.Dayjs;
+  clickedDateSetter: (date: dayjs.Dayjs) => void;
+};
+
+function HomeSection({ planListData, clickedDate, clickedDateSetter }: Props) {
   const [isExtend, setIsExtend] = useState(false);
+  const [planList, setPlanList] = useState<HomePlanModel[]>([]);
   const { handleTouchStart, handleTouchEnd } = useTouchHandlers(setIsExtend);
   const { handleMouseUp, handleMouseDown } = useMouseHandlers(
     setIsExtend,
     isExtend
   );
+  const isListData = planListData && 0 < planListData?.length;
+
+  const planListSetter = (id: string) => {
+    setPlanList((planList) => {
+      const newPlanList = [...planList].sort((a, b) => {
+        if (a._id === id) return -1;
+        if (b._id === id) return 1;
+        return 0;
+      });
+      return newPlanList;
+    });
+  };
+
+  useEffect(() => {
+    if (planListData) {
+      setPlanList(planListData);
+    }
+  }, [planListData]);
 
   return (
     <div
@@ -26,20 +53,27 @@ function HomeSection() {
       onTouchStart={handleTouchStart}
     >
       <section className="w-full h-[12%]">
-        <HomeHeader />
+        <HomeHeader
+          selectedPlan={planList[0]}
+          clickedDate={clickedDate}
+          clickedDateSetter={clickedDateSetter}
+        />
       </section>
       <section className={`w-full ${isExtend ? "h-[19%]" : "h-[48%]"}`}>
         <HomeInfo isExtend={isExtend} />
       </section>
       <section
-        className={`bg-white w-full rounded-t-3xl ${
+        className={`relative bg-white w-full rounded-t-3xl ${
           isExtend ? "h-[69%]" : "h-[40%]"
         }`}
       >
-        <HomePlanListBoard />
+        <HomePlanListBoard
+          planList={planList}
+          planListSetter={planListSetter}
+        />
       </section>
-      <Link href={"/write/creat"}>
-        <MetaButton mode={"creat"} />
+      <Link href={isListData ? "/timer" : "/write/creat"}>
+        <MetaButton mode={isListData ? "play" : "creat"} />
       </Link>
     </div>
   );

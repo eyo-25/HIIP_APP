@@ -14,7 +14,7 @@ function HomeInfo({ isExtend }: Props) {
     <div className="flex flex-col items-center h-full text-white">
       {!isExtend && (
         <div className="flex-center flex-col text-2xl leading-loose h-[78%]">
-          {wiseSaying.map((word, idx) => (
+          {wiseSaying?.map((word, idx) => (
             <p key={idx}>{word}</p>
           ))}
         </div>

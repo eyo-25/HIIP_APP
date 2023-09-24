@@ -62,6 +62,14 @@ export interface PlanDetailModel {
   history: { [key: string]: PlanHistory };
 }
 
+export interface HomePlanModel {
+  title: string;
+  interval: number;
+  color: ColorType;
+  _id: string;
+  status: StatusType;
+}
+
 export interface SimplePlanModel {
   title: string;
   memo: string;

@@ -5,6 +5,8 @@ import {
   PlanModel,
   FormDataModel,
   PlanDetailModel,
+  HomePlanModel,
+  StatusType,
 } from "../model/plan";
 import { client } from "./sanity";
 
@@ -43,6 +45,69 @@ export async function getPlanList(userId: string): Promise<PlanModel[]> {
       }
     )
     .then(mapPlanList);
+}
+
+export async function getDatePlanList(
+  userId: string,
+  date: string
+): Promise<HomePlanModel[]> {
+  const day = dayjs(date).day();
+  const convertDate = `${date}T00:00:00Z`;
+
+  return await client
+    .fetch(
+      `*[_type == "plan" && author._ref == $userId && startDate <= $date && endDate >= $date && $day in days[]] | order(_createdAt desc)`,
+      {
+        userId,
+        date: convertDate,
+        day,
+      }
+    )
+    .then((res) => mapHomePlanList(res, date));
+}
+
+function mapHomePlanList(
+  planList: PlanDataModel[],
+  date: string
+): HomePlanModel[] {
+  const today = dayjs();
+
+  return planList
+    .map((plan) => {
+      const { title, history, interval, color, _id } = plan;
+
+      const filteredHistory = history.find(({ date: recordDate }) =>
+        dayjs(recordDate).isSame(date, "day")
+      );
+
+      let status: StatusType = "pending";
+      const isPastDate = dayjs(date).isBefore(today, "day");
+
+      if (filteredHistory) {
+        status = "success";
+      } else if (isPastDate) {
+        status = "fail";
+      }
+
+      return {
+        title,
+        interval,
+        color,
+        _id,
+        status,
+      };
+    })
+    .sort((a, b) => {
+      if (a.status === b.status) {
+        return 0;
+      } else if (a.status === "pending") {
+        return -1;
+      } else if (b.status === "pending") {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
 }
 
 function mapPlanList(planList: PlanDataModel[]): PlanModel[] {

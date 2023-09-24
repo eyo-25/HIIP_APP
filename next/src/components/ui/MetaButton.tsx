@@ -1,5 +1,6 @@
 import { MetaButtonType } from "@/comman/types/type";
 import { AiOutlinePlus } from "react-icons/ai";
+import { IoPlaySharp } from "react-icons/io5";
 
 type Props = {
   mode: MetaButtonType;
@@ -11,6 +12,9 @@ export default function MetaButton({ mode }: Props) {
       <button className="bg-black rounded-full flex-center w-full h-full">
         {mode === "creat" && (
           <AiOutlinePlus className="text-white w-[50%] h-[50%]" />
+        )}
+        {mode === "play" && (
+          <IoPlaySharp className="text-white ml-5pxr w-[50%] h-[50%]" />
         )}
       </button>
     </div>

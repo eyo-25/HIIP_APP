@@ -1,10 +1,11 @@
+import { HomePlanModel } from "@/comman/model/plan";
 import dayjs from "dayjs";
 import { useState } from "react";
 
 const getHomeCalendar = (date: dayjs.Dayjs) => {
   const newArray: string[] = [];
 
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 3; 0 < i; i--) {
     newArray.push(date.subtract(i, "d").format("YYYY-MM-DD"));
   }
   for (let i = 0; i <= 3; i++) {
@@ -14,28 +15,33 @@ const getHomeCalendar = (date: dayjs.Dayjs) => {
   return newArray;
 };
 
-function HomeHeader() {
+type Props = {
+  selectedPlan: HomePlanModel | undefined;
+  clickedDate: dayjs.Dayjs;
+  clickedDateSetter: (date: dayjs.Dayjs) => void;
+};
+
+function HomeHeader({ clickedDate, selectedPlan, clickedDateSetter }: Props) {
   const [weekArray, setWeekArray] = useState<string[]>(
     getHomeCalendar(dayjs())
   );
-  const [clickedDate, setClickedDate] = useState<dayjs.Dayjs>(dayjs());
 
   const handleDateClick = (date: string) => {
     const seletedDate = dayjs(date);
     setWeekArray(getHomeCalendar(seletedDate));
-    setClickedDate(seletedDate);
+    clickedDateSetter(seletedDate);
   };
   const handleTodayClick = () => {
     const today = dayjs();
     setWeekArray(getHomeCalendar(today));
-    setClickedDate(today);
+    clickedDateSetter(today);
   };
 
   return (
     <div className="flex flex-col w-full h-full px-20pxr text-white">
       <div className="flex items-center justify-between h-[58%] px-5pxr pt-7pxr">
         <p>{clickedDate.month() + 1}월</p>
-        <p>영어시험</p>
+        <p>{selectedPlan ? selectedPlan.title : ""}</p>
         <p className="cursor-pointer" onClick={handleTodayClick}>
           오늘
         </p>
