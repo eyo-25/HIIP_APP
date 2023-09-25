@@ -8,16 +8,13 @@ import { useTouchHandlers } from "@/comman/utils/touchHandlers";
 import { useMouseHandlers } from "@/comman/utils/mouseHandlers";
 import MetaButton from "../ui/MetaButton";
 import Link from "next/link";
-import dayjs from "dayjs";
 import { HomePlanModel } from "@/comman/model/plan";
 
 type Props = {
   planListData: HomePlanModel[] | undefined;
-  clickedDate: dayjs.Dayjs;
-  clickedDateSetter: (date: dayjs.Dayjs) => void;
 };
 
-function HomeSection({ planListData, clickedDate, clickedDateSetter }: Props) {
+function HomeSection({ planListData }: Props) {
   const [isExtend, setIsExtend] = useState(false);
   const [planList, setPlanList] = useState<HomePlanModel[]>([]);
   const { handleTouchStart, handleTouchEnd } = useTouchHandlers(setIsExtend);
@@ -53,14 +50,10 @@ function HomeSection({ planListData, clickedDate, clickedDateSetter }: Props) {
       onTouchStart={handleTouchStart}
     >
       <section className="w-full h-[12%]">
-        <HomeHeader
-          selectedPlan={planList[0]}
-          clickedDate={clickedDate}
-          clickedDateSetter={clickedDateSetter}
-        />
+        <HomeHeader selectedPlan={planList[0]} />
       </section>
       <section className={`w-full ${isExtend ? "h-[19%]" : "h-[48%]"}`}>
-        <HomeInfo isExtend={isExtend} />
+        <HomeInfo isExtend={isExtend} selectedPlan={planList[0]} />
       </section>
       <section
         className={`relative bg-white w-full rounded-t-3xl ${

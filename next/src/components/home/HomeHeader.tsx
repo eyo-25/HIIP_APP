@@ -17,42 +17,25 @@ const getHomeCalendar = (date: dayjs.Dayjs) => {
 
 type Props = {
   selectedPlan: HomePlanModel | undefined;
-  clickedDate: dayjs.Dayjs;
-  clickedDateSetter: (date: dayjs.Dayjs) => void;
 };
 
-function HomeHeader({ clickedDate, selectedPlan, clickedDateSetter }: Props) {
+function HomeHeader({ selectedPlan }: Props) {
   const [weekArray, setWeekArray] = useState<string[]>(
     getHomeCalendar(dayjs())
   );
 
-  const handleDateClick = (date: string) => {
-    const seletedDate = dayjs(date);
-    setWeekArray(getHomeCalendar(seletedDate));
-    clickedDateSetter(seletedDate);
-  };
-  const handleTodayClick = () => {
-    const today = dayjs();
-    setWeekArray(getHomeCalendar(today));
-    clickedDateSetter(today);
-  };
-
   return (
     <div className="flex flex-col w-full h-full px-20pxr text-white">
       <div className="flex items-center justify-between h-[58%] px-5pxr pt-7pxr">
-        <p>{clickedDate.month() + 1}월</p>
+        <p>{dayjs().month() + 1}월</p>
         <p>{selectedPlan ? selectedPlan.title : ""}</p>
-        <p className="cursor-pointer" onClick={handleTodayClick}>
-          오늘
-        </p>
       </div>
       <div className="h-[42%]">
         <ul className="flex h-full items-center justify-between">
           {weekArray.map((day, idx) => (
             <li
               key={day}
-              onClick={() => handleDateClick(day)}
-              className={`flex-center cursor-pointer w-28pxr h-28pxr rounded-full ${
+              className={`flex-center w-28pxr h-28pxr rounded-full ${
                 idx === 3 && "bg-white"
               }`}
             >

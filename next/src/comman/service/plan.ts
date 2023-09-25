@@ -74,7 +74,8 @@ function mapHomePlanList(
 
   return planList
     .map((plan) => {
-      const { title, history, interval, color, _id } = plan;
+      const { title, days, history, interval, color, _id, endDate, startDate } =
+        plan;
 
       const filteredHistory = history.find(({ date: recordDate }) =>
         dayjs(recordDate).isSame(date, "day")
@@ -83,31 +84,34 @@ function mapHomePlanList(
       let status: StatusType = "pending";
       const isPastDate = dayjs(date).isBefore(today, "day");
 
-      if (filteredHistory) {
+      if (filteredHistory && filteredHistory.isSuccess) {
         status = "success";
       } else if (isPastDate) {
         status = "fail";
       }
 
+      const transformedObject = plan?.history?.reduce(
+        (result: { [key: string]: PlanHistory }, item) => {
+          const formatDate = dayjs(item.date).format("YYYY-MM-DD");
+          result[formatDate] = item;
+          return result;
+        },
+        {}
+      );
+
       return {
         title,
+        days,
         interval,
         color,
         _id,
         status,
+        startDate: dayjs(startDate).format("YYYY-MM-DD"),
+        endDate: dayjs(endDate).format("YYYY-MM-DD"),
+        history: transformedObject,
       };
     })
-    .sort((a, b) => {
-      if (a.status === b.status) {
-        return 0;
-      } else if (a.status === "pending") {
-        return -1;
-      } else if (b.status === "pending") {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
+    .filter((data) => data.status === "pending");
 }
 
 function mapPlanList(planList: PlanDataModel[]): PlanModel[] {

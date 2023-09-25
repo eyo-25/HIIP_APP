@@ -22,8 +22,6 @@ export const useDatePlanList = (date: string) => {
     isLoading,
   } = useSWR<HomePlanModel[]>(`/api/plan?date=${date}`);
 
-  console.log(planListData);
-
   return { planListData, isLoading, error };
 };
 

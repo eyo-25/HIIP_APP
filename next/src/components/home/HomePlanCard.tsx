@@ -22,6 +22,7 @@ export default function HomePlanCard({ data, idx, planListSetter }: Props) {
   return (
     <li
       key={data._id}
+      onContextMenu={(e) => e.preventDefault()}
       onClick={handleCardClick}
       className={`relative font-semibold cursor-pointer flex flex-col mb-18pxr px-35pxr rounded-md ${
         isActive ? "drop-shadow-md bg-white" : "drop-shadow-sm bg-gray-200"

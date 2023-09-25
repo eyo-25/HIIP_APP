@@ -16,7 +16,6 @@ export async function GET(req: NextRequest) {
   }
 
   const date = req.nextUrl.searchParams.get("date");
-  console.log(date);
   if (date) {
     return getDatePlanList(user.id, date).then((data) =>
       NextResponse.json(data)

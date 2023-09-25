@@ -68,6 +68,10 @@ export interface HomePlanModel {
   color: ColorType;
   _id: string;
   status: StatusType;
+  days: number[];
+  startDate: string;
+  endDate: string;
+  history: { [key: string]: PlanHistory };
 }
 
 export interface SimplePlanModel {

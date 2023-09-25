@@ -2,12 +2,6 @@
 
 import { usePlanList } from "@/comman/hooks";
 import PlanSection from "@/components/plan/PlanSection";
-import dayjs from "dayjs";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-
-dayjs.extend(isSameOrAfter);
-dayjs.extend(isSameOrBefore);
 
 function PlanPage() {
   const { planListData, isLoading, error } = usePlanList();
