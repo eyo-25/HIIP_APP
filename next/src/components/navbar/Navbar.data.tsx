@@ -20,7 +20,7 @@ export const LINKS = [
     icon: <Start />,
     selectIcon: <SelectStart />,
     href: "/",
-    title: "실행",
+    title: "오늘 할일",
   },
   {
     icon: <Feedback />,

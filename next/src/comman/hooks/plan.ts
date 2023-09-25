@@ -1,5 +1,10 @@
 import useSWR from "swr";
-import { PlanModel, PlanDetailModel, FormDataModel } from "../model/plan";
+import {
+  PlanModel,
+  PlanDetailModel,
+  FormDataModel,
+  HomePlanModel,
+} from "../model/plan";
 
 export const usePlanList = () => {
   const {
@@ -7,6 +12,16 @@ export const usePlanList = () => {
     error,
     isLoading,
   } = useSWR<PlanModel[]>(`/api/plan`);
+  return { planListData, isLoading, error };
+};
+
+export const useDatePlanList = (date: string) => {
+  const {
+    data: planListData,
+    error,
+    isLoading,
+  } = useSWR<HomePlanModel[]>(`/api/plan?date=${date}`);
+
   return { planListData, isLoading, error };
 };
 
