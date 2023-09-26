@@ -63,6 +63,11 @@ body {
     width: 0;
     display: none;
   }
+
+  .black-italic {
+    font-weight: 900;
+    font-style: italic;
+  }
 }
 
 input,

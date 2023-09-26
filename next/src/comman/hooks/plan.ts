@@ -4,6 +4,7 @@ import {
   PlanDetailModel,
   FormDataModel,
   HomePlanModel,
+  PlanTimerData,
 } from "../model/plan";
 
 export const usePlanList = () => {
@@ -33,6 +34,18 @@ export const usePlan = (planId: string) => {
   } = useSWR<PlanDetailModel>(`/api/plan/${planId}`);
 
   return { planData, isLoading, error };
+};
+
+export const usePlanTimer = (planId: string) => {
+  const {
+    data: planTimerData,
+    error,
+    isLoading,
+  } = useSWR<PlanTimerData>(`/api/plan/${planId}/timer`);
+
+  // console.log(planTimerData);
+
+  return { planTimerData, isLoading, error };
 };
 
 export async function createPlan(formData: FormDataModel) {

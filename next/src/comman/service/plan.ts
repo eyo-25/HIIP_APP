@@ -7,6 +7,7 @@ import {
   PlanDetailModel,
   HomePlanModel,
   StatusType,
+  PlanTimerData,
 } from "../model/plan";
 import { client } from "./sanity";
 
@@ -34,6 +35,64 @@ export async function getPlan(
         memo: res.memo ? res.memo : "",
       };
     });
+}
+
+export async function getPlanTimer(
+  planId: string,
+  userId: string
+): Promise<PlanTimerData> {
+  try {
+    const res: PlanDataModel = await client.fetch(
+      `*[_type == "plan" && _id == $planId && author._ref == $userId][0]`,
+      {
+        planId,
+        userId,
+      }
+    );
+    const { history, interval, focusTime, breakTime, _id } = res;
+
+    const todayHistory = history.find((record) =>
+      dayjs().isSame(dayjs(record.date), "day")
+    );
+
+    if (todayHistory) {
+      return {
+        ...todayHistory,
+        setFocusTime: focusTime,
+        setBreakTime: breakTime,
+        date: dayjs().format("YYYY-MM-DD"),
+      };
+    } else {
+      const newHistory: PlanHistory = {
+        focusSet: interval,
+        breakSet: interval - 1,
+        focusTime: focusTime * 60,
+        breakTime: breakTime * 60,
+        isSuccess: false,
+        date: `${dayjs().format("YYYY-MM-DD")}T00:00:00Z`,
+      };
+
+      await updatePlanHistory(_id, newHistory);
+
+      return {
+        ...newHistory,
+        setFocusTime: focusTime,
+        setBreakTime: breakTime,
+        date: dayjs().format("YYYY-MM-DD"),
+      };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function updatePlanHistory(planId: string, newHistory: PlanHistory) {
+  return await client
+    .transaction()
+    .patch(planId, (plan) => {
+      return plan.append("history", [newHistory]).set({ isStart: true });
+    })
+    .commit({ autoGenerateArrayKeys: true });
 }
 
 export async function getPlanList(userId: string): Promise<PlanModel[]> {
