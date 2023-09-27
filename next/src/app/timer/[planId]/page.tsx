@@ -1,7 +1,6 @@
 "use client";
 
 import { TimerBackground } from "@/comman/assets";
-import { usePlan } from "@/comman/hooks";
 import { usePlanTimer } from "@/comman/hooks/plan";
 import TimerSection from "@/components/timer/TimerSection";
 import Image from "next/image";
@@ -17,7 +16,9 @@ export default function TimerPage({ params: { planId } }: Props) {
 
   return (
     <main className="relative flex-center bg-black h-full">
-      {planTimerData && <TimerSection planTimerData={planTimerData} />}
+      {planTimerData && (
+        <TimerSection planTimerData={planTimerData} planId={planId} />
+      )}
       <Image
         className="absolute opacity-70"
         fill

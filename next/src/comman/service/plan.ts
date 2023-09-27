@@ -51,7 +51,7 @@ export async function getPlanTimer(
     );
     const { history, interval, focusTime, breakTime, _id } = res;
 
-    const todayHistory = history.find((record) =>
+    const todayHistory = history?.find((record) =>
       dayjs().isSame(dayjs(record.date), "day")
     );
 
@@ -60,14 +60,15 @@ export async function getPlanTimer(
         ...todayHistory,
         setFocusTime: focusTime,
         setBreakTime: breakTime,
-        date: dayjs().format("YYYY-MM-DD"),
+        intervalSet: interval,
+        date: `${dayjs().format("YYYY-MM-DD")}T00:00:00Z`,
       };
     } else {
       const newHistory: PlanHistory = {
         focusSet: interval,
         breakSet: interval - 1,
         focusTime: focusTime * 60,
-        breakTime: breakTime * 60,
+        breakTime: 0,
         isSuccess: false,
         date: `${dayjs().format("YYYY-MM-DD")}T00:00:00Z`,
       };
@@ -76,9 +77,9 @@ export async function getPlanTimer(
 
       return {
         ...newHistory,
+        intervalSet: interval,
         setFocusTime: focusTime,
         setBreakTime: breakTime,
-        date: dayjs().format("YYYY-MM-DD"),
       };
     }
   } catch (error) {
@@ -92,6 +93,26 @@ async function updatePlanHistory(planId: string, newHistory: PlanHistory) {
     .patch(planId, (plan) => {
       return plan.append("history", [newHistory]).set({ isStart: true });
     })
+    .commit({ autoGenerateArrayKeys: true });
+}
+
+export async function updatePlanTimer(planId: string, timerData: PlanHistory) {
+  const currentPlan: PlanDataModel = await client.fetch(
+    `*[_type == "plan" && _id == $planId][0]`,
+    {
+      planId,
+    }
+  );
+
+  const updateHistory = [...currentPlan.history];
+  const findIndex = updateHistory.findIndex((record) =>
+    dayjs(record.date).isSame(dayjs(timerData.date), "day")
+  );
+  updateHistory[findIndex] = timerData;
+
+  return await client
+    .patch(planId)
+    .set({ history: updateHistory })
     .commit({ autoGenerateArrayKeys: true });
 }
 

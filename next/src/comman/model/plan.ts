@@ -88,6 +88,7 @@ export interface SimplePlanModel {
 export interface PlanTimerData {
   focusSet: number;
   breakSet: number;
+  intervalSet: number;
   setFocusTime: number;
   setBreakTime: number;
   focusTime: number;

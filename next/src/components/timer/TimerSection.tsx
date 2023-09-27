@@ -1,14 +1,17 @@
 import { PlanTimerData } from "@/comman/model/plan";
 import MetaButton from "../ui/MetaButton";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useCounter } from "@/comman/hooks/counter";
 import { useRouter } from "next/navigation";
 import ProgressBar from "./ProgressBar";
 import TimerBoard from "./TimerBoard";
+import { updatePlanTimer } from "@/comman/hooks/plan";
+import { mutate } from "swr";
+import dayjs from "dayjs";
 
-type Props = { planTimerData: PlanTimerData };
+type Props = { planTimerData: PlanTimerData; planId: string };
 
-function TimerSection({ planTimerData }: Props) {
+function TimerSection({ planTimerData, planId }: Props) {
   const {
     focusSet: focusSetData,
     breakSet: breakSetData,
@@ -16,6 +19,8 @@ function TimerSection({ planTimerData }: Props) {
     setFocusTime,
     focusTime,
     breakTime,
+    intervalSet,
+    date,
   } = planTimerData;
   const [isBreakSet, setIsBreakSet] = useState<boolean>();
   const [isStop, setIsStop] = useState<boolean>(false);
@@ -25,12 +30,38 @@ function TimerSection({ planTimerData }: Props) {
 
   const { count, start, stop, reset, done } = useCounter();
 
-  console.log(count);
+  // console.log(count);
+
+  const updatePlanHistory = (
+    isFinish: boolean,
+    setTime: number | undefined
+  ) => {
+    const focusTime = 0;
+
+    const timerData = {
+      focusSet: isBreakSet
+        ? Math.floor(interval / 2)
+        : Math.floor(interval / 2) + 1,
+      breakSet: Math.floor(interval / 2),
+      focusTime: isBreakSet ? 0 : count,
+      breakTime: isBreakSet ? count : 0,
+      isSuccess: isFinish ? true : false,
+      date: date,
+    };
+
+    console.log(timerData);
+
+    updatePlanTimer(planId, timerData)
+      .then(() => {
+        mutate(`/api/plan/${planId}/timer`);
+        mutate(`/api/plan?date=${dayjs().format("YYYY-MM-DD")}`);
+      })
+      .catch((err) => alert(err.toString()));
+  };
 
   useEffect(() => {
-    // 브레이크세트인지가 안정해져 있다면 초기화
     if (isBreakSet === undefined) {
-      const isBreak = (focusSetData + breakSetData) % 2 === 0;
+      const isBreak = focusSetData <= breakSetData;
       reset(isBreak ? breakTime : focusTime);
       setIsBreakSet(isBreak);
       start();
@@ -41,6 +72,8 @@ function TimerSection({ planTimerData }: Props) {
       if (interval === 1) {
         done();
         setIsDone(true);
+        updatePlanHistory(true);
+        router.push("/");
         return;
       }
 
@@ -49,10 +82,12 @@ function TimerSection({ planTimerData }: Props) {
         setIsBreakSet(false);
         // reset(setFocusTime * 10);
         reset(10);
+        updatePlanHistory(false);
       } else {
         setIsBreakSet(true);
         // reset(setBreakTime * 10);
         reset(10);
+        updatePlanHistory(false);
       }
 
       start();
@@ -62,6 +97,7 @@ function TimerSection({ planTimerData }: Props) {
   const handleStop = () => {
     setIsStop(true);
     stop();
+    updatePlanHistory(false);
   };
 
   const handleStart = () => {
@@ -85,6 +121,7 @@ function TimerSection({ planTimerData }: Props) {
           {isBreakSet !== undefined && (
             <TimerBoard
               count={count}
+              intervalSet={intervalSet}
               interval={interval}
               isBreakSet={isBreakSet}
               isStop={isStop}
