@@ -30,8 +30,6 @@ function TimerSection({ planTimerData, planId }: Props) {
 
   const { count, start, stop, reset, done } = useCounter();
 
-  // console.log(count);
-
   type UpdateType = "Finish" | "SetEnd" | "Stop";
 
   const updatePlanHistory = (updateType: UpdateType) => {
@@ -74,8 +72,6 @@ function TimerSection({ planTimerData, planId }: Props) {
       date,
     };
 
-    console.log(timerData);
-
     updatePlanTimer(planId, timerData)
       .then(() => {
         mutate(`/api/plan/${planId}/timer`);
@@ -90,7 +86,6 @@ function TimerSection({ planTimerData, planId }: Props) {
       reset(isBreak ? breakTime : focusTime);
       setIsBreakSet(isBreak);
       start();
-      console.log("출항~");
     }
 
     if (isBreakSet !== undefined && count === 0) {
