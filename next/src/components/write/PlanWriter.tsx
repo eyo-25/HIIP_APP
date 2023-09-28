@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import MonthDatePicker from "@/components/write/MonthDatePicker";
 import WriteForm from "@/components/write/WriteForm";
 import { PlanDetailModel } from "@/comman/model/plan";
+import dayjs from "dayjs";
 
 type Props = {
   planData?: PlanDetailModel;
@@ -15,7 +16,9 @@ type Props = {
 
 function PlanWriter({ planData, mode, planId }: Props) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [startDate, setStartDate] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>(
+    dayjs().format("YYYY-MM-DD")
+  );
   const [endDate, setEndDate] = useState<string>("");
   const [isStart, setIsStart] = useState(false);
   const [isStartDate, setIsStartDate] = useState(true);

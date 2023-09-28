@@ -1,1 +1,1 @@
-export type MetaButtonType = "play" | "creat" | "stop" | "end";
+export type MetaButtonType = "play" | "creat" | "pause" | "end";

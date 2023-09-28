@@ -4,6 +4,8 @@ import {
   PlanDetailModel,
   FormDataModel,
   HomePlanModel,
+  PlanTimerData,
+  PlanHistory,
 } from "../model/plan";
 
 export const usePlanList = () => {
@@ -34,6 +36,32 @@ export const usePlan = (planId: string) => {
 
   return { planData, isLoading, error };
 };
+
+export const usePlanTimer = (planId: string) => {
+  const {
+    data: planTimerData,
+    error,
+    isLoading,
+  } = useSWR<PlanTimerData>(`/api/plan/${planId}/timer`);
+
+  return { planTimerData, isLoading, error };
+};
+
+export async function updatePlanTimer(planId: string, timerData: PlanHistory) {
+  const response = await fetch(`/api/plan/${planId}/timer`, {
+    method: "PUT",
+    body: JSON.stringify(timerData),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`${response.status} ${response.statusText}`);
+  }
+
+  return response;
+}
 
 export async function createPlan(formData: FormDataModel) {
   const response = await fetch("/api/plan/", {

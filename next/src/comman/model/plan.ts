@@ -85,6 +85,18 @@ export interface SimplePlanModel {
   endDate: string;
 }
 
+export interface PlanTimerData {
+  focusSet: number;
+  breakSet: number;
+  intervalSet: number;
+  setFocusTime: number;
+  setBreakTime: number;
+  focusTime: number;
+  breakTime: number;
+  isSuccess: boolean;
+  date: string;
+}
+
 export interface PlanHistory {
   focusSet: number;
   breakSet: number;

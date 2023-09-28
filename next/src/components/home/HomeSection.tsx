@@ -65,7 +65,7 @@ function HomeSection({ planListData }: Props) {
           planListSetter={planListSetter}
         />
       </section>
-      <Link href={isListData ? "/timer" : "/write/creat"}>
+      <Link href={planList[0] ? `/timer/${planList[0]._id}` : "/write/creat"}>
         <MetaButton mode={isListData ? "play" : "creat"} />
       </Link>
     </div>
