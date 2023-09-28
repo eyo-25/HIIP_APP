@@ -32,21 +32,46 @@ function TimerSection({ planTimerData, planId }: Props) {
 
   // console.log(count);
 
-  const updatePlanHistory = (
-    isFinish: boolean,
-    setTime: number | undefined
-  ) => {
-    const focusTime = 0;
+  type UpdateType = "Finish" | "SetEnd" | "Stop";
+
+  const updatePlanHistory = (updateType: UpdateType) => {
+    let focusTime = 0;
+    let breakTime = 0;
+    let isSuccess = false;
+    let focusSet = isBreakSet
+      ? Math.floor(interval / 2)
+      : Math.floor(interval / 2) + 1;
+    let breakSet = Math.floor(interval / 2);
+
+    if (updateType === "Finish") {
+      isSuccess = true;
+      focusSet = 0;
+      breakSet = 0;
+    }
+
+    if (updateType === "SetEnd") {
+      if (isBreakSet) {
+        focusTime = setFocusTime * 60;
+        breakSet--;
+      } else {
+        breakTime = setBreakTime * 60;
+        focusSet--;
+      }
+    } else if (updateType === "Stop") {
+      if (isBreakSet) {
+        breakTime = count;
+      } else {
+        focusTime = count;
+      }
+    }
 
     const timerData = {
-      focusSet: isBreakSet
-        ? Math.floor(interval / 2)
-        : Math.floor(interval / 2) + 1,
-      breakSet: Math.floor(interval / 2),
-      focusTime: isBreakSet ? 0 : count,
-      breakTime: isBreakSet ? count : 0,
-      isSuccess: isFinish ? true : false,
-      date: date,
+      focusSet,
+      breakSet,
+      focusTime,
+      breakTime,
+      isSuccess,
+      date,
     };
 
     console.log(timerData);
@@ -72,22 +97,19 @@ function TimerSection({ planTimerData, planId }: Props) {
       if (interval === 1) {
         done();
         setIsDone(true);
-        updatePlanHistory(true);
-        router.push("/");
+        updatePlanHistory("Finish");
         return;
       }
 
       setInterval((prev) => prev - 1);
       if (isBreakSet) {
         setIsBreakSet(false);
-        // reset(setFocusTime * 10);
-        reset(10);
-        updatePlanHistory(false);
+        reset(setFocusTime * 60);
+        updatePlanHistory("SetEnd");
       } else {
         setIsBreakSet(true);
-        // reset(setBreakTime * 10);
-        reset(10);
-        updatePlanHistory(false);
+        reset(setBreakTime * 60);
+        updatePlanHistory("SetEnd");
       }
 
       start();
@@ -97,7 +119,7 @@ function TimerSection({ planTimerData, planId }: Props) {
   const handleStop = () => {
     setIsStop(true);
     stop();
-    updatePlanHistory(false);
+    updatePlanHistory("Stop");
   };
 
   const handleStart = () => {
@@ -112,12 +134,29 @@ function TimerSection({ planTimerData, planId }: Props) {
   return (
     <div className="flex flex-col z-20 w-full h-full text-white">
       {isDone ? (
-        <>
-          <section>{interval}끝났다리</section>
-        </>
+        <section className="z-30 w-full h-full flex-center flex-col">
+          <h5 className="black-italic text-6xl mb-15pxr">FINISH</h5>
+          <p>계획한일을 시간내에 완료 하셨나요?</p>
+          <div className="flex items-center px-10pxr w-full h-50pxr bg-gradient-to-l from-white/20 from-0% via-white via-50% to-white/20 to-100% mt-30pxr">
+            <button className="flex-center w-[50%] font-semibold text-black">
+              실패
+            </button>
+            <div className="w-1pxr h-[60%] bg-black"></div>
+            <button className="flex-center w-[50%] font-semibold text-black">
+              성공
+            </button>
+          </div>
+        </section>
       ) : (
         <>
-          <ProgressBar />
+          <ProgressBar
+            interval={interval}
+            intervalSet={intervalSet}
+            count={count}
+            setBreakTime={setBreakTime}
+            setFocusTime={setFocusTime}
+            isBreakSet={isBreakSet}
+          />
           {isBreakSet !== undefined && (
             <TimerBoard
               count={count}
