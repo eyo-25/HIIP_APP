@@ -8,6 +8,16 @@ import {
   PlanHistory,
 } from "../model/plan";
 
+export const usePlan = (planId: string) => {
+  const {
+    data: planData,
+    error,
+    isLoading,
+  } = useSWR<PlanDetailModel>(`/api/plan/${planId}`);
+
+  return { planData, isLoading, error };
+};
+
 export const usePlanList = () => {
   const {
     data: planListData,
@@ -25,16 +35,6 @@ export const useDatePlanList = (date: string) => {
   } = useSWR<HomePlanModel[]>(`/api/plan?date=${date}`);
 
   return { planListData, isLoading, error };
-};
-
-export const usePlan = (planId: string) => {
-  const {
-    data: planData,
-    error,
-    isLoading,
-  } = useSWR<PlanDetailModel>(`/api/plan/${planId}`);
-
-  return { planData, isLoading, error };
 };
 
 export const usePlanTimer = (planId: string) => {

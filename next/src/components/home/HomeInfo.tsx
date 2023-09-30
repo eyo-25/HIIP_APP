@@ -1,17 +1,17 @@
-import { useLayoutEffect, useMemo, useState } from "react";
+import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { randomWiseSaying } from "@/comman/utils/randomWiseSaying";
 import { HomePlanModel } from "@/comman/model/plan";
 import dayjs from "dayjs";
 
 type Props = {
-  selectedPlan: HomePlanModel;
+  selectedPlan?: HomePlanModel;
   isExtend: boolean;
 };
 
 function HomeInfo({ selectedPlan, isExtend }: Props) {
   const [wiseSaying, setWiseSaying] = useState<string[]>([]);
   const today = dayjs();
-  const leftSet = selectedPlan?.history[today.format("YYYY-MM-DD")]?.focusSet;
+  const todayHistory = selectedPlan?.history?.[today.format("YYYY-MM-DD")];
 
   useLayoutEffect(() => setWiseSaying(randomWiseSaying()), []);
 
@@ -26,6 +26,15 @@ function HomeInfo({ selectedPlan, isExtend }: Props) {
     return Math.floor((totalCount / interval) * 100);
   }, [selectedPlan]);
 
+  const getProcessPercent = useCallback(() => {
+    if (!selectedPlan) return 0;
+    // 히스토리를 매핑하면서 얼마나 진행했는지 체크
+    // 진행했다 = 히스토리의 intervalSet가 0인 경우
+    // 시작일 부터 현재까지의 일수에서 요일인 경우의 총합을 구하고
+    // 위의 진행한 히스토리를 빼서 리턴
+  }, [selectedPlan]);
+
+  // 수정필요
   const averagePercent = useMemo(() => {
     if (!selectedPlan) return 0;
 
@@ -48,6 +57,7 @@ function HomeInfo({ selectedPlan, isExtend }: Props) {
     return Math.floor((totalCount / (totalDays * interval)) * 10);
   }, [selectedPlan]);
 
+  // 성공률은 옳바르게 출력
   const successPercent = useMemo(() => {
     if (!selectedPlan) return 0;
 
@@ -70,6 +80,14 @@ function HomeInfo({ selectedPlan, isExtend }: Props) {
     }
 
     return Math.floor((succesCount / totalDays) * 100);
+  }, [selectedPlan]);
+
+  const getLeftSet = useCallback(() => {
+    if (!selectedPlan) return 0;
+    const interval = selectedPlan.interval;
+    if (!todayHistory) return interval;
+
+    return interval - (interval - todayHistory.focusSet);
   }, [selectedPlan]);
 
   return (
@@ -102,14 +120,14 @@ function HomeInfo({ selectedPlan, isExtend }: Props) {
           <ul className="w-full grid grid-cols-4 px-25pxr pb-18pxr text-center">
             <li>
               <p className="text-lg">
-                {leftSet ? leftSet : selectedPlan ? selectedPlan.interval : 0}
+                {getLeftSet()}
                 <span> SET</span>
               </p>
               <h5 className="text-xs font-thin text-gray-600">남은 세트</h5>
             </li>
             <li>
               <p className="text-lg tracking-widest">{successPercent}%</p>
-              <h5 className="text-xs font-thin text-gray-600">계획 성공</h5>
+              <h5 className="text-xs font-thin text-gray-600">성공률</h5>
             </li>
             <li>
               <p className="text-lg">{averagePercent} SET</p>
@@ -117,7 +135,7 @@ function HomeInfo({ selectedPlan, isExtend }: Props) {
             </li>
             <li>
               <p className="text-lg">{processPercent}%</p>
-              <h5 className="text-xs font-thin text-gray-600">계획 진행</h5>
+              <h5 className="text-xs font-thin text-gray-600">진행률</h5>
             </li>
           </ul>
         )}

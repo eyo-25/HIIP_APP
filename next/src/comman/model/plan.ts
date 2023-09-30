@@ -59,7 +59,7 @@ export interface PlanDetailModel {
   isStart: boolean;
   days: number[];
   color: ColorType;
-  history: { [key: string]: PlanHistory };
+  history: PlanHistory[];
 }
 
 export interface HomePlanModel {

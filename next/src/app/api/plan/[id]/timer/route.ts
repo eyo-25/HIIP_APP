@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { PlanHistory } from "@/comman/model/plan";
-import { getPlanTimer, updatePlanTimer } from "@/comman/service/plan";
+import { getPlanTimer, updatePlanTimer } from "@/comman/service/timer";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
