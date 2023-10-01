@@ -5,10 +5,10 @@ import { IoPlaySharp } from "react-icons/io5";
 type Props = {
   data: HomePlanModel;
   idx: number;
-  planListSetter: (planList: string) => void;
+  planListSort: (planList: string) => void;
 };
 
-export default function HomePlanCard({ data, idx, planListSetter }: Props) {
+export default function HomePlanCard({ data, idx, planListSort }: Props) {
   const { title, interval, _id, color, status } = data;
   const intervalArray = Array.from({ length: interval }, (_, index) => index);
   const isActive = idx === 0;
@@ -16,7 +16,7 @@ export default function HomePlanCard({ data, idx, planListSetter }: Props) {
   const handleCardClick = () => {
     if (idx === 0 || status !== "pending") return;
 
-    planListSetter(_id);
+    planListSort(_id);
   };
 
   return (

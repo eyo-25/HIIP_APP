@@ -18,6 +18,16 @@ export const usePlan = (planId: string) => {
   return { planData, isLoading, error };
 };
 
+export const usePlanDetail = (planId: string) => {
+  const {
+    data: planData,
+    error,
+    isLoading,
+  } = useSWR<HomePlanModel>(`/api/plan/${planId}/detail`);
+
+  return { planData, isLoading, error };
+};
+
 export const usePlanList = () => {
   const {
     data: planListData,

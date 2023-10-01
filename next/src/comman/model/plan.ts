@@ -47,6 +47,18 @@ export interface PlanModel {
   history: { [key: string]: PlanHistory };
 }
 
+export interface HomePlanModel {
+  _id: string;
+  title: string;
+  interval: number;
+  color: ColorType;
+  status: StatusType;
+  days: number[];
+  startDate: string;
+  endDate: string;
+  history: { [key: string]: PlanHistory };
+}
+
 export interface PlanDetailModel {
   _id: string;
   title: string;
@@ -60,18 +72,6 @@ export interface PlanDetailModel {
   days: number[];
   color: ColorType;
   history: PlanHistory[];
-}
-
-export interface HomePlanModel {
-  title: string;
-  interval: number;
-  color: ColorType;
-  _id: string;
-  status: StatusType;
-  days: number[];
-  startDate: string;
-  endDate: string;
-  history: { [key: string]: PlanHistory };
 }
 
 export interface SimplePlanModel {

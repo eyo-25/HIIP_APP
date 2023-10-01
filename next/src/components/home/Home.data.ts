@@ -17,3 +17,38 @@ export const wiseSaying = [
   "요즘-세상이 그래",
   "본질이 잊혀지면-형식이 중요해진다",
 ];
+
+type PlanPercentKeyType =
+  | "processPercent"
+  | "successPercent"
+  | "averageSet"
+  | "leftSet";
+
+type DetailInfoListType = {
+  title: string;
+  key: PlanPercentKeyType;
+  unit: string;
+};
+
+export const detailInfoList: DetailInfoListType[] = [
+  {
+    title: "평균 세트",
+    key: "averageSet",
+    unit: " SET",
+  },
+  {
+    title: "남은 세트",
+    key: "leftSet",
+    unit: " SET",
+  },
+  {
+    title: "성공률",
+    key: "successPercent",
+    unit: "%",
+  },
+  {
+    title: "진행률",
+    key: "processPercent",
+    unit: "%",
+  },
+];

@@ -28,7 +28,7 @@ function HomeHeader({ selectedPlan }: Props) {
     <div className="flex flex-col w-full h-full px-20pxr text-white">
       <div className="flex items-center justify-between h-[58%] px-5pxr pt-7pxr">
         <p>{dayjs().month() + 1}월</p>
-        <p>{selectedPlan ? selectedPlan.title : ""}</p>
+        <p>{selectedPlan ? selectedPlan.title.slice(0, 10) : "HIIP"}</p>
       </div>
       <div className="h-[42%]">
         <ul className="flex h-full items-center justify-between">

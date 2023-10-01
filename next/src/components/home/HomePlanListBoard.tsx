@@ -3,10 +3,10 @@ import HomePlanCard from "./HomePlanCard";
 
 type Props = {
   planList: HomePlanModel[] | undefined;
-  planListSetter: (planList: string) => void;
+  planListSort: (planList: string) => void;
 };
 
-function HomePlanListBoard({ planList, planListSetter }: Props) {
+function HomePlanListBoard({ planList, planListSort }: Props) {
   return (
     <div>
       <div className="absolute top-[5px] w-full">
@@ -19,7 +19,7 @@ function HomePlanListBoard({ planList, planListSetter }: Props) {
               key={data._id}
               data={data}
               idx={idx}
-              planListSetter={planListSetter}
+              planListSort={planListSort}
             />
           ))}
         </ul>

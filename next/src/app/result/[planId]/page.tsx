@@ -1,7 +1,7 @@
 "use client";
 
 import { FailBackground, SuccessBackground } from "@/comman/assets";
-import { usePlan } from "@/comman/hooks";
+import { usePlanDetail } from "@/comman/hooks/plan";
 import ResultSection from "@/components/result/ResultSection";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -13,7 +13,7 @@ type Props = {
 };
 
 function TimerResultPage({ params: { planId } }: Props) {
-  const { planData, isLoading, error } = usePlan(planId);
+  const { planData, isLoading, error } = usePlanDetail(planId);
   console.log(planData && planData);
 
   const searchParams = useSearchParams();
@@ -21,7 +21,11 @@ function TimerResultPage({ params: { planId } }: Props) {
 
   return (
     <main className="relative flex flex-col h-full w-full">
-      <ResultSection isSuccess={isSuccess} planId={planId} />
+      <ResultSection
+        isSuccess={isSuccess}
+        planId={planId}
+        planData={planData}
+      />
       <Image
         className="absolute"
         fill

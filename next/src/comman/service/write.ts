@@ -22,7 +22,7 @@ export async function getPlan(
         ...res,
         startDate: startDate,
         endDate: endDate,
-        history: res.history,
+        history: [],
         memo: res.memo ? res.memo : "",
       };
     });
