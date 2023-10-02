@@ -18,13 +18,13 @@ export const wiseSaying = [
   "본질이 잊혀지면-형식이 중요해진다",
 ];
 
-type PlanPercentKeyType =
+export type PlanPercentKeyType =
   | "processPercent"
   | "successPercent"
   | "averageSet"
   | "leftSet";
 
-type DetailInfoListType = {
+export type DetailInfoListType = {
   title: string;
   key: PlanPercentKeyType;
   unit: string;

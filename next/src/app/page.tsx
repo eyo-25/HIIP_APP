@@ -13,7 +13,7 @@ export default function Main() {
 
   return (
     <main className="relative flex-center bg-black h-full">
-      <HomeSection planListData={planListData} />
+      <HomeSection planListData={planListData} isLoading={isLoading} />
       <Image
         className="absolute opacity-70"
         fill

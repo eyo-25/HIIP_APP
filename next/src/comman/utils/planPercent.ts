@@ -1,51 +1,67 @@
-import { HomePlanModel, PlanHistory } from "../model/plan";
+import { HomePlanModel } from "../model/plan";
 import dayjs from "dayjs";
+
+type percentType = "success" | "prev" | "home";
 
 export const usePlanPercent = (
   selectedPlan: HomePlanModel,
-  isResult: boolean = false
+  type: percentType = "home"
 ) => {
   const { history, interval, startDate } = selectedPlan;
   const today = dayjs();
-  const todayHistory: PlanHistory | undefined =
-    history?.[today.format("YYYY-MM-DD")];
+  const todayHistory = history?.[today.format("YYYY-MM-DD")];
   const isHistory = 0 < Object.keys(history).length;
+  let currentDate = dayjs(startDate);
+  let totalDays = 0;
+  let totalSet = 0;
+  let processCount = 0;
+  let successCount = 0;
 
-  const currentDate = dayjs(startDate);
-  const endDate = today.isBefore(selectedPlan.endDate)
-    ? today
-    : selectedPlan.endDate;
-  const dateRange = dayjs(endDate).diff(currentDate, "day") + 1;
+  while (currentDate.isSameOrBefore(today)) {
+    const currentHistory = history?.[currentDate.format("YYYY-MM-DD")];
+    if (selectedPlan.days.includes(currentDate.day())) {
+      totalDays++;
 
-  const processCount = Object.values(history).filter(
-    (item) =>
-      selectedPlan.days.includes(dayjs(item.date).day()) && item.focusSet === 0
-  ).length;
-
-  const successCount = Object.values(history).filter(
-    (item) =>
-      selectedPlan.days.includes(dayjs(item.date).day()) && item.isSuccess
-  ).length;
-
-  const totalSet = Object.values(history)
-    .filter((item) => selectedPlan.days.includes(dayjs(item.date).day()))
-    .reduce((total, item) => total + (interval - item.focusSet), 0);
-
-  if (isResult) {
-    const processPercent = Math.floor(((processCount + 1) / dateRange) * 100);
-    const successPercent = Math.floor(((successCount + 1) / dateRange) * 100);
-    const averageSet = Math.floor((totalSet + interval) / dateRange);
-    const leftSet = 0;
-
-    return { processPercent, successPercent, averageSet, leftSet };
-  } else {
-    const processPercent = Math.floor((processCount / dateRange) * 100);
-    const successPercent = Math.floor((successCount / dateRange) * 100);
-    const averageSet = isHistory ? Math.floor(totalSet / dateRange) : 0;
-    const leftSet = todayHistory
-      ? interval - (interval - todayHistory.focusSet)
-      : interval;
-
-    return { processPercent, successPercent, averageSet, leftSet };
+      if (currentHistory) {
+        if (currentHistory.isSuccess) {
+          successCount++;
+        }
+        if (currentHistory.focusSet === 0) {
+          processCount++;
+        }
+        totalSet = totalSet + (interval - currentHistory.focusSet);
+      }
+    }
+    currentDate = currentDate.add(1, "day");
   }
+
+  let processPercent =
+    type === "prev"
+      ? Math.floor(((processCount - 1) / totalDays) * 100)
+      : Math.floor((processCount / totalDays) * 100);
+  let successPercent =
+    type === "success"
+      ? Math.floor(((successCount + 1) / totalDays) * 100)
+      : Math.floor((successCount / totalDays) * 100);
+  const averageSet = isHistory
+    ? type === "prev"
+      ? Math.round((totalSet - interval) / totalDays)
+      : Math.round(totalSet / totalDays)
+    : 0;
+  const leftSet = todayHistory
+    ? interval - (interval - todayHistory.focusSet)
+    : interval;
+
+  if (type === "prev") {
+    successPercent = Math.floor((successCount / (totalDays - 1)) * 100);
+  }
+
+  return {
+    processPercent,
+    successPercent,
+    averageSet,
+    leftSet,
+    successCount,
+    totalDays,
+  };
 };

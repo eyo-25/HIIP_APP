@@ -1,46 +1,47 @@
 import { HomePlanModel } from "@/comman/model/plan";
 import { usePlanPercent } from "@/comman/utils/planPercent";
+import { analizeInfoList } from "./Result.data";
+import React from "react";
+import { PlanPercentKeyType } from "../home/Home.data";
 
 type Props = {
   planData: HomePlanModel;
+  isSuccess: boolean;
 };
 
-function ResultAnalize({ planData }: Props) {
-  const planPercentData = usePlanPercent(planData, true);
+function ResultAnalize({ planData, isSuccess }: Props) {
+  const successPlanPercentData = usePlanPercent(
+    planData,
+    isSuccess ? "success" : "home"
+  );
+  const planPercentData = usePlanPercent(planData, "prev");
 
-  console.log(planPercentData);
+  const changePercent = (key: PlanPercentKeyType) => {
+    const diff = successPlanPercentData[key] - planPercentData[key];
 
-  //   const planPercentData: {
-  //     processPercent: number;
-  //     successPercent: number;
-  //     averageSet: number;
-  //     leftSet: number;
-  // }
+    if (0 <= diff) return `+ ${diff}`;
+    return `- ${Math.abs(diff)}`;
+  };
+
   return (
     <ul className="flex h-[19%] gap-[6%]">
-      <li className="bg-white flex-center flex-col w-full h-full rounded-md shadow-lg">
-        <div className="text-sm text-white bg-black px-8pxr rounded-xl">
-          +18
-        </div>
-        <strong className="font-bold text-xl my-[3%]">30%</strong>
-        <p className="text-xs">성공률</p>
-      </li>
-      <li className="bg-white flex-center flex-col w-full h-full rounded-md shadow-lg">
-        <div className="text-sm text-white bg-black px-8pxr rounded-xl">
-          +18
-        </div>
-        <strong className="font-bold text-xl my-[3%]">30%</strong>
-        <p className="text-xs">평균 세트</p>
-      </li>
-      <li className="bg-white flex-center flex-col w-full h-full rounded-md shadow-lg">
-        <div className="text-sm text-white bg-black px-8pxr rounded-xl">
-          +18
-        </div>
-        <strong className="font-bold text-xl my-[3%]">30%</strong>
-        <p className="text-xs">진행률</p>
-      </li>
+      {analizeInfoList.map(({ title, key, unit }) => (
+        <li
+          key={key}
+          className="bg-white flex-center flex-col w-full h-full rounded-md shadow-lg"
+        >
+          <div className="text-sm text-white bg-black px-8pxr rounded-xl">
+            {changePercent(key)}
+          </div>
+          <strong className="font-bold text-xl my-[3%]">
+            {successPlanPercentData[key]}
+            {unit}
+          </strong>
+          <p className="text-xs">{title}</p>
+        </li>
+      ))}
     </ul>
   );
 }
 
-export default ResultAnalize;
+export default React.memo(ResultAnalize);

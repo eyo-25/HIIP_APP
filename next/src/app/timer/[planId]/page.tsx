@@ -16,9 +16,11 @@ export default function TimerPage({ params: { planId } }: Props) {
 
   return (
     <main className="relative flex-center bg-black h-full">
-      {planTimerData && (
-        <TimerSection planTimerData={planTimerData} planId={planId} />
-      )}
+      <TimerSection
+        planTimerData={planTimerData}
+        planId={planId}
+        isLoading={isLoading}
+      />
       <Image
         className="absolute opacity-70"
         fill

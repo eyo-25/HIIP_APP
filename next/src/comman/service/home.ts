@@ -46,7 +46,7 @@ function mapHomePlanList(
 
       if (filteredHistory && filteredHistory.isSuccess) {
         status = "success";
-      } else if (isPastDate) {
+      } else if (isPastDate || filteredHistory?.focusSet === 0) {
         status = "fail";
       }
 

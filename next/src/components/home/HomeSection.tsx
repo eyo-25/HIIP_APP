@@ -7,14 +7,14 @@ import { useTouchHandlers } from "@/comman/utils/touchHandlers";
 import { useMouseHandlers } from "@/comman/utils/mouseHandlers";
 import MetaButton from "../ui/MetaButton";
 import { HomePlanModel } from "@/comman/model/plan";
-import HomeDetailInfo from "./HomeDetailInfo";
-import dayjs from "dayjs";
+import LoadingSpinner from "../ui/Loading";
 
 type Props = {
   planListData: HomePlanModel[] | undefined;
+  isLoading: boolean;
 };
 
-function HomeSection({ planListData }: Props) {
+function HomeSection({ planListData, isLoading }: Props) {
   const [isExtend, setIsExtend] = useState(false);
   const [planList, setPlanList] = useState<HomePlanModel[]>([]);
   const isPlanList = 0 < planList.length;
@@ -54,7 +54,11 @@ function HomeSection({ planListData }: Props) {
         <HomeHeader selectedPlan={planList[0]} />
       </section>
       <section className={`w-full ${isExtend ? "h-[19%]" : "h-[48%]"}`}>
-        <HomeInfo selectedPlan={planList[0]} isExtend={isExtend} />
+        {isLoading ? (
+          <LoadingSpinner size={60} />
+        ) : (
+          <HomeInfo selectedPlan={planList[0]} isExtend={isExtend} />
+        )}
       </section>
       <section
         className={`relative bg-white w-full rounded-t-3xl ${

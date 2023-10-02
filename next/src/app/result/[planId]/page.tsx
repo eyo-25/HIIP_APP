@@ -14,7 +14,6 @@ type Props = {
 
 function TimerResultPage({ params: { planId } }: Props) {
   const { planData, isLoading, error } = usePlanDetail(planId);
-  console.log(planData && planData);
 
   const searchParams = useSearchParams();
   const isSuccess = searchParams.get("type") === "success";
@@ -22,6 +21,7 @@ function TimerResultPage({ params: { planId } }: Props) {
   return (
     <main className="relative flex flex-col h-full w-full">
       <ResultSection
+        isLoading={isLoading}
         isSuccess={isSuccess}
         planId={planId}
         planData={planData}

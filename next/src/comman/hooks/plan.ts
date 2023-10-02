@@ -57,6 +57,22 @@ export const usePlanTimer = (planId: string) => {
   return { planTimerData, isLoading, error };
 };
 
+export async function updatePlanResult(planId: string, isSuccess: boolean) {
+  const response = await fetch(`/api/result/${planId}`, {
+    method: "PUT",
+    body: JSON.stringify({ isSuccess: isSuccess }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`${response.status} ${response.statusText}`);
+  }
+
+  return response;
+}
+
 export async function updatePlanTimer(planId: string, timerData: PlanHistory) {
   const response = await fetch(`/api/plan/${planId}/timer`, {
     method: "PUT",

@@ -26,7 +26,7 @@ export function calculatePlanStatus(
 
   if (historyData?.isSuccess) {
     return "success";
-  } else if (isPastDate) {
+  } else if (isPastDate || historyData?.focusSet === 0) {
     return "fail";
   }
 

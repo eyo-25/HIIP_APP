@@ -40,3 +40,23 @@ export async function getDetailPlan(
       };
     });
 }
+
+export async function updatePlanResult(planId: string, isSuccess: boolean) {
+  const currentPlan: PlanDataModel = await client.fetch(
+    `*[_type == "plan" && _id == $planId][0]`,
+    {
+      planId,
+    }
+  );
+
+  const updateHistory = [...currentPlan.history];
+  const findIndex = updateHistory.findIndex((record) =>
+    dayjs(record.date).isSame(dayjs(), "day")
+  );
+  updateHistory[findIndex] = { ...updateHistory[findIndex], isSuccess };
+
+  return await client
+    .patch(planId)
+    .set({ history: updateHistory })
+    .commit({ autoGenerateArrayKeys: true });
+}
