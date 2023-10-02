@@ -12,7 +12,7 @@ type Props = {
   displayDate: dayjs.Dayjs;
   idx?: number;
   weekIndex?: number;
-  selectedPlan: SelectPlanModel | null;
+  selectedPlan?: SelectPlanModel;
   displayType: "month" | "week-month";
   handleDateClick?: (date: string, planList: SimplePlanModel[]) => void;
 };
