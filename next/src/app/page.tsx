@@ -1,12 +1,25 @@
-export default function Home() {
+"use client";
+
+import { HomeBackground } from "@/comman/assets";
+import { useDatePlanList } from "@/comman/hooks/plan";
+import HomeSection from "@/components/home/HomeSection";
+import dayjs from "dayjs";
+import Image from "next/image";
+
+export default function Main() {
+  const { planListData, isLoading, error } = useDatePlanList(
+    dayjs().format("YYYY-MM-DD")
+  );
+
   return (
-    <div className="bg-white w-200pxr">
-      <p className="font-thin">aas 한글</p>
-      <p className="font-normal">aas 한글</p>
-      <p className="font-medium">aas 한글</p>
-      <p className="font-bold">aas 한글</p>
-      <p className="font-black">aas 한글</p>
-      <p className="font-black italic text-red">10 aas 한글</p>
-    </div>
+    <main className="relative flex-center bg-black h-full">
+      <HomeSection planListData={planListData} isLoading={isLoading} />
+      <Image
+        className="absolute opacity-70"
+        fill
+        src={HomeBackground}
+        alt="home 배경"
+      />
+    </main>
   );
 }

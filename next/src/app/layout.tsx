@@ -1,6 +1,10 @@
 import "./globals.css";
-import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
+import type { Metadata } from "next";
+
+import AuthContext from "@/context/AuthContext";
+import AuthGardContext from "@/context/AuthGardContext";
+import SwrconfigContext from "@/context/SwrconfigContext";
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700", "900"],
@@ -21,9 +25,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={roboto.className}>
       <body className="bg-gray-400 w-full h-screen">
-        <main className="overflow-hidden relative mx-auto h-screen w-full max-w-md bg-gray-100">
-          {children}
-        </main>
+        <div className="relative overflow-hidden mx-auto h-screen w-full max-w-md bg-gray-200">
+          <AuthContext>
+            <SwrconfigContext>
+              <AuthGardContext>{children}</AuthGardContext>
+            </SwrconfigContext>
+          </AuthContext>
+        </div>
       </body>
     </html>
   );
