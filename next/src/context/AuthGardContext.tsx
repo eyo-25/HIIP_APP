@@ -23,8 +23,9 @@ export default function AuthGardContext({ children }: Props) {
     path === "/auth" ||
     path.startsWith("/write") ||
     path.startsWith("/timer")
-  )
+  ) {
     return <>{children}</>;
+  }
 
   return (
     <>

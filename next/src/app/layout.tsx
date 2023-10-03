@@ -1,4 +1,7 @@
+"use client";
+
 import "./globals.css";
+import { useEffect } from "react";
 import { Roboto } from "next/font/google";
 import type { Metadata } from "next";
 
@@ -22,10 +25,19 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  function setScreenSize() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+  }
+  useEffect(() => {
+    window.addEventListener("resize", () => setScreenSize());
+    setScreenSize();
+  }, []);
+
   return (
     <html lang="en" className={roboto.className}>
-      <body className="bg-gray-400 w-full h-screen">
-        <div className="relative overflow-hidden mx-auto h-screen w-full max-w-md bg-gray-200">
+      <body className="bg-gray-400 w-full h-100vh">
+        <div className="relative overflow-hidden mx-auto h-100vh w-full max-w-md bg-gray-200">
           <AuthContext>
             <SwrconfigContext>
               <AuthGardContext>{children}</AuthGardContext>
