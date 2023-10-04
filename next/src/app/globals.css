@@ -9,6 +9,7 @@
 }
 
 body {
+  height: 100svh;
   touch-action: none;
   -ms-user-select: none;
   -moz-user-select: -moz-none;

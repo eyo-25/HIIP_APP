@@ -1,4 +1,5 @@
 export { useOnClickOutside } from "./onClickOutside";
+export { useCounter } from "./counter";
 export {
   usePlanList,
   usePlan,
