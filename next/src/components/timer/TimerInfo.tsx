@@ -13,10 +13,18 @@ import LoadingSpinner from "../ui/Loading";
 type Props = {
   planTimerData: PlanTimerData;
   planId: string;
+  isStop: boolean;
+  isStopSetter: (isStop: boolean) => void;
   timerDone: () => void;
 };
 
-function TimerInfo({ planTimerData, planId, timerDone }: Props) {
+function TimerInfo({
+  planTimerData,
+  planId,
+  isStop,
+  isStopSetter,
+  timerDone,
+}: Props) {
   const {
     focusSet: focusSetData,
     breakSet: breakSetData,
@@ -30,7 +38,6 @@ function TimerInfo({ planTimerData, planId, timerDone }: Props) {
   const router = useRouter();
   const [isUpdateLoading, setIsUpdateLoading] = useState<boolean>(false);
   const [isBreakSet, setIsBreakSet] = useState<boolean>();
-  const [isStop, setIsStop] = useState<boolean>(false);
   const [interval, setInterval] = useState<number>(focusSetData + breakSetData);
   const { count, start, stop, reset, done } = useCounter();
 
@@ -86,12 +93,12 @@ function TimerInfo({ planTimerData, planId, timerDone }: Props) {
   };
 
   const handleStop = () => {
-    setIsStop(true);
+    isStopSetter(true);
     stop();
     updatePlanHistory("stop");
   };
   const handleStart = () => {
-    setIsStop(false);
+    isStopSetter(false);
     start();
   };
   const handleEnd = () => {

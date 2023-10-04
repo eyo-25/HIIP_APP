@@ -3,7 +3,7 @@ import { Roboto } from "next/font/google";
 import type { Metadata } from "next";
 
 import AuthContext from "@/context/AuthContext";
-import AuthGardContext from "@/context/AuthGardContext";
+import NavigationContext from "@/context/NavigationContext";
 import SwrconfigContext from "@/context/SwrconfigContext";
 
 const roboto = Roboto({
@@ -24,14 +24,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={roboto.className}>
-      <body className="bg-gray-400 w-full h-screen">
-        <div className="relative overflow-hidden mx-auto h-screen w-full max-w-md bg-gray-200">
-          <AuthContext>
-            <SwrconfigContext>
-              <AuthGardContext>{children}</AuthGardContext>
-            </SwrconfigContext>
-          </AuthContext>
-        </div>
+      <body className="bg-gray-400 w-full">
+        <AuthContext>
+          <SwrconfigContext>
+            <NavigationContext>{children}</NavigationContext>
+          </SwrconfigContext>
+        </AuthContext>
       </body>
     </html>
   );
