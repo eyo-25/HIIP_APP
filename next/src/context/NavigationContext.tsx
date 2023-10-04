@@ -13,7 +13,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function AuthGardContext({ children }: Props) {
+export default function NavigationContext({ children }: Props) {
   const path = usePathname();
   const isNav = !(
     path === "/auth" ||

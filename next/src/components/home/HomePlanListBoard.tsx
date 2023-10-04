@@ -12,18 +12,20 @@ function HomePlanListBoard({ planList, planListSort }: Props) {
       <div className="absolute top-[5px] w-full">
         <div className="mx-auto w-90pxr h-3pxr bg-gray-400 rounded-md"></div>
       </div>
-      {planList && (
-        <ul className="sroll h-full pt-26pxr w-full px-24pxr mx-auto overflow-hidden">
-          {planList.map((data, idx) => (
-            <HomePlanCard
-              key={data._id}
-              data={data}
-              idx={idx}
-              planListSort={planListSort}
-            />
-          ))}
-        </ul>
-      )}
+      <ul className="sroll h-full pt-26pxr w-full px-24pxr mx-auto overflow-hidden">
+        {planList && (
+          <>
+            {planList.map((data, idx) => (
+              <HomePlanCard
+                key={data._id}
+                data={data}
+                idx={idx}
+                planListSort={planListSort}
+              />
+            ))}
+          </>
+        )}
+      </ul>
     </div>
   );
 }

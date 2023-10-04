@@ -7,7 +7,7 @@ import { useTouchHandlers } from "@/comman/utils/touchHandlers";
 import { useMouseHandlers } from "@/comman/utils/mouseHandlers";
 import MetaButton from "../ui/MetaButton";
 import { HomePlanModel } from "@/comman/model/plan";
-import LoadingSpinner from "../ui/Loading";
+import HomeWiseSaying from "./HomeWiseSaying";
 
 type Props = {
   planListData: HomePlanModel[] | undefined;
@@ -54,11 +54,12 @@ function HomeSection({ planListData, isLoading }: Props) {
         <HomeHeader selectedPlan={planList[0]} />
       </section>
       <section className={`w-full ${isExtend ? "h-[19%]" : "h-[48%]"}`}>
-        {isLoading ? (
-          <LoadingSpinner size={60} />
-        ) : (
+        <div className="flex flex-col items-center h-full text-white">
+          {!isExtend && (
+            <HomeWiseSaying isSelectedPlan={planList[0] !== undefined} />
+          )}
           <HomeInfo selectedPlan={planList[0]} isExtend={isExtend} />
-        )}
+        </div>
       </section>
       <section
         className={`relative bg-white w-full rounded-t-3xl ${
