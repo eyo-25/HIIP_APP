@@ -20,9 +20,6 @@ const config: Config = {
       }, {}),
     },
     extend: {
-      height: {
-        "100vh": "calc(var(--vh, 1vh) * 100)",
-      },
       colors: {
         gray: {
           100: "#F9F9F9",

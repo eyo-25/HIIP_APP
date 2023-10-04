@@ -1,5 +1,5 @@
 import { PlanTimerData } from "@/comman/model/plan";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import TimerInfo from "./TimerInfo";
 import LoadingSpinner from "../ui/Loading";
@@ -12,6 +12,7 @@ type Props = {
 
 function TimerSection({ planTimerData, planId, isLoading }: Props) {
   const [isDone, setIsDone] = useState<boolean>(false);
+  const [isStop, setIsStop] = useState<boolean>(false);
   const router = useRouter();
 
   const handleFinishClick = (isSuccess: boolean) => {
@@ -19,6 +20,17 @@ function TimerSection({ planTimerData, planId, isLoading }: Props) {
   };
   const timerDone = () => {
     setIsDone(true);
+  };
+  const isStopSetter = (isStop: boolean) => setIsStop(isStop);
+
+  const gradiantClass = () => {
+    const base = "absolute z-10 bottom-0pxr w-full h-[70%] bg-gradient-to-t ";
+
+    if (isStop) {
+      return `${base} from-red from-10% via-red/50 via-30% to-red/0 to-90%`;
+    }
+
+    return `${base} from-blue from-10% via-blue/50 via-30% to-blue/0 to-90%`;
   };
 
   return (
@@ -48,11 +60,13 @@ function TimerSection({ planTimerData, planId, isLoading }: Props) {
           planTimerData={planTimerData}
           planId={planId}
           timerDone={timerDone}
+          isStop={isStop}
+          isStopSetter={isStopSetter}
         />
       ) : (
         <LoadingSpinner size={80} />
       )}
-      <div className="absolute z-10 bottom-0pxr w-full h-[70%] bg-gradient-to-t from-blue from-10% via-blue/50 via-30% to-blue/0 to-90%"></div>
+      <div className={gradiantClass()}></div>
     </div>
   );
 }

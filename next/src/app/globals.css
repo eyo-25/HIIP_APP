@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --vh: 100%;
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
 
 body {
+  height: 100svh;
   touch-action: none;
   -ms-user-select: none;
   -moz-user-select: -moz-none;

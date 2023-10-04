@@ -1,7 +1,6 @@
 "use client";
 
 import Navbar from "@/components/navbar/Navbar";
-import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -15,22 +14,17 @@ type Props = {
 };
 
 export default function AuthGardContext({ children }: Props) {
-  const { data: session } = useSession();
-  const user = session?.user;
   const path = usePathname();
-
-  if (
+  const isNav = !(
     path === "/auth" ||
     path.startsWith("/write") ||
     path.startsWith("/timer")
-  ) {
-    return <>{children}</>;
-  }
+  );
 
   return (
-    <>
+    <div className="relative overflow-hidden mx-auto h-full w-full max-w-md bg-gray-200">
       {children}
-      <Navbar />
-    </>
+      {isNav && <Navbar />}
+    </div>
   );
 }
