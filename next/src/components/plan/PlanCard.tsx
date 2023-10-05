@@ -5,8 +5,18 @@ import { useRef, useState } from "react";
 import { PencilIcon, XIcon } from "@/comman/assets";
 import Link from "next/link";
 import { mutate } from "swr";
-
+import { motion } from "framer-motion";
 import { removePlan, useOnClickOutside } from "@/comman/hooks";
+
+const cardVariants = {
+  click: {
+    scale: 0.95,
+    transition: {
+      delay: 0.3,
+      type: "linear",
+    },
+  },
+};
 
 type Props = {
   planData: SimplePlanModel;
@@ -57,7 +67,9 @@ export default function PlanCard({
   };
 
   return (
-    <li
+    <motion.li
+      variants={cardVariants}
+      whileTap="click"
       ref={cardRef}
       onContextMenu={(e) => e.preventDefault()}
       onClick={handleSelectPlan}
@@ -127,6 +139,6 @@ export default function PlanCard({
           ))}
         </ul>
       </div>
-    </li>
+    </motion.li>
   );
 }

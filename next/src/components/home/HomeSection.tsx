@@ -1,13 +1,28 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import HomeHeader from "./HomeHeader";
-import HomeInfo from "./HomeInfo";
+import HomeDetailInfo from "./HomeDetailInfo";
 import HomePlanListBoard from "./HomePlanListBoard";
 import { useTouchHandlers } from "@/comman/utils/touchHandlers";
 import { useMouseHandlers } from "@/comman/utils/mouseHandlers";
 import MetaButton from "../ui/MetaButton";
 import { HomePlanModel } from "@/comman/model/plan";
-import HomeWiseSaying from "./HomeWiseSaying";
+import HomeInfo from "./HomeInfo";
+
+const buttonVarients = {
+  normal: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      delay: 0.5,
+      duration: 1,
+      type: "linear",
+    },
+  },
+};
 
 type Props = {
   planListData: HomePlanModel[] | undefined;
@@ -24,6 +39,32 @@ function HomeSection({ planListData, isLoading }: Props) {
     setIsExtend,
     isExtend
   );
+
+  const infoVariants = {
+    normal: {
+      opacity: 0,
+    },
+    animate: {
+      opacity: 1,
+      transition: {
+        delay: 0.3,
+        duration: 0.8,
+        type: "tween",
+      },
+    },
+  };
+  const boardVariants = {
+    normal: {
+      height: "0%",
+    },
+    animate: {
+      height: isExtend ? "69%" : "40%",
+      transition: {
+        duration: 0.5,
+        type: "tween",
+      },
+    },
+  };
 
   const planListSort = (id: string) => {
     setPlanList((planList) => {
@@ -44,7 +85,7 @@ function HomeSection({ planListData, isLoading }: Props) {
 
   return (
     <div
-      className={`w-full h-full z-10 ${isExtend && "bg-black/50"}`}
+      className={`relative w-full h-full z-10 ${isExtend && "bg-black/50"}`}
       onMouseDown={isPlanList ? handleMouseDown : undefined}
       onMouseUp={isPlanList ? handleMouseUp : undefined}
       onTouchEnd={isPlanList ? handleTouchEnd : undefined}
@@ -53,24 +94,33 @@ function HomeSection({ planListData, isLoading }: Props) {
       <section className="w-full h-[12%]">
         <HomeHeader selectedPlan={planList[0]} />
       </section>
-      <section className={`w-full ${isExtend ? "h-[19%]" : "h-[48%]"}`}>
+      <motion.section
+        variants={infoVariants}
+        initial="normal"
+        animate="animate"
+        className={`w-full ${isExtend ? "h-[19%]" : "h-[48%]"}`}
+      >
         <div className="flex flex-col items-center h-full text-white">
-          {!isExtend && (
-            <HomeWiseSaying isSelectedPlan={planList[0] !== undefined} />
+          {isExtend ? (
+            <HomeDetailInfo selectedPlan={planList[0]} isExtend={isExtend} />
+          ) : (
+            <HomeInfo selectedPlan={planList[0]} />
           )}
-          <HomeInfo selectedPlan={planList[0]} isExtend={isExtend} />
         </div>
-      </section>
-      <section
-        className={`relative bg-white w-full rounded-t-3xl ${
-          isExtend ? "h-[69%]" : "h-[40%]"
-        }`}
+      </motion.section>
+      <motion.section
+        className={`absolute bottom-0pxr bg-white w-full rounded-t-3xl`}
+        variants={boardVariants}
+        initial="normal"
+        animate="animate"
       >
         <HomePlanListBoard planList={planList} planListSort={planListSort} />
-      </section>
-      <Link href={planList[0] ? `/timer/${planList[0]._id}` : "/write/creat"}>
-        <MetaButton mode={isPlanList ? "play" : "creat"} />
-      </Link>
+      </motion.section>
+      <motion.div variants={buttonVarients} initial="normal" animate="animate">
+        <Link href={planList[0] ? `/timer/${planList[0]._id}` : "/write/creat"}>
+          <MetaButton mode={isPlanList ? "play" : "creat"} />
+        </Link>
+      </motion.div>
     </div>
   );
 }

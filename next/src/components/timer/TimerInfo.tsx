@@ -9,6 +9,7 @@ import MetaButton from "../ui/MetaButton";
 import ProgressBar from "./ProgressBar";
 import TimerBoard from "./TimerBoard";
 import LoadingSpinner from "../ui/Loading";
+import { motion } from "framer-motion";
 
 type Props = {
   planTimerData: PlanTimerData;
@@ -163,8 +164,8 @@ function TimerInfo({
       )}
       {isStop ? (
         <div>
-          <MetaButton mode={"end"} onClick={handleEnd} style="right-150pxr" />
-          <MetaButton mode={"play"} onClick={handleStart} style="left-150pxr" />
+          <MetaButton mode={"end"} onClick={handleEnd} move={-80} />
+          <MetaButton mode={"play"} onClick={handleStart} move={80} />
         </div>
       ) : (
         <MetaButton mode={"pause"} onClick={handleStop} />

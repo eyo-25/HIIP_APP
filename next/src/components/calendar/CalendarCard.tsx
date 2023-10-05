@@ -3,8 +3,23 @@ import {
   SelectPlanModel,
   SimplePlanModel,
 } from "@/comman/model/plan";
+import { motion } from "framer-motion";
 import dayjs from "dayjs";
 import { planColor } from "../plan/PlanCard.data";
+
+const calendarVariants = {
+  normal: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      delay: 0.35,
+      duration: 0.5,
+      type: "linear",
+    },
+  },
+};
 
 type Props = {
   data: CalendarModel;
@@ -62,7 +77,10 @@ function CalendarCard({
   };
 
   return (
-    <li
+    <motion.li
+      variants={calendarVariants}
+      initial="normal"
+      animate="animate"
       onClick={() => handleDateClick && handleDateClick(date, list)}
       className={liClassName(date)}
       key={date}
@@ -88,7 +106,7 @@ function CalendarCard({
           ))}
         </ul>
       )}
-    </li>
+    </motion.li>
   );
 }
 
