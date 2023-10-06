@@ -53,7 +53,7 @@ function AppSplash() {
         animate="animate"
       >
         <motion.div
-          className="z-30 text-white font-black text-5xl leading-tight tracking-wide"
+          className="z-30 text-white font-black desktop:text-5xl text-4xl leading-tight tracking-wide"
           variants={textVariants}
           initial="normal"
           animate="animate"

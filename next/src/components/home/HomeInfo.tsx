@@ -30,7 +30,7 @@ function HomeInfo({ selectedPlan }: Props) {
       variants={infoVariants}
       initial="normal"
       animate="animate"
-      className="flex-center flex-col text-2xl leading-loose h-full"
+      className="flex-center flex-col text-2xl h-full leading-loose"
     >
       <div className="flex-center flex-col h-full">
         {selectedPlan ? (

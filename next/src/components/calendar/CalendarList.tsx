@@ -27,7 +27,7 @@ function CalendarList({
 }: Props) {
   return (
     <ul
-      className={`grid grid-cols-7 text-sm ${isWeekly ? "h-[60%]" : "h-[84%]"}`}
+      className={`grid grid-cols-7 text-sm ${isWeekly ? "h-[60%]" : "h-[88%]"}`}
     >
       {isWeekly
         ? calendarArray[weekIndex].map((data, idx: number) => (

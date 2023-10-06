@@ -55,7 +55,20 @@ function PlanSection({ planListData }: Props) {
       height: "0%",
     },
     animate: {
-      height: isWeekly ? "17%" : "50%",
+      height: isWeekly ? "20%" : "52%",
+      transition: {
+        duration: 0.5,
+        type: "tween",
+      },
+    },
+  };
+
+  const planBoardVariants = {
+    normal: {
+      height: "80%",
+    },
+    animate: {
+      height: isWeekly ? "80%" : "48%",
       transition: {
         duration: 0.5,
         type: "tween",
@@ -89,13 +102,18 @@ function PlanSection({ planListData }: Props) {
             setCalendarMemo={setCalendarMemo}
           />
         </motion.section>
-        <section className={booleanStyle(isWeekly, "h-[83%]", "h-[50%]")}>
+        <motion.section
+          variants={planBoardVariants}
+          initial="normal"
+          animate="animate"
+          className={booleanStyle(isWeekly, "h-[80%]", "h-[48%]")}
+        >
           <PlanListBoard
             selectedPlanId={selectedPlan?._id}
             selectPlan={selectPlan}
             planList={planList}
           />
-        </section>
+        </motion.section>
       </main>
       <motion.div variants={buttonVarients} initial="normal" animate="animate">
         <Link href={"/write/creat"}>

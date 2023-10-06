@@ -28,7 +28,7 @@ export default function HomePlanCard({ data, idx, planListSort }: Props) {
         isActive ? "drop-shadow-md bg-white" : "drop-shadow-sm bg-gray-200"
       }`}
     >
-      <div className="relative h-full py-35pxr">
+      <div className="relative h-full desktop:py-35pxr py-30pxr">
         <div className="flex justify-between">
           <div className="flex">
             <h4

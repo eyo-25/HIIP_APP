@@ -20,6 +20,9 @@ const config: Config = {
       }, {}),
     },
     extend: {
+      screens: {
+        desktop: { raw: "(min-height: 896px)" },
+      },
       colors: {
         gray: {
           100: "#F9F9F9",

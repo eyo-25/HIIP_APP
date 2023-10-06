@@ -8,7 +8,7 @@ type Props = {
 function HomeDday({ selectedPlan }: Props) {
   return (
     <div className="flex w-full">
-      <p className="italic font-black text-[80px] mx-auto">
+      <p className="italic font-black text-7xl mx-auto pb-5pxr desktop:text-8xl">
         {selectedPlan
           ? dayjs(selectedPlan.endDate).diff(dayjs(), "day") + 1
           : 0}

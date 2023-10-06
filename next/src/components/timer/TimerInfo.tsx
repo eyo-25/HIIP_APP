@@ -164,8 +164,8 @@ function TimerInfo({
       )}
       {isStop ? (
         <div>
-          <MetaButton mode={"end"} onClick={handleEnd} move={-80} />
-          <MetaButton mode={"play"} onClick={handleStart} move={80} />
+          <MetaButton mode={"end"} onClick={handleEnd} move={-75} />
+          <MetaButton mode={"play"} onClick={handleStart} move={75} />
         </div>
       ) : (
         <MetaButton mode={"pause"} onClick={handleStop} />
