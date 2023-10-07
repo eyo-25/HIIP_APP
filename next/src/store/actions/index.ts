@@ -1,1 +1,1 @@
-export * from "./isSplash";
+export * from "./commanAction";

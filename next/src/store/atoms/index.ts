@@ -1,1 +1,1 @@
-export * from "./splash";
+export * from "./comman";

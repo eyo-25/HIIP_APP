@@ -4,20 +4,20 @@ import Navbar from "@/components/navbar/Navbar";
 import { useEffect } from "react";
 import AppSplash from "@/components/splash/AppSplash";
 import { useAtomValue, useSetAtom } from "jotai";
-import { isHomeSplash, is_home_splash_atom } from "@/store";
+import { isHomeSplashSetter, is_homesplash_atom } from "@/store";
 
 type Props = {
   children: React.ReactNode;
 };
 
 export default function NavigationContext({ children }: Props) {
-  const isHomeSplashAtom = useAtomValue(is_home_splash_atom);
-  const setTaxPrice = useSetAtom(isHomeSplash);
+  const isHomeSplashAtom = useAtomValue(is_homesplash_atom);
+  const setIsHomeSplash = useSetAtom(isHomeSplashSetter);
 
   useEffect(() => {
     if (isHomeSplashAtom) {
       setTimeout(() => {
-        setTaxPrice();
+        setIsHomeSplash();
       }, 1800);
     }
   }, []);

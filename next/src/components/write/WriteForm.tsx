@@ -18,6 +18,8 @@ import DaySelector from "./DaySelector";
 import { ColorType, FormDataModel, PlanDetailModel } from "@/comman/model/plan";
 import { mutate } from "swr";
 import { createPlan, updatePlan } from "@/comman/hooks";
+import { useSetAtom } from "jotai";
+import { isLoadingSetter } from "@/store";
 
 type IntervalType = "interval" | "focusTime" | "breakTime";
 type Props = {
@@ -51,8 +53,7 @@ function WriteForm({
   const [interval, setInterval] = useState<number>(5);
   const [focusTime, setFocusTime] = useState<number>(25);
   const [breakTime, setBreakTime] = useState<number>(5);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>();
+  const setIsLoading = useSetAtom(isLoadingSetter);
 
   useEffect(() => {
     if (planData) {
@@ -84,6 +85,8 @@ function WriteForm({
     }
     if (selectedDays.length <= 0) return alert("요일을 하루이상 선택해 주세요");
 
+    setIsLoading(true);
+
     const formData: FormDataModel = {
       title,
       memo,
@@ -99,8 +102,8 @@ function WriteForm({
     if (mode === "creat") {
       createPlan(formData)
         .then(() => router.push("/plan"))
-        .catch((err) => setError(err.toString()))
-        .finally(() => setLoading(false));
+        .catch((err) => alert(err.toString()))
+        .finally(() => setIsLoading(false));
     }
     if (mode === "edit" && planId) {
       updatePlan(planId, formData)
@@ -108,8 +111,8 @@ function WriteForm({
           mutate(`/api/plan/${planId}`);
           router.push("/plan");
         })
-        .catch((err) => setError(err.toString()))
-        .finally(() => setLoading(false));
+        .catch((err) => alert(err.toString()))
+        .finally(() => setIsLoading(false));
     }
   };
   const handleDayClick = (idx: number) => {
