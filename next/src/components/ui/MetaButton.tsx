@@ -1,21 +1,42 @@
-import { MetaButtonType } from "@/comman/types/type";
+import { MetaButtonIconType } from "@/comman/types/type";
 import { AiOutlinePlus } from "react-icons/ai";
 import { IoPlaySharp } from "react-icons/io5";
 import { AiOutlinePause } from "react-icons/ai";
+import { motion } from "framer-motion";
 
 type Props = {
-  mode: MetaButtonType;
-  style?: string;
+  mode: MetaButtonIconType;
+  move?: number;
   onClick?: () => void;
 };
 
-export default function MetaButton({ mode, style, onClick }: Props) {
+export default function MetaButton({ mode, move, onClick }: Props) {
+  const buttonVarients = {
+    click: { scale: 0.9 },
+    normal: {
+      opacity: 0,
+      x: 0,
+    },
+    animate: {
+      opacity: 1,
+      x: move ? move : 0,
+      transition: {
+        duration: 0.7,
+        type: "linear",
+      },
+    },
+  };
+
   return (
     <div
-      className={`fixed flex mx-auto left-0pxr right-0pxr bottom-[16%] z-20 w-86pxr h-86pxr ${style}`}
+      className={`fixed flex mx-auto left-0pxr right-0pxr bottom-[14%] desktop:bottom-[16%] z-20 w-80pxr h-80pxr desktop:w-88pxr desktop:h-88pxr`}
     >
-      <button
+      <motion.button
+        initial="normal"
+        animate="animate"
         onClick={onClick}
+        variants={buttonVarients}
+        whileTap="click"
         className={`rounded-full flex-center w-full h-full ${
           mode === "end" ? "bg-white" : "bg-black"
         }`}
@@ -30,7 +51,7 @@ export default function MetaButton({ mode, style, onClick }: Props) {
           <AiOutlinePause className="text-white w-[50%] h-[50%]" />
         )}
         {mode === "end" && <div className="bg-black w-[27%] h-[27%]"></div>}
-      </button>
+      </motion.button>
     </div>
   );
 }

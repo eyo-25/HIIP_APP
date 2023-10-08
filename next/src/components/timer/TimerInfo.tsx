@@ -40,10 +40,14 @@ function TimerInfo({
   const [isBreakSet, setIsBreakSet] = useState<boolean>();
   const [interval, setInterval] = useState<number>(focusSetData + breakSetData);
   const { count, start, stop, reset, done } = useCounter();
+  const [uploadCount, setUploadCount] = useState(0);
 
   type UpdateType = "finish" | "setend" | "stop";
 
   const updatePlanHistory = (updateType: UpdateType) => {
+    if (count !== 0 && uploadCount === count) return;
+    setUploadCount(count);
+
     setIsUpdateLoading(true);
     let focusTime = 0;
     let breakTime = 0;
@@ -122,8 +126,8 @@ function TimerInfo({
     if (count === 0) {
       if (interval === 1) {
         done();
-        timerDone();
         updatePlanHistory("finish");
+        timerDone();
         return;
       }
 
@@ -163,8 +167,8 @@ function TimerInfo({
       )}
       {isStop ? (
         <div>
-          <MetaButton mode={"end"} onClick={handleEnd} style="right-150pxr" />
-          <MetaButton mode={"play"} onClick={handleStart} style="left-150pxr" />
+          <MetaButton mode={"end"} onClick={handleEnd} move={-75} />
+          <MetaButton mode={"play"} onClick={handleStart} move={75} />
         </div>
       ) : (
         <MetaButton mode={"pause"} onClick={handleStop} />

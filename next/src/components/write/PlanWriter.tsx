@@ -7,14 +7,18 @@ import MonthDatePicker from "@/components/write/MonthDatePicker";
 import WriteForm from "@/components/write/WriteForm";
 import { PlanDetailModel } from "@/comman/model/plan";
 import dayjs from "dayjs";
+import LoadingSpinner from "../ui/Loading";
+import { useAtomValue } from "jotai";
+import { is_loading_atom } from "@/store";
 
 type Props = {
   planData?: PlanDetailModel;
   planId?: string;
   mode: "edit" | "creat";
+  isLoading?: boolean;
 };
 
-function PlanWriter({ planData, mode, planId }: Props) {
+function PlanWriter({ planData, mode, planId, isLoading = false }: Props) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<string>(
     dayjs().format("YYYY-MM-DD")
@@ -22,6 +26,7 @@ function PlanWriter({ planData, mode, planId }: Props) {
   const [endDate, setEndDate] = useState<string>("");
   const [isStart, setIsStart] = useState(false);
   const [isStartDate, setIsStartDate] = useState(true);
+  const isLoadingAtom = useAtomValue(is_loading_atom);
 
   const handleDateSet = (date: string) => {
     isStartDate ? setStartDate(date) : setEndDate(date);
@@ -40,6 +45,11 @@ function PlanWriter({ planData, mode, planId }: Props) {
 
   return (
     <main className="bg-white text-lg font-semibold sroll h-full">
+      {(isLoadingAtom || isLoading) && (
+        <div className="flex flex-col z-30 absolute w-full h-full bg-black/50 backdrop-blur-[1px]">
+          <LoadingSpinner size={60} text="Loading..." />
+        </div>
+      )}
       {isModalOpen && (
         <div
           onClick={modalClose}

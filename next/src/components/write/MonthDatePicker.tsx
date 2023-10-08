@@ -38,7 +38,7 @@ function MonthDatePicker({ modalClose, handleDateSet, isStartDate }: Props) {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="flex flex-col px-8pxr items-center fixed bg-white w-full h-420pxr bottom-0pxr rounded-t-3xl max-w-md"
+      className="flex flex-col px-8pxr items-center fixed bg-white w-full h-450pxr bottom-0pxr rounded-t-3xl max-w-md"
     >
       <div className="flex flex-col items-center max-w-sm w-full">
         <h5 className="py-23pxr text-gray-700">
@@ -51,7 +51,7 @@ function MonthDatePicker({ modalClose, handleDateSet, isStartDate }: Props) {
           displayDate={displayDate}
         />
       </div>
-      <section className="w-full px-7pxr font-medium h-[88%] max-w-sm">
+      <section className="w-full desktop:px-7pxr font-medium h-[88%] max-w-sm">
         <CalendarDays />
         <ul className="grid grid-cols-7 text-sm h-[84%]">
           {calendarArray?.map((date) => (

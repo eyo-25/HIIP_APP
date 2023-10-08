@@ -11,19 +11,19 @@ function MyList({ data }: Props) {
   const { title, link, icon } = data;
 
   return (
-    <li className="py-10pxr border-b-2 border-gray-400">
+    <li className="desktop:py-10pxr py-8pxr border-b-2 border-gray-400">
       <Link
         className="flex justify-between items-center"
         href={link}
         target="_blank"
       >
         <div className="flex">
-          <div className="relative h-28pxr w-28pxr">
+          <div className="relative desktop:h-28pxr desktop:w-28pxr h-25pxr w-25pxr">
             <Image fill src={icon} alt={title} />
           </div>
-          <p className="ml-9pxr font-semibold text-gray-850 mt-4pxr">{title}</p>
+          <p className="ml-9pxr font-semibold text-gray-850 mt-2pxr">{title}</p>
         </div>
-        <IoChevronForward className="w-30pxr h-30pxr text-gray-600" />
+        <IoChevronForward className="desttop:w-30pxr desttop:h-30pxr w-25pxr h-25pxr text-gray-600" />
       </Link>
     </li>
   );

@@ -10,7 +10,7 @@ function HomePlanListBoard({ planList, planListSort }: Props) {
   return (
     <div>
       <div className="absolute top-[5px] w-full">
-        <div className="mx-auto w-90pxr h-3pxr bg-gray-400 rounded-md"></div>
+        <div className="mx-auto w-100pxr h-3pxr bg-gray-400 rounded-md"></div>
       </div>
       <ul className="sroll h-full pt-26pxr w-full px-24pxr mx-auto overflow-hidden">
         {planList && (

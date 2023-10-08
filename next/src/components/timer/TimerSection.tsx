@@ -1,6 +1,7 @@
 import { PlanTimerData } from "@/comman/model/plan";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import TimerInfo from "./TimerInfo";
 import LoadingSpinner from "../ui/Loading";
 
@@ -23,8 +24,24 @@ function TimerSection({ planTimerData, planId, isLoading }: Props) {
   };
   const isStopSetter = (isStop: boolean) => setIsStop(isStop);
 
+  const gradiantVariants = {
+    normal: {
+      opacity: 0,
+      height: "0",
+    },
+    animate: {
+      opacity: 1,
+      height: "70%",
+      transition: {
+        delat: 0.1,
+        duration: 1,
+        type: "tween",
+      },
+    },
+  };
+
   const gradiantClass = () => {
-    const base = "absolute z-10 bottom-0pxr w-full h-[70%] bg-gradient-to-t ";
+    const base = "absolute z-10 bottom-0pxr w-full h-[70%] bg-gradient-to-t";
 
     if (isStop) {
       return `${base} from-red from-10% via-red/50 via-30% to-red/0 to-90%`;
@@ -64,9 +81,14 @@ function TimerSection({ planTimerData, planId, isLoading }: Props) {
           isStopSetter={isStopSetter}
         />
       ) : (
-        <LoadingSpinner size={80} />
+        <LoadingSpinner size={60} text="타이머 불러오는 중" />
       )}
-      <div className={gradiantClass()}></div>
+      <motion.div
+        variants={gradiantVariants}
+        initial="normal"
+        animate="animate"
+        className={gradiantClass()}
+      ></motion.div>
     </div>
   );
 }

@@ -5,19 +5,31 @@ import { useRef, useState } from "react";
 import { PencilIcon, XIcon } from "@/comman/assets";
 import Link from "next/link";
 import { mutate } from "swr";
-
+import { motion } from "framer-motion";
 import { removePlan, useOnClickOutside } from "@/comman/hooks";
+
+const cardVariants = {
+  click: {
+    scale: 0.95,
+    transition: {
+      delay: 0.3,
+      type: "linear",
+    },
+  },
+};
 
 type Props = {
   planData: SimplePlanModel;
   selectedPlanId?: string;
   selectPlan: (planData: SelectPlanModel | null) => void;
+  loadingSetter: (isBoardLoading: boolean) => void;
 };
 
 export default function PlanCard({
   planData,
   selectedPlanId,
   selectPlan,
+  loadingSetter,
 }: Props) {
   const { title, memo, interval, _id, startDate, endDate, status, color } =
     planData;
@@ -44,7 +56,9 @@ export default function PlanCard({
     }
   };
   useOnClickOutside(cardRef, () => setIsModalOpen(false));
+
   const handleDeleteClick = () => {
+    loadingSetter(true);
     const ok = confirm("플랜을 삭제하시겠습니까?");
     if (ok) {
       removePlan(_id)
@@ -52,12 +66,19 @@ export default function PlanCard({
           mutate(`/api/plan`);
           selectPlan(null);
         })
-        .catch((err) => alert(err.toString()));
+        .catch((err) => alert(err.toString()))
+        .finally(() =>
+          setTimeout(() => {
+            loadingSetter(false);
+          }, 600)
+        );
     }
   };
 
   return (
-    <li
+    <motion.li
+      variants={cardVariants}
+      whileTap="click"
       ref={cardRef}
       onContextMenu={(e) => e.preventDefault()}
       onClick={handleSelectPlan}
@@ -70,28 +91,28 @@ export default function PlanCard({
       }`}
     >
       {isModalOpen && (
-        <div className="absolute flex top-[-22px] right-15pxr">
+        <div className="absolute flex desktop:top-[-22px] top-[-18px] right-15pxr">
           <button
             onClick={handleDeleteClick}
-            className="z-20 flex-center w-45pxr h-45pxr"
+            className="z-20 flex-center desktop:w-45pxr desktop:h-45pxr w-40pxr h-40pxr"
           >
-            <div className="flex-center w-34pxr h-34pxr rounded-full drop-shadow-md bg-gray-600">
+            <div className="flex-center desktop:w-34pxr desktop:h-34pxr w-32pxr h-32pxr rounded-full drop-shadow-md bg-gray-600">
               <XIcon />
             </div>
           </button>
           <Link
-            className="z-20 flex-center w-45pxr h-45pxr"
+            className="z-20 flex-center desktop:w-45pxr desktop:h-45pxr w-40pxr h-40pxr"
             href={`/write/edit/${_id}`}
           >
             <div
-              className={`flex-center drop-shadow-md w-34pxr h-34pxr rounded-full ${planColor[color]}`}
+              className={`flex-center drop-shadow-md desktop:w-34pxr w-32pxr h-32pxr desktop:h-34pxr rounded-full ${planColor[color]}`}
             >
               <PencilIcon />
             </div>
           </Link>
         </div>
       )}
-      <div className="relative py-35pxr">
+      <div className="relative desktop:py-35pxr py-25pxr">
         <div className="flex justify-between mb-15pxr">
           <div className="flex">
             <h4
@@ -127,6 +148,6 @@ export default function PlanCard({
           ))}
         </ul>
       </div>
-    </li>
+    </motion.li>
   );
 }

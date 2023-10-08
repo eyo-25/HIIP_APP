@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import dayjs from "dayjs";
-
 import CalendarList from "./CalendarList";
 import {
   CalendaMemoModel,
@@ -118,7 +117,7 @@ function CalendarPicker({
   };
 
   return (
-    <div className="flex flex-col items-center w-full h-full bg-white drop-shadow-sm">
+    <div className="relative flex flex-col items-center w-full h-full">
       <CalendarHeader
         displayDate={displayDate}
         handlePrevClick={handlePrevClick}
@@ -141,6 +140,9 @@ function CalendarPicker({
           handleDateClick={handleDateClick}
         />
       </section>
+      <div className="absolute bottom-[5px] w-full">
+        <div className="mx-auto w-100pxr h-3pxr bg-gray-400 rounded-md"></div>
+      </div>
     </div>
   );
 }
