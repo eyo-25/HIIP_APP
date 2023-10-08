@@ -1,17 +1,9 @@
-"use client";
-
 import "./globals.css";
 import { Roboto } from "next/font/google";
 import type { Metadata } from "next";
 
 import AuthContext from "@/context/AuthContext";
 import SwrconfigContext from "@/context/SwrconfigContext";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import dayjs from "dayjs";
-
-dayjs.extend(isSameOrAfter);
-dayjs.extend(isSameOrBefore);
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700", "900"],

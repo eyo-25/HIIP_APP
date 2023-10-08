@@ -5,6 +5,12 @@ import { useEffect } from "react";
 import AppSplash from "@/components/splash/AppSplash";
 import { useAtomValue, useSetAtom } from "jotai";
 import { isHomeSplashSetter, is_homesplash_atom } from "@/store";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import dayjs from "dayjs";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 type Props = {
   children: React.ReactNode;
