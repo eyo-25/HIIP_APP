@@ -41,10 +41,14 @@ function TimerInfo({
   const [isBreakSet, setIsBreakSet] = useState<boolean>();
   const [interval, setInterval] = useState<number>(focusSetData + breakSetData);
   const { count, start, stop, reset, done } = useCounter();
+  const [uploadCount, setUploadCount] = useState(0);
 
   type UpdateType = "finish" | "setend" | "stop";
 
   const updatePlanHistory = (updateType: UpdateType) => {
+    if (uploadCount === count) return;
+    setUploadCount(count);
+
     setIsUpdateLoading(true);
     let focusTime = 0;
     let breakTime = 0;

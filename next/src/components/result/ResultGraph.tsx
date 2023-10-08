@@ -15,13 +15,15 @@ function ResultGraph({ planData, isSuccess }: Props) {
     planData,
     isSuccess ? "success" : "home"
   );
-  const arr = [0, 0, 0, 0, 0, 0, 0];
+
+  const arr = [0, 0, 0, 0, 0, 0, 0, 0];
   const today = dayjs();
   let currentDate = dayjs().endOf("week").add(1, "day");
   let cnt = 0;
 
-  for (let i = 6; 0 <= i; i--) {
+  for (let i = 7; 0 <= i; i--) {
     currentDate = currentDate.subtract(1, "day");
+    console.log(currentDate.format("MM-DD"));
     if (today.isBefore(currentDate, "day")) continue;
     if (today.isSame(currentDate, "day")) {
       arr[i] = successPercent;
@@ -36,8 +38,10 @@ function ResultGraph({ planData, isSuccess }: Props) {
     );
   }
 
+  console.log(arr);
+
   const percentDiff = () => {
-    const diff = arr[today.day()] - arr[today.day() - 1];
+    const diff = arr[today.day() + 1] - arr[today.day()];
     if (0 <= diff) return `${diff}% 증가`;
     else return `${diff.toString().slice(1)}% 하락`;
   };
@@ -79,7 +83,7 @@ function ResultGraph({ planData, isSuccess }: Props) {
                           : "bg-red"
                         : "bg-gray-600"
                     }`}
-                    style={{ height: `${arr[idx] + 0.5}%` }}
+                    style={{ height: `${arr[idx + 1] + 0.5}%` }}
                   ></div>
                   <p className="text-sm text-gray-900">{day}</p>
                 </li>
