@@ -23,7 +23,6 @@ function ResultGraph({ planData, isSuccess }: Props) {
 
   for (let i = 7; 0 <= i; i--) {
     currentDate = currentDate.subtract(1, "day");
-    console.log(currentDate.format("MM-DD"));
     if (today.isBefore(currentDate, "day")) continue;
     if (today.isSame(currentDate, "day")) {
       arr[i] = successPercent;
@@ -37,8 +36,6 @@ function ResultGraph({ planData, isSuccess }: Props) {
       ((successCount - cnt) / (totalDays - (today.day() - i))) * 100
     );
   }
-
-  console.log(arr);
 
   const percentDiff = () => {
     const diff = arr[today.day() + 1] - arr[today.day()];

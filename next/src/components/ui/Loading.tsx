@@ -15,7 +15,11 @@ function LoadingSpinner({ size = 50, color = "white", text }: Props) {
         src={color === "white" ? LoadingWhite : LoadingBlack}
         alt="로딩 이미지"
       />
-      {text && <p className="text-white font-medium">{text}</p>}
+      {text && (
+        <p className="font-medium" style={{ color: color }}>
+          {text}
+        </p>
+      )}
     </div>
   );
 }

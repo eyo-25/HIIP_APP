@@ -9,7 +9,6 @@ import MetaButton from "../ui/MetaButton";
 import ProgressBar from "./ProgressBar";
 import TimerBoard from "./TimerBoard";
 import LoadingSpinner from "../ui/Loading";
-import { motion } from "framer-motion";
 
 type Props = {
   planTimerData: PlanTimerData;
@@ -46,7 +45,7 @@ function TimerInfo({
   type UpdateType = "finish" | "setend" | "stop";
 
   const updatePlanHistory = (updateType: UpdateType) => {
-    if (uploadCount === count) return;
+    if (count !== 0 && uploadCount === count) return;
     setUploadCount(count);
 
     setIsUpdateLoading(true);
@@ -127,8 +126,8 @@ function TimerInfo({
     if (count === 0) {
       if (interval === 1) {
         done();
-        timerDone();
         updatePlanHistory("finish");
+        timerDone();
         return;
       }
 
