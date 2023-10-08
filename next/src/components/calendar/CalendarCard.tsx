@@ -3,8 +3,23 @@ import {
   SelectPlanModel,
   SimplePlanModel,
 } from "@/comman/model/plan";
+import { motion } from "framer-motion";
 import dayjs from "dayjs";
 import { planColor } from "../plan/PlanCard.data";
+
+const calendarVariants = {
+  normal: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      delay: 0.35,
+      duration: 0.5,
+      type: "linear",
+    },
+  },
+};
 
 type Props = {
   data: CalendarModel;
@@ -31,7 +46,8 @@ function CalendarCard({
   const isCurrentMonth = Number(date.split("-")[1]) === displayDate.month() + 1;
 
   const liClassName = (date: string) => {
-    const base = "relative flex-center mx-auto my-[8%] cursor-pointer w-full";
+    const base =
+      "relative flex-center desktop:max-h-44pxr max-h-40pxr mx-auto my-[8%] cursor-pointer w-full";
     if (displayType === "month") {
       return dayjs().isAfter(dayjs(date)) ? `${base} text-gray-600` : base;
     }
@@ -39,7 +55,7 @@ function CalendarCard({
     return `${base} ${!isCurrentMonth && "text-gray-600"}`;
   };
   const circleClassName = (date: string) => {
-    const base = "z-10 flex-center h-full w-[64%] rounded-full";
+    const base = "z-10 flex-center h-full desktop:w-[73%] w-[70%] rounded-full";
 
     if (date === today) return `bg-black text-white ${base}`;
     if (
@@ -62,7 +78,10 @@ function CalendarCard({
   };
 
   return (
-    <li
+    <motion.li
+      variants={calendarVariants}
+      initial="normal"
+      animate="animate"
       onClick={() => handleDateClick && handleDateClick(date, list)}
       className={liClassName(date)}
       key={date}
@@ -88,7 +107,7 @@ function CalendarCard({
           ))}
         </ul>
       )}
-    </li>
+    </motion.li>
   );
 }
 

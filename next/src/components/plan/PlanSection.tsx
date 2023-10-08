@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import PlanHeader from "./PlanHeader";
 import PlanListBoard from "@/components/plan/PlanListBoard";
 import MetaButton from "@/components/ui/MetaButton";
@@ -13,6 +14,20 @@ import {
 import Link from "next/link";
 import { useMouseHandlers } from "@/comman/utils/mouseHandlers";
 import { useTouchHandlers } from "@/comman/utils/touchHandlers";
+
+const buttonVarients = {
+  normal: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      delay: 0.5,
+      duration: 1,
+      type: "linear",
+    },
+  },
+};
 
 type Props = {
   planListData: PlanModel[];
@@ -35,6 +50,32 @@ function PlanSection({ planListData }: Props) {
     setSelectedPlan(data);
   };
 
+  const calendarVariants = {
+    normal: {
+      height: "0%",
+    },
+    animate: {
+      height: isWeekly ? "20%" : "52%",
+      transition: {
+        duration: 0.5,
+        type: "tween",
+      },
+    },
+  };
+
+  const planBoardVariants = {
+    normal: {
+      height: "80%",
+    },
+    animate: {
+      height: isWeekly ? "80%" : "48%",
+      transition: {
+        duration: 0.5,
+        type: "tween",
+      },
+    },
+  };
+
   return (
     <>
       <PlanHeader
@@ -42,12 +83,15 @@ function PlanSection({ planListData }: Props) {
         isPlanList={0 < planList.length ? true : false}
       />
       <main className="relative flex flex-col w-full overflow-hidden h-[92%]">
-        <section
+        <motion.section
+          variants={calendarVariants}
+          initial="normal"
+          animate="animate"
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onTouchEnd={handleTouchEnd}
           onTouchStart={handleTouchStart}
-          className={booleanStyle(isWeekly, "h-[17%] z-10", "h-[50%] z-10")}
+          className="bg-white drop-shadow-sm"
         >
           <Calendar
             planListData={planListData}
@@ -57,18 +101,25 @@ function PlanSection({ planListData }: Props) {
             calendarMemo={calendarMemo}
             setCalendarMemo={setCalendarMemo}
           />
-        </section>
-        <section className={booleanStyle(isWeekly, "h-[83%]", "h-[50%]")}>
+        </motion.section>
+        <motion.section
+          variants={planBoardVariants}
+          initial="normal"
+          animate="animate"
+          className={booleanStyle(isWeekly, "h-[80%]", "h-[48%]")}
+        >
           <PlanListBoard
             selectedPlanId={selectedPlan?._id}
             selectPlan={selectPlan}
             planList={planList}
           />
-        </section>
+        </motion.section>
       </main>
-      <Link href={"/write/creat"}>
-        <MetaButton mode={"creat"} />
-      </Link>
+      <motion.div variants={buttonVarients} initial="normal" animate="animate">
+        <Link href={"/write/creat"}>
+          <MetaButton mode={"creat"} />
+        </Link>
+      </motion.div>
     </>
   );
 }

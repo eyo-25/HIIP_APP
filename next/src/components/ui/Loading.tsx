@@ -4,16 +4,22 @@ import Image from "next/image";
 type Props = {
   size?: number;
   color?: "white" | "black";
+  text?: string;
 };
 
-function LoadingSpinner({ size = 50, color = "white" }: Props) {
+function LoadingSpinner({ size = 50, color = "white", text }: Props) {
   return (
-    <div className="z-30 flex-center w-full h-full">
+    <div className="flex flex-col z-30 flex-center w-full h-full">
       <Image
         width={size}
         src={color === "white" ? LoadingWhite : LoadingBlack}
         alt="로딩 이미지"
       />
+      {text && (
+        <p className="font-medium" style={{ color: color }}>
+          {text}
+        </p>
+      )}
     </div>
   );
 }

@@ -6,6 +6,7 @@ import ResultAnalize from "./ResultAnalize";
 import { HomePlanModel } from "@/comman/model/plan";
 import { resultWord } from "./Result.data";
 import LoadingSpinner from "../ui/Loading";
+import ResultBoardSkeleton from "./ResultBoardSkeleton";
 
 type Props = {
   isLoading: boolean;
@@ -34,7 +35,7 @@ function ResultSection({ isSuccess, planId, planData, isLoading }: Props) {
               <ResultPushBar planData={planData} isSuccess={isSuccess} />
             </>
           ) : (
-            <LoadingSpinner />
+            <ResultBoardSkeleton isSuccess={isSuccess} />
           )}
         </div>
       </section>

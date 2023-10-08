@@ -46,34 +46,38 @@ function ProgressBar({
 
   return (
     <section className="flex flex-col justify-end pb-45pxr items-center w-full h-[30%]">
-      <ul className="flex gap-x-3 mb-20pxr w-235pxr h-5pxr bg-white">
-        {progressBarElements.map((type, idx) =>
-          type === "focus" ? (
-            <li
-              key={idx}
-              className={`relative h-full bg-white`}
-              style={{ width: `${focusLength}%` }}
-            >
-              <div
-                className={`absolute h-full bg-blue`}
-                style={{ width: `${getProgressWidth(idx)}%` }}
-              ></div>
-            </li>
-          ) : (
-            <li
-              key={idx}
-              className={`relative h-full bg-black`}
-              style={{ width: `${breakLength}%` }}
-            >
-              <div
-                className={`absolute h-full bg-red`}
-                style={{ width: `${getProgressWidth(idx)}%` }}
-              ></div>
-            </li>
-          )
-        )}
-      </ul>
-      <p>나중에 울지말고 지금 울면서하자</p>
+      <div className="desktop:w-240pxr w-210pxr">
+        <ul className="flex gap-x-3 mb-20pxr w-full h-5pxr bg-white">
+          {progressBarElements.map((type, idx) =>
+            type === "focus" ? (
+              <li
+                key={idx}
+                className={`relative h-full bg-white`}
+                style={{ width: `${focusLength}%` }}
+              >
+                <div
+                  className={`absolute h-full bg-blue`}
+                  style={{ width: `${getProgressWidth(idx)}%` }}
+                ></div>
+              </li>
+            ) : (
+              <li
+                key={idx}
+                className={`relative h-full bg-black`}
+                style={{ width: `${breakLength}%` }}
+              >
+                <div
+                  className={`absolute h-full bg-red`}
+                  style={{ width: `${getProgressWidth(idx)}%` }}
+                ></div>
+              </li>
+            )
+          )}
+        </ul>
+        <p className="desktop:text-base text-sm text-center ellipsis">
+          나중에 울지말고 지금 울면서하자
+        </p>
+      </div>
     </section>
   );
 }

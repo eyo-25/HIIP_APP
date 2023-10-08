@@ -7,7 +7,9 @@ type Props = {
 export default function CalendarDays({ isWeekly }: Props) {
   return (
     <ul
-      className={`grid grid-cols-7 text-sm ${isWeekly ? "h-[40%]" : "h-[9%]"}`}
+      className={`grid grid-cols-7 text-sm ${
+        isWeekly ? "h-[40%]" : "desktop:h-[9%] h-[8%]"
+      }`}
     >
       {DAYS.map((day) => (
         <li className="mx-auto" key={day}>
