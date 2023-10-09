@@ -11,6 +11,7 @@
 body {
   height: 100svh;
   touch-action: none;
+  overscroll-behavior-y: none;
   -ms-user-select: none;
   -moz-user-select: -moz-none;
   -khtml-user-select: none;

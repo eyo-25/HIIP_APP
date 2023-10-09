@@ -10,7 +10,7 @@ type Props = {
 };
 
 function ResultGraph({ planData, isSuccess }: Props) {
-  const { history } = planData;
+  const { history, days } = planData;
   const { successCount, totalDays, successPercent } = usePlanPercent(
     planData,
     isSuccess ? "success" : "home"
@@ -19,22 +19,23 @@ function ResultGraph({ planData, isSuccess }: Props) {
   const arr = [0, 0, 0, 0, 0, 0, 0, 0];
   const today = dayjs();
   let currentDate = dayjs().endOf("week").add(1, "day");
-  let cnt = 0;
+  let successCnt = 0;
+  let cntDays = totalDays;
 
   for (let i = 7; 0 <= i; i--) {
     currentDate = currentDate.subtract(1, "day");
     if (today.isBefore(currentDate, "day")) continue;
     if (today.isSame(currentDate, "day")) {
       arr[i] = successPercent;
+      if (days.includes(currentDate.day())) cntDays--;
       continue;
     }
 
-    const currentKey = currentDate.format("YYYY-MM-DD");
-    if (history?.[currentKey]?.isSuccess) cnt++;
+    arr[i] = Math.floor(((successCount - successCnt) / cntDays) * 100);
 
-    arr[i] = Math.floor(
-      ((successCount - cnt) / (totalDays - (today.day() - i))) * 100
-    );
+    const currentKey = currentDate.format("YYYY-MM-DD");
+    if (days.includes(currentDate.day())) cntDays--;
+    if (history?.[currentKey]?.isSuccess === true) successCnt++;
   }
 
   const percentDiff = () => {
@@ -42,6 +43,8 @@ function ResultGraph({ planData, isSuccess }: Props) {
     if (0 <= diff) return `${diff}% 증가`;
     else return `${diff.toString().slice(1)}% 하락`;
   };
+
+  console.log(arr);
 
   return (
     <div className="flex h-[69%] w-full py-[5%]">
