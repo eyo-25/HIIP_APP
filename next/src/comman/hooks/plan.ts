@@ -1,11 +1,12 @@
 import useSWR from "swr";
 import {
   PlanModel,
-  PlanDetailModel,
-  FormDataModel,
+  PlanDataModel,
+  FormModel,
   HomePlanModel,
   PlanTimerData,
   PlanHistory,
+  FeedbackDataModel,
 } from "../model/plan";
 
 export const usePlan = (planId: string) => {
@@ -13,9 +14,19 @@ export const usePlan = (planId: string) => {
     data: planData,
     error,
     isLoading,
-  } = useSWR<PlanDetailModel>(`/api/plan/${planId}`);
+  } = useSWR<PlanDataModel>(`/api/plan/${planId}`);
 
   return { planData, isLoading, error };
+};
+
+export const useFeedback = () => {
+  const {
+    data: feedBackList,
+    error,
+    isLoading,
+  } = useSWR<FeedbackDataModel[]>(`/api/feedback`);
+
+  return { feedBackList, isLoading, error };
 };
 
 export const usePlanDetail = (planId: string) => {
@@ -89,7 +100,7 @@ export async function updatePlanTimer(planId: string, timerData: PlanHistory) {
   return response;
 }
 
-export async function createPlan(formData: FormDataModel) {
+export async function createPlan(formData: FormModel) {
   const response = await fetch("/api/plan/", {
     method: "POST",
     body: JSON.stringify(formData),
@@ -105,7 +116,7 @@ export async function createPlan(formData: FormDataModel) {
   return response;
 }
 
-export async function updatePlan(planId: string, formData: FormDataModel) {
+export async function updatePlan(planId: string, formData: FormModel) {
   const response = await fetch(`/api/plan/${planId}`, {
     method: "PUT",
     body: JSON.stringify(formData),

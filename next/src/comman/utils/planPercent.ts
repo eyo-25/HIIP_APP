@@ -1,5 +1,10 @@
 import { HomePlanModel } from "../model/plan";
 import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 type percentType = "success" | "prev" | "home";
 
@@ -8,7 +13,7 @@ export const usePlanPercent = (
   type: percentType = "home"
 ) => {
   const { history, interval, startDate } = selectedPlan;
-  const today = dayjs();
+  const today = type === "prev" ? dayjs().subtract(1, "day") : dayjs();
   const todayHistory = history?.[today.format("YYYY-MM-DD")];
   const isHistory = 0 < Object.keys(history).length;
   let currentDate = dayjs(startDate);
@@ -43,7 +48,7 @@ export const usePlanPercent = (
     type === "success"
       ? Math.floor(((successCount + 1) / totalDays) * 100)
       : Math.floor((successCount / totalDays) * 100);
-  const averageSet = isHistory
+  let averageSet = isHistory
     ? type === "prev"
       ? Math.round((totalSet - interval) / totalDays)
       : Math.round(totalSet / totalDays)
@@ -53,8 +58,14 @@ export const usePlanPercent = (
     : interval;
 
   if (type === "prev") {
-    successPercent = Math.floor((successCount / (totalDays - 1)) * 100);
+    if (totalDays === 0) {
+      processPercent = 0;
+      averageSet = 0;
+    }
   }
+
+  if (!processPercent) processPercent = 0;
+  if (!successPercent) successPercent = 0;
 
   return {
     processPercent,

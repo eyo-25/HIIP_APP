@@ -5,14 +5,14 @@ import { IoArrowBackOutline } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import MonthDatePicker from "@/components/write/MonthDatePicker";
 import WriteForm from "@/components/write/WriteForm";
-import { PlanDetailModel } from "@/comman/model/plan";
+import { PlanDataModel } from "@/comman/model/plan";
 import dayjs from "dayjs";
 import LoadingSpinner from "../ui/Loading";
 import { useAtomValue } from "jotai";
 import { is_loading_atom } from "@/store";
 
 type Props = {
-  planData?: PlanDetailModel;
+  planData?: PlanDataModel;
   planId?: string;
   mode: "edit" | "creat";
   isLoading?: boolean;

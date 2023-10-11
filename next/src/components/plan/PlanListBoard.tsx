@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import PlanCard from "./PlanCard";
 import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
 import { motion } from "framer-motion";
-import LoadingSpinner from "../ui/Loading";
 import PlanCardSkeleton from "./PlanCardSkeleton";
 
 type Props = {
@@ -19,7 +18,7 @@ const boardVariants = {
     opacity: 1,
     transition: {
       delay: 0.5,
-      duration: 0.7,
+      duration: 1,
       type: "linear",
     },
   },

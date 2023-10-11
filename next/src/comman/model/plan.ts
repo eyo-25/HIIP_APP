@@ -22,7 +22,33 @@ export interface PlanDataModel {
   history: PlanHistory[];
 }
 
-export interface FormDataModel {
+export interface PlanModel {
+  _id: string;
+  title: string;
+  memo: string;
+  startDate: string;
+  endDate: string;
+  interval: number;
+  isStart: boolean;
+  focusTime: number;
+  breakTime: number;
+  days: number[];
+  color: ColorType;
+  history: { [key: string]: PlanHistory };
+}
+
+export interface SimplePlanModel {
+  title: string;
+  memo: string;
+  interval: number;
+  color: ColorType;
+  _id: string;
+  status: StatusType;
+  startDate: string;
+  endDate: string;
+}
+
+export interface FormModel {
   title: string;
   memo: string;
   startDate: string;
@@ -32,19 +58,6 @@ export interface FormDataModel {
   breakTime: number;
   color: ColorType;
   days: number[];
-}
-
-export interface PlanModel {
-  _id: string;
-  title: string;
-  memo: string;
-  startDate: string;
-  endDate: string;
-  interval: number;
-  isStart: boolean;
-  days: number[];
-  color: ColorType;
-  history: { [key: string]: PlanHistory };
 }
 
 export interface HomePlanModel {
@@ -57,32 +70,6 @@ export interface HomePlanModel {
   startDate: string;
   endDate: string;
   history: { [key: string]: PlanHistory };
-}
-
-export interface PlanDetailModel {
-  _id: string;
-  title: string;
-  memo: string;
-  startDate: string;
-  focusTime: number;
-  breakTime: number;
-  endDate: string;
-  interval: number;
-  isStart: boolean;
-  days: number[];
-  color: ColorType;
-  history: PlanHistory[];
-}
-
-export interface SimplePlanModel {
-  title: string;
-  memo: string;
-  interval: number;
-  color: ColorType;
-  _id: string;
-  status: StatusType;
-  startDate: string;
-  endDate: string;
 }
 
 export interface PlanTimerData {
@@ -121,4 +108,24 @@ export interface CalendarModel {
 
 export interface CalendaMemoModel {
   [key: string]: CalendarModel[][];
+}
+
+export interface FeedbackDataModel {
+  successPercent: number;
+  processPercent: number;
+  averageSet: number;
+  title: string;
+  weekSuccessArr: number[];
+  startDate: string;
+  endDate: string;
+  interval: number;
+}
+
+export interface planPercent {
+  processPercent: number;
+  successPercent: number;
+  averageSet: number;
+  leftSet: number;
+  successCount: number;
+  totalDays: number;
 }

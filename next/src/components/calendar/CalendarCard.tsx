@@ -14,8 +14,7 @@ const calendarVariants = {
   animate: {
     opacity: 1,
     transition: {
-      delay: 0.35,
-      duration: 0.5,
+      duration: 1,
       type: "linear",
     },
   },

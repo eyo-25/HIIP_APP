@@ -15,7 +15,7 @@ import IntervalSetter from "./IntervalSetter";
 import { useRouter } from "next/navigation";
 import ColorSelector from "./ColorSelector";
 import DaySelector from "./DaySelector";
-import { ColorType, FormDataModel, PlanDetailModel } from "@/comman/model/plan";
+import { ColorType, FormModel, PlanDataModel } from "@/comman/model/plan";
 import { mutate } from "swr";
 import { createPlan, updatePlan } from "@/comman/hooks";
 import { useSetAtom } from "jotai";
@@ -24,7 +24,7 @@ import { isLoadingSetter } from "@/store";
 type IntervalType = "interval" | "focusTime" | "breakTime";
 type Props = {
   mode: "edit" | "creat";
-  planData?: PlanDetailModel;
+  planData?: PlanDataModel;
   startDate: string;
   endDate: string;
   isStart: boolean;
@@ -87,7 +87,7 @@ function WriteForm({
 
     setIsLoading(true);
 
-    const formData: FormDataModel = {
+    const formData: FormModel = {
       title,
       memo,
       startDate,
