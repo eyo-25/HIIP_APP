@@ -54,11 +54,16 @@ function mapHomePlanList(planList: PlanDataModel[]): FeedbackDataModel[] {
       const { title, startDate, endDate, interval } = homePlan;
       const { successPercent, processPercent, averageSet } = planPercent;
       const weekSuccessArr = weekSuccessPercent(homePlan, planPercent);
+      const today = dayjs();
+
+      const percentDiff =
+        weekSuccessArr[today.day() + 1] - weekSuccessArr[today.day()];
 
       return {
         successPercent,
         processPercent,
         averageSet,
+        percentDiff,
         weekSuccessArr,
         title,
         startDate,

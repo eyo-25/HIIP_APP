@@ -6,7 +6,7 @@ export const weekSuccessPercent = (
   planPercent: planPercent
 ) => {
   const today = dayjs();
-  const { history, days, startDate } = planData;
+  const { history, days, startDate, title } = planData;
   const { successCount, totalDays, successPercent } = planPercent;
 
   const weekSuccessArr = [0, 0, 0, 0, 0, 0, 0, 0];

@@ -12,7 +12,7 @@ export const usePlanPercent = (
   selectedPlan: HomePlanModel,
   type: percentType = "home"
 ) => {
-  const { history, interval, startDate } = selectedPlan;
+  const { history, interval, startDate, title } = selectedPlan;
   const today = type === "prev" ? dayjs().subtract(1, "day") : dayjs();
   const todayHistory = history?.[today.format("YYYY-MM-DD")];
   const isHistory = 0 < Object.keys(history).length;

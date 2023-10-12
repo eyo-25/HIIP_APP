@@ -4,6 +4,7 @@ import { usePlanPercent } from "@/comman/utils/planPercent";
 import { weekSuccessPercent } from "@/comman/utils/weekSuccessPercent";
 import dayjs from "dayjs";
 import React from "react";
+import WeeklyGraph from "../ui/WeeklyGraph";
 
 type Props = {
   planData: HomePlanModel;
@@ -39,33 +40,7 @@ function ResultGraph({ planData, isSuccess }: Props) {
             하였습니다
           </p>
         </div>
-        <div className="relative flex flex-col h-full w-full">
-          <div className="grid grid-rows-4 my-6pxr h-full pb-18pxr">
-            {Array.from({ length: 3 }).map((_, idx) => (
-              <div key={idx} className="border-b border-gray-800"></div>
-            ))}
-            <ul className="absolute grid grid-cols-7 h-full w-full">
-              {DAYS.map((day, idx) => (
-                <li
-                  key={day}
-                  className="flex flex-col justify-end items-center"
-                >
-                  <div
-                    className={`w-[50%] mb-4pxr ${
-                      today.day() === idx
-                        ? isSuccess
-                          ? "bg-blue"
-                          : "bg-red"
-                        : "bg-gray-600"
-                    }`}
-                    style={{ height: `${weekSuccessArr[idx + 1] + 0.5}%` }}
-                  ></div>
-                  <p className="text-sm text-gray-900">{day}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <WeeklyGraph isSuccess={isSuccess} weekSuccessArr={weekSuccessArr} />
       </div>
     </div>
   );

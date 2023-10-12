@@ -115,6 +115,7 @@ export interface FeedbackDataModel {
   processPercent: number;
   averageSet: number;
   title: string;
+  percentDiff: number;
   weekSuccessArr: number[];
   startDate: string;
   endDate: string;

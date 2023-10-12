@@ -30,7 +30,6 @@ export async function getPlan(
 
 export async function createPlan(userId: string, formData: FormModel) {
   const { startDate, endDate } = formData;
-  console.log(`${startDate}T00:00:00Z`, `${endDate}T05:00:00Z`);
   return client.create(
     {
       _type: "plan",

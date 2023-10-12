@@ -58,9 +58,9 @@ export default function PlanCard({
   useOnClickOutside(cardRef, () => setIsModalOpen(false));
 
   const handleDeleteClick = () => {
-    loadingSetter(true);
     const ok = confirm("플랜을 삭제하시겠습니까?");
     if (ok) {
+      loadingSetter(true);
       removePlan(_id)
         .then((res) => {
           mutate(`/api/plan`);
