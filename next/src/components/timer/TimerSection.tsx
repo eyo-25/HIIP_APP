@@ -81,7 +81,7 @@ function TimerSection({ planTimerData, planId, isLoading }: Props) {
           isStopSetter={isStopSetter}
         />
       ) : (
-        <LoadingSpinner size={60} text="타이머 불러오는 중" />
+        <LoadingSpinner text="타이머 불러오는 중" />
       )}
       <motion.div
         variants={gradiantVariants}

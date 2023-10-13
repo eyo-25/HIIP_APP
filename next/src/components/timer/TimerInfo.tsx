@@ -175,8 +175,7 @@ function TimerInfo({
       )}
       {isUpdateLoading && (
         <div className="absolute bottom-20pxr right-20pxr z-40">
-          <LoadingSpinner size={40} />
-          <p className="text-xs text-center mt-2pxr">저장 중</p>
+          <LoadingSpinner type="diamond" text="저장 중" />
         </div>
       )}
     </>

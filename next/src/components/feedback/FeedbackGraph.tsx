@@ -1,6 +1,7 @@
 import { FeedbackDataModel } from "@/comman/model/plan";
 import WeeklyGraph from "../ui/WeeklyGraph";
 import { useState } from "react";
+import HelpIcon from "../ui/HelpIcon";
 
 type Props = {
   feedBackList: FeedbackDataModel[];
@@ -22,26 +23,43 @@ function FeedbackGraph({ feedBackList }: Props) {
   };
 
   return (
-    <div className="flex flex-col w-full h-full py-40pxr px-24pxr">
-      <div className="flex flex-col h-[35%]">
+    <div className="flex flex-col justify-between w-full h-full py-30pxr">
+      <div className="flex flex-col justify-between h-[35%] pb-[4%]">
         <div className="flex justify-end items-center">
-          <select
-            value={feedBackList[selectPlanIndex].title}
-            onChange={handleSelectChange}
-          >
+          <select value={selectedValue} onChange={handleSelectChange}>
             {feedBackList.map(({ title }) => (
-              <option key={title} value={title}>
+              <option className="text-center" key={title} value={title}>
                 {title}
               </option>
             ))}
           </select>
         </div>
-        <p>
-          기간별 각<br /> PLAN 분석
-        </p>
-        <h5></h5>
+        <div className="flex items-end">
+          <p className="font-bold text-xl leading-tight">
+            주간 계획
+            <br />
+            성공률 분석
+          </p>
+          <HelpIcon />
+        </div>
+        <div className="flex items-end">
+          <h5 className="black-italic text-5xl">
+            {feedBackList[selectPlanIndex].successPercent}
+            <span className="text-3xl">%</span>
+          </h5>
+          <p
+            className={`ml-10pxr italic font-bold text-xl ${
+              0 <= feedBackList[selectPlanIndex].percentDiff
+                ? "text-blue"
+                : "text-red"
+            }`}
+          >
+            {0 < feedBackList[selectPlanIndex].percentDiff && "+"}
+            {feedBackList[selectPlanIndex].percentDiff}%
+          </p>
+        </div>
       </div>
-      <div className="h-[65%]">
+      <div className="h-[60%]">
         <WeeklyGraph
           weekSuccessArr={feedBackList[selectPlanIndex].weekSuccessArr}
         />

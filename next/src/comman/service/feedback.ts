@@ -23,52 +23,67 @@ export async function getFeedBackList(
 }
 
 function mapHomePlanList(planList: PlanDataModel[]): FeedbackDataModel[] {
-  return planList
-    .map((plan) => {
-      const { title, days, history, interval, color, _id, endDate, startDate } =
-        plan;
+  const homePlanList = planList.map((plan) => {
+    const {
+      title,
+      days,
+      history,
+      interval,
+      color,
+      _id,
+      endDate,
+      startDate,
+      focusTime,
+    } = plan;
 
-      const transformedObject = history.reduce(
-        (result: { [key: string]: PlanHistory }, item) => {
-          const formatDate = dayjs(item.date).format("YYYY-MM-DD");
-          result[formatDate] = item;
-          return result;
-        },
-        {}
-      );
+    const transformedObject = history.reduce(
+      (result: { [key: string]: PlanHistory }, item) => {
+        const formatDate = dayjs(item.date).format("YYYY-MM-DD");
+        result[formatDate] = item;
+        return result;
+      },
+      {}
+    );
 
-      return {
-        _id,
-        title,
-        interval,
-        color,
-        status: "pending",
-        days,
-        startDate: dayjs(startDate).format("YYYY-MM-DD"),
-        endDate: dayjs(endDate).format("YYYY-MM-DD"),
-        history: transformedObject,
-      } as HomePlanModel;
-    })
-    .map((homePlan: HomePlanModel) => {
-      const planPercent = usePlanPercent(homePlan);
-      const { title, startDate, endDate, interval } = homePlan;
-      const { successPercent, processPercent, averageSet } = planPercent;
-      const weekSuccessArr = weekSuccessPercent(homePlan, planPercent);
-      const today = dayjs();
+    return {
+      _id,
+      title,
+      interval,
+      color,
+      status: "pending",
+      days,
+      focusTime,
+      startDate: dayjs(startDate).format("YYYY-MM-DD"),
+      endDate: dayjs(endDate).format("YYYY-MM-DD"),
+      history: transformedObject,
+    } as HomePlanModel;
+  });
 
-      const percentDiff =
-        weekSuccessArr[today.day() + 1] - weekSuccessArr[today.day()];
+  return homePlanList.map((homePlan: HomePlanModel) => {
+    const planPercent = usePlanPercent(homePlan);
+    const { title, startDate, endDate, interval, focusTime } = homePlan;
+    const { successPercent, processPercent, averageSet, processCount } =
+      planPercent;
+    const weekSuccessArr = weekSuccessPercent(homePlan, planPercent);
+    const today = dayjs();
 
-      return {
-        successPercent,
-        processPercent,
-        averageSet,
-        percentDiff,
-        weekSuccessArr,
-        title,
-        startDate,
-        endDate,
-        interval,
-      };
-    });
+    const percentDiff =
+      weekSuccessArr[today.day() + 1] - weekSuccessArr[today.day()];
+
+    return {
+      totalSet: planPercent.totalSet,
+      totalDay: planPercent.totalDay,
+      successPercent,
+      processPercent,
+      processCount,
+      averageSet,
+      focusTime,
+      percentDiff,
+      weekSuccessArr,
+      title,
+      startDate,
+      endDate,
+      interval,
+    };
+  });
 }

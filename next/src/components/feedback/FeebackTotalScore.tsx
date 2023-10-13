@@ -28,7 +28,7 @@ function FeebackTotalScore({ scoreInfo }: Props) {
         </div>
         <div className="flex-center flex-col">
           <p className="desktop:text-xl">종합점수 : {scoreInfo.score}</p>
-          <h5 className="font-black py-[6%] italic desktop:text-7xl text-6xl">
+          <h5 className="black-italic text-6xl py-[6%] desktop:text-7xl">
             {scoreInfo.rating}
           </h5>
           <div className="flex-center flex-col font-light text-sm leading-snug text-gray-500">

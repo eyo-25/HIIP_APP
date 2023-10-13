@@ -12,12 +12,12 @@ export const usePlanPercent = (
   selectedPlan: HomePlanModel,
   type: percentType = "home"
 ) => {
-  const { history, interval, startDate, title } = selectedPlan;
+  const { history, interval, startDate, focusTime } = selectedPlan;
   const today = type === "prev" ? dayjs().subtract(1, "day") : dayjs();
   const todayHistory = history?.[today.format("YYYY-MM-DD")];
   const isHistory = 0 < Object.keys(history).length;
   let currentDate = dayjs(startDate);
-  let totalDays = 0;
+  let totalDay = 0;
   let totalSet = 0;
   let processCount = 0;
   let successCount = 0;
@@ -25,7 +25,7 @@ export const usePlanPercent = (
   while (currentDate.isSameOrBefore(today)) {
     const currentHistory = history?.[currentDate.format("YYYY-MM-DD")];
     if (selectedPlan.days.includes(currentDate.day())) {
-      totalDays++;
+      totalDay++;
 
       if (currentHistory) {
         if (currentHistory.isSuccess) {
@@ -42,23 +42,23 @@ export const usePlanPercent = (
 
   let processPercent =
     type === "prev"
-      ? Math.floor(((processCount - 1) / totalDays) * 100)
-      : Math.floor((processCount / totalDays) * 100);
+      ? Math.floor(((processCount - 1) / totalDay) * 100)
+      : Math.floor((processCount / totalDay) * 100);
   let successPercent =
     type === "success"
-      ? Math.floor(((successCount + 1) / totalDays) * 100)
-      : Math.floor((successCount / totalDays) * 100);
+      ? Math.floor(((successCount + 1) / totalDay) * 100)
+      : Math.floor((successCount / totalDay) * 100);
   let averageSet = isHistory
     ? type === "prev"
-      ? Math.round((totalSet - interval) / totalDays)
-      : Math.round(totalSet / totalDays)
+      ? Math.round((totalSet - interval) / totalDay)
+      : Math.round(totalSet / totalDay)
     : 0;
   const leftSet = todayHistory
     ? interval - (interval - todayHistory.focusSet)
     : interval;
 
   if (type === "prev") {
-    if (totalDays === 0) {
+    if (totalDay === 0) {
       processPercent = 0;
       averageSet = 0;
     }
@@ -69,10 +69,13 @@ export const usePlanPercent = (
 
   return {
     processPercent,
+    processCount,
     successPercent,
     averageSet,
     leftSet,
     successCount,
-    totalDays,
+    totalDay,
+    totalSet,
+    focusTime,
   };
 };

@@ -47,7 +47,7 @@ function PlanWriter({ planData, mode, planId, isLoading = false }: Props) {
     <main className="bg-white text-lg font-semibold sroll h-full">
       {(isLoadingAtom || isLoading) && (
         <div className="flex flex-col z-30 absolute w-full h-full bg-black/50 backdrop-blur-[1px]">
-          <LoadingSpinner size={60} text="Loading..." />
+          <LoadingSpinner text="Loading..." />
         </div>
       )}
       {isModalOpen && (

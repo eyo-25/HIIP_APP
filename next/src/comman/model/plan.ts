@@ -68,6 +68,7 @@ export interface HomePlanModel {
   status: StatusType;
   days: number[];
   startDate: string;
+  focusTime: number;
   endDate: string;
   history: { [key: string]: PlanHistory };
 }
@@ -113,20 +114,25 @@ export interface CalendaMemoModel {
 export interface FeedbackDataModel {
   successPercent: number;
   processPercent: number;
+  processCount: number;
   averageSet: number;
   title: string;
   percentDiff: number;
   weekSuccessArr: number[];
+  totalDay: number;
+  totalSet: number;
   startDate: string;
   endDate: string;
   interval: number;
+  focusTime: number;
 }
 
 export interface planPercent {
   processPercent: number;
   successPercent: number;
+  totalSet: number;
   averageSet: number;
   leftSet: number;
   successCount: number;
-  totalDays: number;
+  totalDay: number;
 }

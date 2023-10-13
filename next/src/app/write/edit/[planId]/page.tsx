@@ -1,10 +1,7 @@
 "use client";
 
 import { usePlan } from "@/comman/hooks";
-import LoadingSpinner from "@/components/ui/Loading";
 import PlanWriter from "@/components/write/PlanWriter";
-import { is_loading_atom } from "@/store";
-import { useAtomValue } from "jotai";
 
 type Props = {
   params: {
