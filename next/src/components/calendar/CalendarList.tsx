@@ -5,6 +5,21 @@ import {
   SimplePlanModel,
 } from "@/comman/model/plan";
 import CalendarCard from "./CalendarCard";
+import { motion } from "framer-motion";
+
+const calendarVariants = {
+  normal: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      delay: 0.4,
+      duration: 0.5,
+      type: "linear",
+    },
+  },
+};
 
 type Props = {
   isWeekly: boolean;
@@ -26,11 +41,18 @@ function CalendarList({
   weekIndex,
 }: Props) {
   return (
-    <ul
-      className={`grid grid-cols-7 text-sm ${isWeekly ? "h-[60%]" : "h-[88%]"}`}
-    >
-      {isWeekly
-        ? calendarArray[weekIndex].map((data, idx: number) => (
+    <>
+      {isWeekly ? (
+        <motion.ul
+          variants={calendarVariants}
+          initial="normal"
+          animate="animate"
+          key={"weekly"}
+          className={`grid grid-cols-7 text-sm ${
+            isWeekly ? "h-[60%]" : "h-[88%]"
+          }`}
+        >
+          {calendarArray[weekIndex].map((data, idx: number) => (
             <CalendarCard
               handleDateClick={handleDateClick}
               data={data}
@@ -42,8 +64,19 @@ function CalendarList({
               displayDate={displayDate}
               key={idx}
             />
-          ))
-        : calendarArray.map((week) =>
+          ))}
+        </motion.ul>
+      ) : (
+        <motion.div
+          variants={calendarVariants}
+          initial="normal"
+          animate="animate"
+          key={"month"}
+          className={`grid grid-cols-7 text-sm ${
+            isWeekly ? "h-[60%]" : "h-[88%] mobile:h-[93%]"
+          }`}
+        >
+          {calendarArray.map((week) =>
             week.map((data, idx: number) => (
               <CalendarCard
                 handleDateClick={handleDateClick}
@@ -58,7 +91,9 @@ function CalendarList({
               />
             ))
           )}
-    </ul>
+        </motion.div>
+      )}
+    </>
   );
 }
 

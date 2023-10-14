@@ -125,6 +125,7 @@ export interface FeedbackDataModel {
   endDate: string;
   interval: number;
   focusTime: number;
+  wasteTime: number;
 }
 
 export interface planPercent {

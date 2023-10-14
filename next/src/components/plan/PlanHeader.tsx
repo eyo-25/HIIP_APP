@@ -23,7 +23,7 @@ type Props = {
 
 export default function PlanHeader({ selectedPlanTitle, isPlanList }: Props) {
   return (
-    <header className="px-25pxr w-full desktop:h-[8%] h-[7%] bg-white">
+    <header className="px-25pxr w-full desktop:h-[8%] h-[7%] mobile:h-[6%] bg-white">
       <motion.div
         className="relative flex items-center justify-between w-full h-full"
         variants={calendarHeaderVariants}
@@ -37,7 +37,7 @@ export default function PlanHeader({ selectedPlanTitle, isPlanList }: Props) {
               : "플랜을 추가해 주세요"
             : selectedPlanTitle.slice(0, 12)}
         </h4>
-        <div className="relative desktop:w-53pxr desktop:h-22pxr w-45pxr h-18pxr">
+        <div className="relative desktop:w-53pxr desktop:h-22pxr w-45pxr h-18pxr mobile:w-38pxr mobile:h-16pxr">
           <Image src={Logo} alt="logo" fill />
         </div>
       </motion.div>

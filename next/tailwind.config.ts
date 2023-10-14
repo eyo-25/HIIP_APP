@@ -22,6 +22,7 @@ const config: Config = {
     extend: {
       screens: {
         desktop: { raw: "(min-height: 896px)" },
+        mobile: { raw: "(max-height: 668px)" },
       },
       colors: {
         gray: {

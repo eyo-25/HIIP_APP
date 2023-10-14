@@ -62,8 +62,13 @@ function mapHomePlanList(planList: PlanDataModel[]): FeedbackDataModel[] {
   return homePlanList.map((homePlan: HomePlanModel) => {
     const planPercent = usePlanPercent(homePlan);
     const { title, startDate, endDate, interval, focusTime } = homePlan;
-    const { successPercent, processPercent, averageSet, processCount } =
-      planPercent;
+    const {
+      successPercent,
+      processPercent,
+      averageSet,
+      processCount,
+      wasteTime,
+    } = planPercent;
     const weekSuccessArr = weekSuccessPercent(homePlan, planPercent);
     const today = dayjs();
 
@@ -84,6 +89,7 @@ function mapHomePlanList(planList: PlanDataModel[]): FeedbackDataModel[] {
       startDate,
       endDate,
       interval,
+      wasteTime,
     };
   });
 }

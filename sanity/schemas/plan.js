@@ -110,11 +110,11 @@ export default {
   preview: {
     select: {
       title: 'title',
-      authorName: 'author.name',
+      subtitle: 'author.name',
     },
     prepare(selection) {
-      const {title, authorName} = selection
-      return {title, authorName: `by ${authorName}`}
+      const {title, subtitle} = selection
+      return {title, subtitle: `by ${subtitle}`}
     },
   },
 }

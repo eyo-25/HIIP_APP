@@ -20,7 +20,7 @@ function FeebackTotalScore({ scoreInfo }: Props) {
           <img
             className="desktop:h-40pxr desktop:w-40pxr h-35pxr w-35pxr rounded-full mr-12pxr"
             alt="user profile"
-            src={userData.image ?? undefined}
+            src={userData?.image ?? undefined}
           />
           <p className="text-center text-xs">
             {userData.name}님의 플랜 피드백입니다.
@@ -31,7 +31,7 @@ function FeebackTotalScore({ scoreInfo }: Props) {
           <h5 className="black-italic text-6xl py-[6%] desktop:text-7xl">
             {scoreInfo.rating}
           </h5>
-          <div className="flex-center flex-col font-light text-sm leading-snug text-gray-500">
+          <div className="flex-center flex-col font-light mobile:text-xs text-sm leading-snug text-gray-500">
             <p>{scoreMessageData[scoreInfo.rating].message[0]}</p>
             <p>{scoreMessageData[scoreInfo.rating].message[1]}</p>
           </div>
