@@ -14,9 +14,9 @@ function MySection({ userData }: Props) {
     <>
       {userData && (
         <>
-          <section className="flex flex-col h-[20%] px-24pxr mb-[9%] bg-white drop-shadow-sm">
+          <section className="flex flex-col h-[20%] px-24pxr mb-[9%] mobile:mb-[5%] bg-white drop-shadow-sm">
             <div className="flex mt-20pxr">
-              <h2 className="font-black text-2xl">MY PAGE</h2>
+              <h2 className="font-black text-2xl mobile:text-xl">MY PAGE</h2>
             </div>
             <div className="flex items-center h-full">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -38,8 +38,8 @@ function MySection({ userData }: Props) {
               </div>
             </div>
           </section>
-          <section className="px-24pxr desktop:mb-[10%] mb-[8%]">
-            <h5 className="text-xl pb-11pxr font-bold border-b-2 border-gray-400">
+          <section className="px-24pxr mb-[10%] mobile:mb-[6%]">
+            <h5 className="text-xl pb-11pxr mobile:pb-8pxr font-bold border-b-2 border-gray-400">
               Documents
             </h5>
             <ul>
@@ -48,8 +48,8 @@ function MySection({ userData }: Props) {
               ))}
             </ul>
           </section>
-          <section className="px-24pxr desktop:mb-[10%] mb-[8%]">
-            <h5 className="text-xl pb-11pxr font-bold border-b-2 border-gray-400">
+          <section className="px-24pxr mb-[10%] mobile:mb-[6%]">
+            <h5 className="text-xl pb-11pxr mobile:pb-8pxr font-bold border-b-2 border-gray-400">
               Interactions
             </h5>
             <ul>

@@ -126,6 +126,7 @@ export interface FeedbackDataModel {
   interval: number;
   focusTime: number;
   wasteTime: number;
+  todayFocus: number;
 }
 
 export interface planPercent {

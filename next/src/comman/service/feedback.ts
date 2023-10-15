@@ -68,6 +68,7 @@ function mapHomePlanList(planList: PlanDataModel[]): FeedbackDataModel[] {
       averageSet,
       processCount,
       wasteTime,
+      todayFocus,
     } = planPercent;
     const weekSuccessArr = weekSuccessPercent(homePlan, planPercent);
     const today = dayjs();
@@ -90,6 +91,7 @@ function mapHomePlanList(planList: PlanDataModel[]): FeedbackDataModel[] {
       endDate,
       interval,
       wasteTime,
+      todayFocus,
     };
   });
 }

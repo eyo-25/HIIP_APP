@@ -22,21 +22,29 @@ function FeedbackSuccessInfo({ scoreInfo }: Props) {
             {scoreInfo.success.totalProcessSet}
             <span className="ml-5pxr">set</span>
           </h6>
-          <p className="text-gray-700 text-sm">진행한 세트</p>
+          <p className="text-gray-700 text-sm">총 진행한 세트</p>
         </li>
         <li className="flex-col">
           <h6 className="font-black text-2xl">
-            {60 < scoreInfo.success.totalFocusTime
-              ? Math.floor(scoreInfo.success.totalFocusTime / 60) + "h"
-              : scoreInfo.success.totalFocusTime + "m"}
+            {60 <= scoreInfo.success.totalFocusTime
+              ? Math.floor(scoreInfo.success.totalFocusTime / 60) +
+                "h  " +
+                (scoreInfo.success.totalFocusTime -
+                  Math.floor(scoreInfo.success.totalFocusTime / 60) * 60) +
+                "m"
+              : scoreInfo.success.totalFocusTime + " m"}
           </h6>
           <p className="text-gray-700 text-sm">총 집중시간</p>
         </li>
         <li className="flex-col">
           <h6 className="font-black text-2xl">
-            {60 < scoreInfo.success.averageTime
-              ? Math.floor(scoreInfo.success.averageTime / 60) + "h"
-              : scoreInfo.success.averageTime + "m"}
+            {60 <= scoreInfo.success.averageTime
+              ? Math.floor(scoreInfo.success.averageTime / 60) +
+                "h  " +
+                (scoreInfo.success.averageTime -
+                  Math.floor(scoreInfo.success.averageTime / 60) * 60) +
+                "m"
+              : scoreInfo.success.averageTime + " m"}
           </h6>
           <p className="text-gray-700 text-sm">평균 집중시간</p>
         </li>

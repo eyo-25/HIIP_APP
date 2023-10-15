@@ -17,10 +17,12 @@ function TimerBoard({
   const seconds = count - minutes * 60;
 
   return (
-    <section className="z-20 flex flex-col items-center w-full h-[70%]">
+    <section className="z-20 flex flex-col items-center w-full h-[70%] mobile:h-[73%]">
       {isStop ? (
         <>
-          <h5 className="black-italic text-6xl text-center mb-30pxr">PAUSE</h5>
+          <h5 className="black-italic text-6xl mobile:text-5xl text-center mb-30pxr">
+            PAUSE
+          </h5>
           <p className="text-center mb-10pxr font-light">다음세트 까지</p>
         </>
       ) : (

@@ -1,6 +1,6 @@
 import { FeedbackDataModel } from "@/comman/model/plan";
 import WeeklyGraph from "../ui/WeeklyGraph";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HelpIcon from "../ui/HelpIcon";
 
 type Props = {
@@ -22,14 +22,18 @@ function FeedbackGraph({ feedBackList }: Props) {
     setSelectPlanIndex(index);
   };
 
+  useEffect(() => {
+    setSelectedValue(feedBackList[selectPlanIndex].title);
+  }, [feedBackList]);
+
   return (
     <div className="flex flex-col justify-between w-full h-full py-30pxr">
       <div className="flex flex-col justify-between h-[35%] pb-[2%]">
         <div className="flex justify-end items-center">
           <p className="text-gray-800 text-sm mr-2pxr">플랜명 :</p>
           <select value={selectedValue} onChange={handleSelectChange}>
-            {feedBackList.map(({ title }) => (
-              <option className="text-center" key={title} value={title}>
+            {feedBackList.map(({ title }, idx) => (
+              <option className="text-center" key={idx} value={title}>
                 {title}
               </option>
             ))}

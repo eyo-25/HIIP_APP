@@ -22,6 +22,7 @@ export const usePlanPercent = (
   let processCount = 0;
   let successCount = 0;
   let wasteTime = 0;
+  let todayFocus = 0;
 
   while (currentDate.isSameOrBefore(today)) {
     const currentHistory = history?.[currentDate.format("YYYY-MM-DD")];
@@ -34,10 +35,33 @@ export const usePlanPercent = (
         }
         if (currentHistory.focusSet === 0) {
           processCount++;
+          if (currentDate.isSameOrBefore(today)) {
+            todayFocus += interval * focusTime;
+          }
         } else {
-          wasteTime +=
-            (currentHistory.focusSet - 1) * focusTime +
-            Math.floor(currentHistory.focusTime / 60);
+          if (currentHistory.focusSet === currentHistory.breakSet) {
+            wasteTime +=
+              currentHistory.focusSet * focusTime +
+              Math.floor(currentHistory.focusTime / 60);
+
+            if (currentDate.isSameOrBefore(today)) {
+              const todayFocusSet = interval - (currentHistory.focusSet - 1);
+              const todayFocusTime =
+                todayFocusSet * focusTime + currentHistory.focusTime;
+              todayFocus += todayFocusTime;
+            }
+          } else {
+            wasteTime +=
+              (currentHistory.focusSet - 1) * focusTime +
+              Math.floor(currentHistory.focusTime / 60);
+
+            if (currentDate.isSameOrBefore(today)) {
+              const todayFocusSet = interval - currentHistory.focusSet;
+              const todayFocusTime =
+                todayFocusSet * focusTime + currentHistory.focusTime;
+              todayFocus += todayFocusTime;
+            }
+          }
         }
         totalSet = totalSet + (interval - currentHistory.focusSet);
       } else {
@@ -85,5 +109,6 @@ export const usePlanPercent = (
     totalSet,
     focusTime,
     wasteTime,
+    todayFocus,
   };
 };

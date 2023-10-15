@@ -45,7 +45,7 @@ function ProgressBar({
   };
 
   return (
-    <section className="flex flex-col justify-end pb-45pxr items-center w-full h-[30%]">
+    <section className="flex flex-col justify-end pb-45pxr mobile:pb-35pxr items-center w-full h-[30%] mobile:h-[27%]">
       <div className="desktop:w-240pxr w-210pxr">
         <ul className="flex gap-x-3 mb-20pxr w-full h-5pxr bg-white">
           {progressBarElements.map((type, idx) =>
