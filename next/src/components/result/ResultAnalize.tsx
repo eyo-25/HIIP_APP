@@ -14,10 +14,10 @@ function ResultAnalize({ planData, isSuccess }: Props) {
     planData,
     isSuccess ? "success" : "home"
   );
-  const planPercentData = usePlanPercent(planData, "prev");
+  const prevPlanPercentData = usePlanPercent(planData, "prev");
 
   const changePercent = (key: PlanPercentKeyType) => {
-    const diff = successPlanPercentData[key] - planPercentData[key];
+    const diff = successPlanPercentData[key] - prevPlanPercentData[key];
 
     if (0 <= diff) return `+ ${diff}`;
     return `- ${Math.abs(diff)}`;

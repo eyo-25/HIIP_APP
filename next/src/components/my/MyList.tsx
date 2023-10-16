@@ -18,10 +18,12 @@ function MyList({ data }: Props) {
         target="_blank"
       >
         <div className="flex">
-          <div className="relative desktop:h-28pxr desktop:w-28pxr h-25pxr w-25pxr">
+          <div className="relative h-28pxr w-28pxr mobile:h-23pxr mobile:w-23pxr">
             <Image fill src={icon} alt={title} />
           </div>
-          <p className="ml-9pxr font-semibold text-gray-850 mt-2pxr">{title}</p>
+          <p className="ml-9pxr font-semibold text-gray-850 mt-2pxr mobile:text-sm">
+            {title}
+          </p>
         </div>
         <IoChevronForward className="desttop:w-30pxr desttop:h-30pxr w-25pxr h-25pxr text-gray-600" />
       </Link>

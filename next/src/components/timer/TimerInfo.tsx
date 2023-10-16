@@ -41,7 +41,6 @@ function TimerInfo({
   const [interval, setInterval] = useState<number>(focusSetData + breakSetData);
   const { count, start, stop, reset, done } = useCounter();
   const [uploadCount, setUploadCount] = useState(0);
-
   type UpdateType = "finish" | "setend" | "stop";
 
   const updatePlanHistory = (updateType: UpdateType) => {
@@ -115,6 +114,14 @@ function TimerInfo({
       return;
     }
 
+    if (uploadCount === 0) {
+      setUploadCount(count);
+    }
+    if (uploadCount >= 0 && uploadCount >= count + 30) {
+      setUploadCount(count);
+      updatePlanHistory("stop");
+    }
+
     if (isBreakSet === undefined) {
       const isBreak = focusSetData <= breakSetData;
       reset(isBreak ? breakTime : focusTime);
@@ -142,6 +149,7 @@ function TimerInfo({
         updatePlanHistory("setend");
       }
 
+      setUploadCount(0);
       start();
     }
   }, [count]);
@@ -175,8 +183,7 @@ function TimerInfo({
       )}
       {isUpdateLoading && (
         <div className="absolute bottom-20pxr right-20pxr z-40">
-          <LoadingSpinner size={40} />
-          <p className="text-xs text-center mt-2pxr">저장 중</p>
+          <LoadingSpinner type="diamond" text="저장 중" />
         </div>
       )}
     </>

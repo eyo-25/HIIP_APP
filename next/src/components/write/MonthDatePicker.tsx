@@ -38,7 +38,7 @@ function MonthDatePicker({ modalClose, handleDateSet, isStartDate }: Props) {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="flex flex-col px-8pxr items-center fixed bg-white w-full h-450pxr bottom-0pxr rounded-t-3xl max-w-md"
+      className="flex flex-col px-8pxr items-center fixed bg-white w-full mobile:h-390pxr h-400pxr desktop:h-430pxr bottom-0pxr rounded-t-3xl max-w-md"
     >
       <div className="flex flex-col items-center max-w-sm w-full">
         <h5 className="py-23pxr text-gray-700">

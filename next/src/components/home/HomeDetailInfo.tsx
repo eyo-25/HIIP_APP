@@ -36,7 +36,7 @@ function HomeDetailInfo({ selectedPlan, isExtend }: Props) {
       <div className="flex-center flex-col w-full h-full">
         <HomeDday selectedPlan={selectedPlan} />
         {selectedPlan && isExtend && (
-          <ul className="w-full grid grid-cols-4 justify-end px-25pxr py-5pxr text-center">
+          <ul className="w-full grid grid-cols-4 justify-end px-25pxr desktop:py-5pxr mobile:pb-10pxr text-center">
             {detailInfoList.map(({ title, key, unit }) => (
               <li key={key}>
                 <p className="desktop:text-lg text-base">

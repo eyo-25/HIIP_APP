@@ -15,8 +15,17 @@ export async function getDetailPlan(
       }
     )
     .then((plan: PlanDataModel) => {
-      const { title, days, history, interval, color, _id, endDate, startDate } =
-        plan;
+      const {
+        title,
+        days,
+        history,
+        interval,
+        color,
+        _id,
+        endDate,
+        startDate,
+        focusTime,
+      } = plan;
 
       const transformedObject = history?.reduce(
         (result: { [key: string]: PlanHistory }, item) => {
@@ -31,6 +40,7 @@ export async function getDetailPlan(
         title,
         days,
         interval,
+        focusTime,
         color,
         _id,
         status: "pending",

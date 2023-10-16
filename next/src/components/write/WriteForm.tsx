@@ -15,7 +15,7 @@ import IntervalSetter from "./IntervalSetter";
 import { useRouter } from "next/navigation";
 import ColorSelector from "./ColorSelector";
 import DaySelector from "./DaySelector";
-import { ColorType, FormDataModel, PlanDetailModel } from "@/comman/model/plan";
+import { ColorType, FormModel, PlanDataModel } from "@/comman/model/plan";
 import { mutate } from "swr";
 import { createPlan, updatePlan } from "@/comman/hooks";
 import { useSetAtom } from "jotai";
@@ -24,7 +24,7 @@ import { isLoadingSetter } from "@/store";
 type IntervalType = "interval" | "focusTime" | "breakTime";
 type Props = {
   mode: "edit" | "creat";
-  planData?: PlanDetailModel;
+  planData?: PlanDataModel;
   startDate: string;
   endDate: string;
   isStart: boolean;
@@ -79,15 +79,28 @@ function WriteForm({
     }
     if (startDate === "") return alert("시작날짜를 설정해 주세요");
     if (endDate === "") return alert("종료날짜를 설정해 주세요");
-    if (dayjs(startDate).isAfter(endDate)) {
+    if (dayjs(startDate).isAfter(endDate, "day")) {
       setEndDate("");
       return alert("종료날짜는 시작날짜와 같거나 이후로 설정해 주세요.");
     }
     if (selectedDays.length <= 0) return alert("요일을 하루이상 선택해 주세요");
+    let isNotDate = false;
+    let currentDate = dayjs(startDate);
+    while (currentDate.isSameOrBefore(endDate, "day")) {
+      if (selectedDays.includes(currentDate.day())) {
+        isNotDate = true;
+        break;
+      }
+      currentDate = currentDate.add(1, "day");
+    }
+
+    if (!isNotDate) {
+      return alert("기간중에 선택한 요일에 해당하는 날짜가 있어야 합니다.");
+    }
 
     setIsLoading(true);
 
-    const formData: FormDataModel = {
+    const formData: FormModel = {
       title,
       memo,
       startDate,

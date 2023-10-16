@@ -1,4 +1,3 @@
-import { LoadingWhite } from "@/comman/assets";
 import { updatePlanResult } from "@/comman/hooks/plan";
 import { HomePlanModel } from "@/comman/model/plan";
 import dayjs from "dayjs";
@@ -36,7 +35,7 @@ function ResultPushBar({ isSuccess, planData }: Props) {
       .catch((err) => alert(err.toString()))
       .finally(() => {
         setIsLoarding(false);
-        router.push("/");
+        router.push("/feedback");
       });
   };
   const handleMouseDown = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {

@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import PlanHeader from "./PlanHeader";
 import PlanListBoard from "@/components/plan/PlanListBoard";
 import MetaButton from "@/components/ui/MetaButton";
-import { booleanStyle } from "@/comman/utils/booleanStyle";
 import Calendar from "@/components/calendar/Calendar";
 import {
   CalendaMemoModel,
@@ -106,7 +105,6 @@ function PlanSection({ planListData }: Props) {
           variants={planBoardVariants}
           initial="normal"
           animate="animate"
-          className={booleanStyle(isWeekly, "h-[80%]", "h-[48%]")}
         >
           <PlanListBoard
             selectedPlanId={selectedPlan?._id}
