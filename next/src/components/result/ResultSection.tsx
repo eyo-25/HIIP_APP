@@ -5,7 +5,6 @@ import ResultGraph from "./ResultGraph";
 import ResultAnalize from "./ResultAnalize";
 import { HomePlanModel } from "@/comman/model/plan";
 import { resultWord } from "./Result.data";
-import LoadingSpinner from "../ui/Loading";
 import ResultBoardSkeleton from "./ResultBoardSkeleton";
 
 type Props = {

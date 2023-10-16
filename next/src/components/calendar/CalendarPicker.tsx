@@ -8,6 +8,7 @@ import {
   SimplePlanModel,
 } from "@/comman/model/plan";
 import { dateMemoKey } from "./calendarUtils";
+import { motion } from "framer-motion";
 import CalendarHeader from "./CalendarHeader";
 import CalendarDays from "./CalendarDays";
 
@@ -22,6 +23,20 @@ type Props = {
   setClickedDate: Dispatch<SetStateAction<dayjs.Dayjs>>;
   setPlanList: Dispatch<SetStateAction<SimplePlanModel[]>>;
   setDisplayMonth: Dispatch<SetStateAction<number>>;
+};
+
+const calendarVariants = {
+  normal: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      delay: 0.5,
+      duration: 1,
+      type: "linear",
+    },
+  },
 };
 
 function CalendarPicker({
@@ -117,7 +132,12 @@ function CalendarPicker({
   };
 
   return (
-    <div className="relative flex flex-col items-center w-full h-full">
+    <motion.div
+      variants={calendarVariants}
+      initial="normal"
+      animate="animate"
+      className="relative flex flex-col items-center w-full h-full"
+    >
       <CalendarHeader
         displayDate={displayDate}
         handlePrevClick={handlePrevClick}
@@ -143,7 +163,7 @@ function CalendarPicker({
       <div className="absolute bottom-[5px] w-full">
         <div className="mx-auto w-100pxr h-3pxr bg-gray-400 rounded-md"></div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

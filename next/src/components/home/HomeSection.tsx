@@ -9,6 +9,7 @@ import { useMouseHandlers } from "@/comman/utils/mouseHandlers";
 import MetaButton from "../ui/MetaButton";
 import { HomePlanModel } from "@/comman/model/plan";
 import HomeInfo from "./HomeInfo";
+import HomeSkeletonPlanList from "./HomeSkeletonPlanList";
 
 const buttonVarients = {
   normal: {
@@ -114,7 +115,11 @@ function HomeSection({ planListData, isLoading }: Props) {
         initial="normal"
         animate="animate"
       >
-        <HomePlanListBoard planList={planList} planListSort={planListSort} />
+        {isLoading ? (
+          <HomeSkeletonPlanList />
+        ) : (
+          <HomePlanListBoard planList={planList} planListSort={planListSort} />
+        )}
       </motion.section>
       <motion.div variants={buttonVarients} initial="normal" animate="animate">
         <Link href={planList[0] ? `/timer/${planList[0]._id}` : "/write/creat"}>

@@ -4,3 +4,8 @@ export { default as TimerBackground } from "./timer-background.png";
 export { default as SuccessBackground } from "./success-background.png";
 export { default as FailBackground } from "./fail-background.png";
 export { default as StartBackgound } from "./start-background.png";
+export { default as PerfectBackground } from "./perfect_background.png";
+export { default as SadBackground } from "./sad_background.png";
+export { default as SosoBackground } from "./soso_background.png";
+export { default as GoodBackground } from "./good_background.png";
+export { default as BadBackground } from "./bad_background.png";

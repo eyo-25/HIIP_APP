@@ -34,8 +34,17 @@ function mapHomePlanList(
 
   return planList
     .map((plan) => {
-      const { title, days, history, interval, color, _id, endDate, startDate } =
-        plan;
+      const {
+        title,
+        days,
+        history,
+        interval,
+        color,
+        _id,
+        endDate,
+        startDate,
+        focusTime,
+      } = plan;
 
       const filteredHistory = history.find(({ date: recordDate }) =>
         dayjs(recordDate).isSame(date, "day")
@@ -66,6 +75,7 @@ function mapHomePlanList(
         color,
         _id,
         status,
+        focusTime,
         startDate: dayjs(startDate).format("YYYY-MM-DD"),
         endDate: dayjs(endDate).format("YYYY-MM-DD"),
         history: transformedObject,

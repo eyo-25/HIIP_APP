@@ -9,8 +9,8 @@ export function filterPlansByDate(
 
   return planListData.filter((plan) => {
     return (
-      date.isSameOrAfter(plan.startDate) &&
-      date.isSameOrBefore(plan.endDate) &&
+      date.isSameOrAfter(plan.startDate, "day") &&
+      date.isSameOrBefore(plan.endDate, "day") &&
       plan.days.includes(calendarDateDay)
     );
   });
