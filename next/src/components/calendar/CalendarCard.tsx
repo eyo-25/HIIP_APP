@@ -34,7 +34,9 @@ function CalendarCard({
     const base =
       "relative flex-center desktop:max-h-44pxr max-h-40pxr mx-auto mobile:my-[4%] my-[6%] desktop:my-[8%] cursor-pointer w-full";
     if (displayType === "month") {
-      return dayjs().isAfter(dayjs(date)) ? `${base} text-gray-600` : base;
+      return dayjs().isAfter(dayjs(date), "day")
+        ? `${base} text-gray-600`
+        : base;
     }
 
     return `${base} ${!isCurrentMonth && "text-gray-600"}`;

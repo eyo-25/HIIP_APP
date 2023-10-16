@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import PlanCard from "./PlanCard";
 import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
 import { motion } from "framer-motion";
 import PlanCardSkeleton from "./PlanCardSkeleton";
+import PlanCard from "./PlanCard";
 
 type Props = {
   planList: SimplePlanModel[];
@@ -35,7 +35,9 @@ function PlanListBoard({ planList, selectedPlanId, selectPlan }: Props) {
       variants={boardVariants}
       initial="normal"
       animate="animate"
-      className="pb-[40%] h-full pt-5pxr w-full px-[5%] mx-auto overflow-hidden sroll"
+      className={`pb-[40%] h-full pt-5pxr w-full px-[5%] mx-auto overflow-hidden ${
+        !isBoardLoading && "sroll"
+      }`}
     >
       {isBoardLoading ? (
         <>

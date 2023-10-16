@@ -16,16 +16,16 @@ function FeedbackSuccessInfo({ scoreInfo }: Props) {
         {scoreInfo.success.totalSuccessPercent}
         <span className="text-3xl">%</span>
       </h5>
-      <ul className="flex gap-28pxr">
+      <ul className="flex desktop:gap-28pxr gap-23pxr">
         <li className="flex-col">
-          <h6 className="font-black text-2xl">
+          <h6 className="font-black text-2xl mobile:text-xl">
             {scoreInfo.success.totalProcessSet}
             <span className="ml-5pxr">set</span>
           </h6>
           <p className="text-gray-700 text-sm">총 진행한 세트</p>
         </li>
         <li className="flex-col">
-          <h6 className="font-black text-2xl">
+          <h6 className="font-black text-2xl mobile:text-xl">
             {60 <= scoreInfo.success.totalFocusTime
               ? Math.floor(scoreInfo.success.totalFocusTime / 60) +
                 "h  " +
@@ -37,7 +37,7 @@ function FeedbackSuccessInfo({ scoreInfo }: Props) {
           <p className="text-gray-700 text-sm">총 집중시간</p>
         </li>
         <li className="flex-col">
-          <h6 className="font-black text-2xl">
+          <h6 className="font-black text-2xl mobile:text-xl">
             {60 <= scoreInfo.success.averageTime
               ? Math.floor(scoreInfo.success.averageTime / 60) +
                 "h  " +

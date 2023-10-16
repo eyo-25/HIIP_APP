@@ -24,7 +24,7 @@ export const usePlanPercent = (
   let wasteTime = 0;
   let todayFocus = 0;
 
-  while (currentDate.isSameOrBefore(today)) {
+  while (currentDate.isSameOrBefore(today, "day")) {
     const currentHistory = history?.[currentDate.format("YYYY-MM-DD")];
     if (selectedPlan.days.includes(currentDate.day())) {
       totalDay++;
@@ -35,7 +35,7 @@ export const usePlanPercent = (
         }
         if (currentHistory.focusSet === 0) {
           processCount++;
-          if (currentDate.isSameOrBefore(today)) {
+          if (currentDate.isSame(today, "day")) {
             todayFocus += interval * focusTime;
           }
         } else {
@@ -44,10 +44,9 @@ export const usePlanPercent = (
               currentHistory.focusSet * focusTime +
               Math.floor(currentHistory.focusTime / 60);
 
-            if (currentDate.isSameOrBefore(today)) {
-              const todayFocusSet = interval - (currentHistory.focusSet - 1);
-              const todayFocusTime =
-                todayFocusSet * focusTime + currentHistory.focusTime;
+            if (currentDate.isSame(today, "day")) {
+              const todayFocusSet = interval - currentHistory.focusSet;
+              const todayFocusTime = todayFocusSet * focusTime;
               todayFocus += todayFocusTime;
             }
           } else {
@@ -55,10 +54,11 @@ export const usePlanPercent = (
               (currentHistory.focusSet - 1) * focusTime +
               Math.floor(currentHistory.focusTime / 60);
 
-            if (currentDate.isSameOrBefore(today)) {
+            if (currentDate.isSame(today, "day")) {
               const todayFocusSet = interval - currentHistory.focusSet;
               const todayFocusTime =
-                todayFocusSet * focusTime + currentHistory.focusTime;
+                todayFocusSet * focusTime +
+                Math.floor((focusTime * 60 - currentHistory.focusTime) / 60);
               todayFocus += todayFocusTime;
             }
           }

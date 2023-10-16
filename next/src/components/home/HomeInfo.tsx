@@ -24,15 +24,14 @@ type Props = {
 
 function HomeInfo({ selectedPlan }: Props) {
   const wiseSaying = useMemo(() => randomWiseSaying(), []);
-
   return (
     <motion.div
       variants={infoVariants}
       initial="normal"
       animate="animate"
-      className="flex-center flex-col desktop:text-2xl text-xl h-full leading-loose"
+      className="flex-center flex-col desktop:text-2xl text-xl h-full"
     >
-      <div className="flex-center flex-col h-full">
+      <div className="flex-center flex-col h-full leading-loose">
         {selectedPlan ? (
           wiseSaying?.map((word, idx) => <p key={idx}>{word}</p>)
         ) : (

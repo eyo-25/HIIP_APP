@@ -79,11 +79,24 @@ function WriteForm({
     }
     if (startDate === "") return alert("시작날짜를 설정해 주세요");
     if (endDate === "") return alert("종료날짜를 설정해 주세요");
-    if (dayjs(startDate).isAfter(endDate)) {
+    if (dayjs(startDate).isAfter(endDate, "day")) {
       setEndDate("");
       return alert("종료날짜는 시작날짜와 같거나 이후로 설정해 주세요.");
     }
     if (selectedDays.length <= 0) return alert("요일을 하루이상 선택해 주세요");
+    let isNotDate = false;
+    let currentDate = dayjs(startDate);
+    while (currentDate.isSameOrBefore(endDate, "day")) {
+      if (selectedDays.includes(currentDate.day())) {
+        isNotDate = true;
+        break;
+      }
+      currentDate = currentDate.add(1, "day");
+    }
+
+    if (!isNotDate) {
+      return alert("기간중에 선택한 요일에 해당하는 날짜가 있어야 합니다.");
+    }
 
     setIsLoading(true);
 
