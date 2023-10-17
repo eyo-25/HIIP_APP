@@ -9,11 +9,11 @@ function FeedbackSuccessInfo({ scoreInfo }: Props) {
   return (
     <div className="flex flex-col justify-center h-full w-full">
       <div className="flex font-bold text-xl items-center">
-        <p>성공률</p>
+        <p>진행률</p>
         <HelpIcon />
       </div>
       <h5 className="black-italic text-5xl mt-[3%] mb-[6%]">
-        {scoreInfo.success.totalSuccessPercent}
+        {scoreInfo.success.totalProccessPercent}
         <span className="text-3xl">%</span>
       </h5>
       <ul className="flex desktop:gap-28pxr gap-23pxr">

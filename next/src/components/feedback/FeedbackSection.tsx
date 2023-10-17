@@ -6,10 +6,21 @@ import FeebackTotalScore from "./FeebackTotalScore";
 import FeedbackGraph from "./FeedbackGraph";
 import FeedbackSuccessInfo from "./FeedbackSuccessInfo";
 import FeedBackAverage from "./FeedBackAverage";
+import { motion } from "framer-motion";
+
+const cardVariants = {
+  click: {
+    scale: 0.95,
+    transition: {
+      delay: 0.3,
+      type: "linear",
+    },
+  },
+};
 
 export type RatingType = "BAD" | "SAD" | "SOSO" | "GOOD" | "PERFECT";
 interface SuccessType {
-  totalSuccessPercent: string;
+  totalProccessPercent: string;
   totalFocusTime: number;
   averageTime: number;
   totalProcessSet: number;
@@ -35,6 +46,7 @@ export default function FeedbackSection({ feedBackList }: Props) {
   useEffect(() => {
     let totalFocusTime = 0;
     let totalProcessSet = 0;
+    let totalProcessPercent = 0;
     let totalAverageSet = 0;
     let totalWastTime = 0;
     let totalTodayFocus = 0;
@@ -71,6 +83,7 @@ export default function FeedbackSection({ feedBackList }: Props) {
         totalAverageSet += averageSet;
         totalWastTime += wasteTime;
         totalTodayFocus += todayFocus;
+        totalProcessPercent += processPercent;
 
         return copy;
       },
@@ -89,7 +102,9 @@ export default function FeedbackSection({ feedBackList }: Props) {
     );
 
     const success: SuccessType = {
-      totalSuccessPercent: (totalArr[0] / feedBackList.length).toFixed(1),
+      totalProccessPercent: (totalProcessPercent / feedBackList.length).toFixed(
+        1
+      ),
       totalFocusTime: totalFocusTime,
       averageTime,
       totalProcessSet,
@@ -121,23 +136,28 @@ export default function FeedbackSection({ feedBackList }: Props) {
   }, [feedBackList]);
 
   return (
-    <main className="w-full overflow-hidden sroll h-full">
+    <>
       {scoreInfo && (
         <>
           <section className="relative flex w-full h-[90%] pb-[18%] bg-black text-white">
             <FeebackTotalScore scoreInfo={scoreInfo} />
           </section>
-          <section className="w-full h-480pxr bg-white px-24pxr">
+          <section className="w-full h-480pxr bg-white px-24pxr text-black">
             <FeedbackGraph feedBackList={feedBackList} />
           </section>
           <section className="w-full h-280pxr flex px-24pxr text-black">
             <FeedbackSuccessInfo scoreInfo={scoreInfo} />
           </section>
-          <section className="flex flex-col h-400pxr mx-24pxr p-24pxr mb-[40%] rounded-lg drop-shadow-md bg-white text-black">
+          <motion.section
+            onContextMenu={(e) => e.preventDefault()}
+            variants={cardVariants}
+            whileTap="click"
+            className="flex flex-col h-400pxr mx-24pxr p-24pxr mb-[40%] rounded-lg drop-shadow-md bg-white text-black"
+          >
             <FeedBackAverage scoreInfo={scoreInfo} />
-          </section>
+          </motion.section>
         </>
       )}
-    </main>
+    </>
   );
 }

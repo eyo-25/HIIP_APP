@@ -17,6 +17,7 @@ body {
   -khtml-user-select: none;
   -webkit-user-select: none;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 @layer utilities {

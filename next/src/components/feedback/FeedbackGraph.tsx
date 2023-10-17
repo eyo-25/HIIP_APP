@@ -41,7 +41,7 @@ function FeedbackGraph({ feedBackList }: Props) {
         </div>
         <div className="flex items-end">
           <p className="font-bold text-xl leading-tight">
-            주간 계획
+            주간 계획별
             <br />
             성공률 분석
           </p>
