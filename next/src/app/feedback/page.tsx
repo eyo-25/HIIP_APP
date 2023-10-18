@@ -14,7 +14,7 @@ export default function FeedbackPage() {
     <NavigationContext>
       <main className="w-full overflow-hidden sroll h-full text-white">
         {isLoading && (
-          <div className="absolute flex flex-col h-full w-full">
+          <div className="absolute flex flex-col h-full w-full bg-black">
             <LoadingSpinner text="피드백 로딩중..." />
             <div className="h-[11%] w-full"></div>
           </div>
