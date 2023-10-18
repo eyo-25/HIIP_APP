@@ -21,7 +21,7 @@ export default function MetaButton({ mode, move, onClick }: Props) {
       opacity: 1,
       x: move ? move : 0,
       transition: {
-        duration: 0.7,
+        duration: 0.8,
         type: "linear",
       },
     },

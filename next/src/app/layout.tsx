@@ -1,7 +1,6 @@
 import "./globals.css";
 import { Roboto } from "next/font/google";
 import type { Metadata } from "next";
-
 import AuthContext from "@/context/AuthContext";
 import SwrconfigContext from "@/context/SwrconfigContext";
 
@@ -14,6 +13,9 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   title: "HIIP APP",
   description: "High Intensity Interval Planing App",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

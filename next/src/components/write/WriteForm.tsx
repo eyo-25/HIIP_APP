@@ -83,6 +83,11 @@ function WriteForm({
       setEndDate("");
       return alert("종료날짜는 시작날짜와 같거나 이후로 설정해 주세요.");
     }
+    if (90 < dayjs(endDate).diff(startDate, "day")) {
+      setEndDate("");
+      return alert("기간으로 설정할 수 있는 날짜는 최대 3개월입니다.");
+    }
+
     if (selectedDays.length <= 0) return alert("요일을 하루이상 선택해 주세요");
     let isNotDate = false;
     let currentDate = dayjs(startDate);

@@ -56,8 +56,8 @@ function PlanSection({ planListData }: Props) {
     animate: {
       height: isWeekly ? "20%" : "52%",
       transition: {
-        duration: 0.5,
-        type: "tween",
+        duration: 0.45,
+        type: "linear",
       },
     },
   };
@@ -69,8 +69,8 @@ function PlanSection({ planListData }: Props) {
     animate: {
       height: isWeekly ? "80%" : "48%",
       transition: {
-        duration: 0.5,
-        type: "tween",
+        duration: 0.45,
+        type: "linear",
       },
     },
   };
@@ -81,7 +81,7 @@ function PlanSection({ planListData }: Props) {
         selectedPlanTitle={selectedPlan ? selectedPlan.title : ""}
         isPlanList={0 < planList.length ? true : false}
       />
-      <main className="relative flex flex-col w-full overflow-hidden h-[92%]">
+      <main className="relative flex flex-col w-full overflow-hidden desktop:[92%] h-[93%] mobile:h-[94%]">
         <motion.section
           variants={calendarVariants}
           initial="normal"
