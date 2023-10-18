@@ -1,12 +1,19 @@
 # HIIP
 
 ![Mask group (13)](https://github.com/eyo-25/HIIP_APP/assets/105860766/9b5f7ee0-d6a8-45b0-89f5-57c6bebfccfa)
+  
+<br/>
 
 - **Solo Project**
-- **Service Name:** [HIIP](https://hiip-app.vercel.app/)
-- **Development Duration**: `2023.09.27 ~ 2023.10.18`
-- **Expansion**: `2023.10.19 ~`
-- **Developer**: [박재현](https://github.com/eyo-25)
+- **Service Name** : [HIIP](https://hiip-app.vercel.app/)
+  
+<br/>
+
+- **Development Duration** : `2023.09.27 ~ 2023.10.18`
+- **Expansion** : `2023.10.19 ~`
+- **Developer** : [박재현](https://github.com/eyo-25)
+
+<br/>
 
 ## 💻 Tech Stack
 
@@ -22,6 +29,7 @@
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | <img src="https://github.com/eyo-25/HIIP_APP/assets/105860766/46247943-a955-424d-b1dc-8fc48079b2b2" width="100" height="100"> | <img src="https://github.com/eyo-25/HIIP_APP/assets/105860766/0f232948-ccca-4db6-9713-639e4153cdde" width="100" height="100"> |
 
+<br/>
 
 ## 📚️ Docs
 
