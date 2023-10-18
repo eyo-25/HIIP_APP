@@ -1,5 +1,3 @@
-# Read me
-
 # HIIP
 
 ![Mask group (13)](https://github.com/eyo-25/HIIP_APP/assets/105860766/9b5f7ee0-d6a8-45b0-89f5-57c6bebfccfa)
