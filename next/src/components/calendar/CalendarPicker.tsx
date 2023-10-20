@@ -1,28 +1,26 @@
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import dayjs from "dayjs";
 import CalendarList from "./CalendarList";
 import {
-  CalendaMemoModel,
   CalendarModel,
   SelectPlanModel,
   SimplePlanModel,
 } from "@/comman/model/plan";
-import { dateMemoKey } from "./calendarUtils";
 import { motion } from "framer-motion";
 import CalendarHeader from "./CalendarHeader";
 import CalendarDays from "./CalendarDays";
+import { today } from "@/comman/utils/today";
 
 type Props = {
   isWeekly: boolean;
   selectedPlan: SelectPlanModel | null;
-  calendarArray: CalendarModel[][];
-  displayDate: dayjs.Dayjs;
   clickedDate: dayjs.Dayjs;
-  calendarMemo: CalendaMemoModel;
+  calendarData: CalendarModel[][];
+  displayDate: dayjs.Dayjs;
   setDisplayDate: Dispatch<SetStateAction<dayjs.Dayjs>>;
   setClickedDate: Dispatch<SetStateAction<dayjs.Dayjs>>;
   setPlanList: Dispatch<SetStateAction<SimplePlanModel[]>>;
-  setDisplayMonth: Dispatch<SetStateAction<number>>;
+  displayMonthSetter: (year: number, month: number) => void;
 };
 
 const calendarVariants = {
@@ -40,35 +38,34 @@ const calendarVariants = {
 };
 
 function CalendarPicker({
+  calendarData,
   isWeekly,
   selectedPlan,
-  calendarArray,
-  displayDate,
-  calendarMemo,
   clickedDate,
+  displayDate,
   setDisplayDate,
   setClickedDate,
   setPlanList,
-  setDisplayMonth,
+  displayMonthSetter,
 }: Props) {
-  const today = useMemo(() => dayjs(), []);
   const [weekIndex, setWeekIndex] = useState(
     Math.ceil((today.startOf("month").day() + today.date()) / 7) - 1
   );
 
   const updateCalendarValue = (newDate: dayjs.Dayjs, index: number) => {
     setDisplayDate(newDate);
-    setDisplayMonth(newDate.month());
+    displayMonthSetter(newDate.year(), newDate.month() + 1);
     setWeekIndex(index);
   };
   const handleWeeklyPrevClick = () => {
     if (
       weekIndex === 0 ||
-      dayjs(calendarArray[weekIndex][0].date).month() !== displayDate.month()
+      dayjs(calendarData[weekIndex][0].date).month() !== displayDate.month()
     ) {
       const prevMonth = displayDate.subtract(1, "M");
-      const index =
-        Math.ceil((today.startOf("month").day() + today.date()) / 7) - 1;
+      const index = Math.ceil(
+        (today.startOf("month").day() + today.date()) / 7
+      );
       updateCalendarValue(prevMonth, index);
     } else {
       setWeekIndex((prev) => prev - 1);
@@ -77,8 +74,7 @@ function CalendarPicker({
   const handleWeeklyNextClick = () => {
     if (
       weekIndex === 5 ||
-      dayjs(calendarArray[weekIndex + 1][0].date).month() !==
-        displayDate.month()
+      dayjs(calendarData[weekIndex + 1][0].date).month() !== displayDate.month()
     ) {
       const nextMonth = displayDate.add(1, "M");
       const index = nextMonth.startOf("month").day() === 0 ? 0 : 1;
@@ -104,15 +100,10 @@ function CalendarPicker({
     }
   };
   const handleTodayClick = () => {
-    const memoKey = dateMemoKey(today);
     const index =
       Math.ceil((today.startOf("month").day() + today.date()) / 7) - 1;
     updateCalendarValue(today, index);
     setClickedDate(today);
-
-    if (calendarMemo[memoKey]) {
-      setPlanList(calendarMemo[memoKey][index][today.day()].list);
-    }
   };
   const handleDateClick = (date: string, planList: SimplePlanModel[]) => {
     const selectDate = dayjs(date);
@@ -124,7 +115,7 @@ function CalendarPicker({
     setPlanList(planList);
     if (selectMonth + 1 !== selectMonth) {
       setDisplayDate(selectDate);
-      setDisplayMonth(selectMonth);
+      displayMonthSetter(selectDate.year(), selectMonth + 1);
     }
     if (weekIndex !== selectWeekIndex) {
       setWeekIndex(selectWeekIndex);
@@ -151,7 +142,7 @@ function CalendarPicker({
       >
         <CalendarDays isWeekly={isWeekly} />
         <CalendarList
-          calendarArray={calendarArray}
+          calendarData={calendarData}
           selectedPlan={selectedPlan}
           isWeekly={isWeekly}
           displayDate={displayDate}

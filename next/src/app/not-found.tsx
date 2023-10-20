@@ -1,21 +1,8 @@
-"use client"; // Error components must be Client Components
-
+"use client";
 import Link from "next/link";
-import { useEffect } from "react";
 import { RxArrowTopRight } from "react-icons/rx";
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
-  useEffect(() => {
-    // Log the error to an error reporting service
-    console.error(error);
-  }, [error]);
-
+export default function Error() {
   return (
     <main className="flex flex-center h-full w-full bg-black text-white">
       <div className="flex-center flex-col w-full h-[90%] text-center">

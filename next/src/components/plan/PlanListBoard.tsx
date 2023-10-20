@@ -3,8 +3,10 @@ import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
 import { motion } from "framer-motion";
 import PlanCardSkeleton from "./PlanCardSkeleton";
 import PlanCard from "./PlanCard";
+import dayjs from "dayjs";
 
 type Props = {
+  clickedDate: dayjs.Dayjs;
   planList: SimplePlanModel[];
   selectedPlanId?: string;
   selectPlan: (planData: SelectPlanModel | null) => void;
@@ -24,7 +26,12 @@ const boardVariants = {
   },
 };
 
-function PlanListBoard({ planList, selectedPlanId, selectPlan }: Props) {
+function PlanListBoard({
+  planList,
+  selectedPlanId,
+  clickedDate,
+  selectPlan,
+}: Props) {
   const [isBoardLoading, setIsBoardLoading] = useState<boolean>(false);
   const loadingSetter = (isBoardLoading: boolean) => {
     setIsBoardLoading(isBoardLoading);
@@ -57,6 +64,7 @@ function PlanListBoard({ planList, selectedPlanId, selectPlan }: Props) {
           {planList.map((planData: SimplePlanModel) => (
             <PlanCard
               key={planData._id}
+              clickedDate={clickedDate}
               planData={planData}
               selectedPlanId={selectedPlanId}
               selectPlan={selectPlan}

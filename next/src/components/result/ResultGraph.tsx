@@ -1,10 +1,9 @@
-import { DAYS } from "@/comman/constants";
 import { HomePlanModel } from "@/comman/model/plan";
 import { usePlanPercent } from "@/comman/utils/planPercent";
 import { weekSuccessPercent } from "@/comman/utils/weekSuccessPercent";
-import dayjs from "dayjs";
 import React from "react";
 import WeeklyGraph from "../ui/WeeklyGraph";
+import { today } from "@/comman/utils/today";
 
 type Props = {
   planData: HomePlanModel;
@@ -12,7 +11,6 @@ type Props = {
 };
 
 function ResultGraph({ planData, isSuccess }: Props) {
-  const today = dayjs();
   const planPercent = usePlanPercent(planData, isSuccess ? "success" : "home");
   const weekSuccessArr = weekSuccessPercent(planData, planPercent);
 

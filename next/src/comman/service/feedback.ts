@@ -8,6 +8,7 @@ import {
 import { client } from "./sanity";
 import { usePlanPercent } from "../utils/planPercent";
 import { weekSuccessPercent } from "../utils/weekSuccessPercent";
+import { today } from "../utils/today";
 
 export async function getFeedBackList(
   userId: string
@@ -71,7 +72,6 @@ function mapHomePlanList(planList: PlanDataModel[]): FeedbackDataModel[] {
       todayFocus,
     } = planPercent;
     const weekSuccessArr = weekSuccessPercent(homePlan, planPercent);
-    const today = dayjs();
 
     const percentDiff =
       weekSuccessArr[today.day() + 1] - weekSuccessArr[today.day()];

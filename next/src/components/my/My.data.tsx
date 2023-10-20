@@ -17,7 +17,7 @@ export type MyListType = {
 export const myDocuments: MyListType[] = [
   {
     title: "프로젝트 깃허브",
-    link: "https://github.com/eyo-25",
+    link: "https://github.com/eyo-25/HIIP_APP",
     icon: GithubIcon,
   },
   {

@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import {
   PlanModel,
   PlanDataModel,
@@ -7,6 +7,7 @@ import {
   PlanTimerData,
   PlanHistory,
   FeedbackDataModel,
+  CalendarModel,
 } from "../model/plan";
 
 export const usePlan = (planId: string) => {
@@ -143,3 +144,11 @@ export async function removePlan(planId: string) {
 
   return response;
 }
+
+export const useCalendar = (initialDate: string) => {
+  const { data, error, isLoading } = useSWR<CalendarModel[][]>(
+    `/api/calendar?date=${initialDate}`
+  );
+
+  return { calendarData: data, isLoading, error };
+};
