@@ -17,6 +17,8 @@ type Props = {
   clickedDate: dayjs.Dayjs;
   calendarData: CalendarModel[][];
   displayDate: dayjs.Dayjs;
+  weekIndex: number;
+  setWeekIndex: Dispatch<SetStateAction<number>>;
   setDisplayDate: Dispatch<SetStateAction<dayjs.Dayjs>>;
   setClickedDate: Dispatch<SetStateAction<dayjs.Dayjs>>;
   setPlanList: Dispatch<SetStateAction<SimplePlanModel[]>>;
@@ -43,15 +45,13 @@ function CalendarPicker({
   selectedPlan,
   clickedDate,
   displayDate,
+  weekIndex,
+  setWeekIndex,
   setDisplayDate,
   setClickedDate,
   setPlanList,
   displayMonthSetter,
 }: Props) {
-  const [weekIndex, setWeekIndex] = useState(
-    Math.ceil((today.startOf("month").day() + today.date()) / 7) - 1
-  );
-
   const updateCalendarValue = (newDate: dayjs.Dayjs, index: number) => {
     setDisplayDate(newDate);
     displayMonthSetter(newDate.year(), newDate.month() + 1);
@@ -63,9 +63,15 @@ function CalendarPicker({
       dayjs(calendarData[weekIndex][0].date).month() !== displayDate.month()
     ) {
       const prevMonth = displayDate.subtract(1, "M");
-      const index = Math.ceil(
-        (today.startOf("month").day() + today.date()) / 7
-      );
+      const prevStartMonthDay = prevMonth.startOf("month").day();
+      const prevMonthDate = prevMonth.endOf("month").date();
+      const prevEndMonthDay = prevMonth.endOf("month").day();
+
+      const index =
+        6 === prevEndMonthDay
+          ? Math.ceil((prevStartMonthDay + prevMonthDate) / 7) - 1
+          : Math.ceil((prevStartMonthDay + prevMonthDate) / 7) - 2;
+
       updateCalendarValue(prevMonth, index);
     } else {
       setWeekIndex((prev) => prev - 1);

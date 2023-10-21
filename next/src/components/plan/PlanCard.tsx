@@ -1,7 +1,7 @@
 import { IoPlaySharp } from "react-icons/io5";
 import { DEFAULTMEMO, StatusImg, planColor } from "./PlanCard.data";
 import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
-import { useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { PencilIcon, XIcon } from "@/comman/assets";
 import Link from "next/link";
 import { mutate } from "swr";
@@ -69,15 +69,23 @@ export default function PlanCard({
       loadingSetter(true);
       removePlan(_id)
         .then((res) => {
-          mutate(`/api/plan`);
+          let currentMonth = dayjs(startDate);
+          while (currentMonth.isSameOrBefore(endDate, "month")) {
+            mutate(
+              `/api/calendar?date=${currentMonth.year()}-${
+                currentMonth.month() + 1
+              }`
+            );
+            currentMonth = currentMonth.add(1, "month");
+          }
           selectPlan(null);
         })
         .catch((err) => alert(err.toString()))
-        .finally(() =>
+        .finally(() => {
           setTimeout(() => {
             loadingSetter(false);
-          }, 600)
-        );
+          }, 100);
+        });
     }
   };
   const handleQuickStartClick = () => {

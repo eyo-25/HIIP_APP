@@ -43,36 +43,39 @@ function CalendarCard({
   const { date, list, colors } = data;
   const today = clickedDate.format("YYYY-MM-DD");
   const isCurrentMonth = Number(date.split("-")[1]) === displayDate.month() + 1;
+  const isStartDate = dayjs(date).isSame(selectedPlan?.startDate, "day");
+  const isEndDate = dayjs(date).isSame(selectedPlan?.endDate, "day");
 
   const liClassName = (date: string) => {
-    const base =
+    const baseStyle =
       "relative flex-center desktop:max-h-44pxr max-h-40pxr mx-auto mobile:my-[4%] my-[6%] desktop:my-[8%] cursor-pointer w-full";
     if (displayType === "month") {
       return dayjs().isAfter(dayjs(date), "day")
-        ? `${base} text-gray-600`
-        : base;
+        ? `${baseStyle} text-gray-600`
+        : baseStyle;
     }
 
-    return `${base} ${!isCurrentMonth && "text-gray-600"}`;
+    return `${baseStyle} ${!isCurrentMonth && "text-gray-600"}`;
   };
   const circleClassName = (date: string) => {
-    const base =
-      "z-10 flex-center h-full desktop:w-[73%] w-[70%] rounded-full mobile:text-xs text-sm desktop:text-base";
+    const baseStyle =
+      "z-10 flex-center h-full desktop:w-[73%] w-[70%] rounded-full mobile:text-xs text-sm desktop:text-baseStyle";
 
-    if (date === today) return `bg-black text-white ${base}`;
+    if (date === today) return `bg-black text-white ${baseStyle}`;
     if (
-      dayjs(selectedPlan?.startDate) <= dayjs(date) &&
-      dayjs(date) <= dayjs(selectedPlan?.endDate)
+      selectedPlan &&
+      dayjs(date).isSameOrAfter(selectedPlan?.startDate, "day") &&
+      dayjs(date).isSameOrBefore(selectedPlan?.endDate, "day")
     ) {
-      return `bg-gray-300 ${base}`;
+      return `bg-gray-300 ${baseStyle}`;
     }
-    return base;
+    return baseStyle;
   };
 
   const isEdgeDate = (date: string) => {
     if (
-      dayjs(selectedPlan?.startDate) <= dayjs(date) &&
-      dayjs(date) <= dayjs(selectedPlan?.endDate)
+      dayjs(selectedPlan?.startDate).isSameOrBefore(date, "day") &&
+      dayjs(selectedPlan?.endDate).isSameOrAfter(date, "day")
     ) {
       return true;
     }
@@ -88,11 +91,11 @@ function CalendarCard({
       className={liClassName(date)}
       key={date}
     >
-      {idx !== 0 && isEdgeDate(date) && selectedPlan?.startDate !== date && (
+      {idx !== 0 && isEdgeDate(date) && !isStartDate && (
         <div className={`absolute h-full w-[50%] left-0pxr bg-gray-300`}></div>
       )}
       <div className={circleClassName(date)}>{date.split("-")[2]}</div>
-      {idx !== 6 && isEdgeDate(date) && selectedPlan?.endDate !== date && (
+      {idx !== 6 && isEdgeDate(date) && !isEndDate && (
         <div className={`absolute h-full w-[50%] right-0pxr bg-gray-300`}></div>
       )}
       {date !== today && (

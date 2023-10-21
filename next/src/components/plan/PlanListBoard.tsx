@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
 import { motion } from "framer-motion";
 import PlanCardSkeleton from "./PlanCardSkeleton";
