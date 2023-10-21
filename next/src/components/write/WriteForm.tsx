@@ -16,7 +16,6 @@ import { useRouter } from "next/navigation";
 import ColorSelector from "./ColorSelector";
 import DaySelector from "./DaySelector";
 import { ColorType, FormModel, PlanDataModel } from "@/comman/model/plan";
-import { mutate } from "swr";
 import { createPlan, updatePlan } from "@/comman/hooks";
 import { useSetAtom } from "jotai";
 import { isLoadingSetter } from "@/store";
@@ -98,7 +97,6 @@ function WriteForm({
       }
       currentDate = currentDate.add(1, "day");
     }
-
     if (!isNotDate) {
       return alert("기간중에 선택한 요일에 해당하는 날짜가 있어야 합니다.");
     }
@@ -126,7 +124,6 @@ function WriteForm({
     if (mode === "edit" && planId) {
       updatePlan(planId, formData)
         .then(() => {
-          mutate(`/api/plan/${planId}`);
           router.push("/plan");
         })
         .catch((err) => alert(err.toString()))

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export const getCalendar = (displayMonth: dayjs.Dayjs) => {
+export const getCalendar = (displayMonth: dayjs.Dayjs): string[] => {
   const startDate = displayMonth.startOf("month");
   const startDay = startDate.day();
 

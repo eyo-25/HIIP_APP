@@ -25,17 +25,17 @@ type Props = {
   isWeekly: boolean;
   handleDateClick: (date: string, planList: SimplePlanModel[]) => void;
   selectedPlan: SelectPlanModel | null;
-  calendarArray: CalendarModel[][];
   displayDate: dayjs.Dayjs;
   clickedDate: dayjs.Dayjs;
   weekIndex: number;
+  calendarData: CalendarModel[][];
 };
 
 function CalendarList({
   handleDateClick,
+  calendarData,
   isWeekly,
   selectedPlan,
-  calendarArray,
   displayDate,
   clickedDate,
   weekIndex,
@@ -52,7 +52,7 @@ function CalendarList({
             isWeekly ? "h-[60%]" : "h-[88%]"
           }`}
         >
-          {calendarArray[weekIndex].map((data, idx: number) => (
+          {calendarData[weekIndex].map((data, idx: number) => (
             <CalendarCard
               handleDateClick={handleDateClick}
               data={data}
@@ -76,7 +76,7 @@ function CalendarList({
             isWeekly ? "h-[60%]" : "h-[88%] mobile:h-[93%]"
           }`}
         >
-          {calendarArray.map((week) =>
+          {calendarData.map((week) =>
             week.map((data, idx: number) => (
               <CalendarCard
                 handleDateClick={handleDateClick}

@@ -12,7 +12,7 @@ export const usePlanPercent = (
   selectedPlan: HomePlanModel,
   type: percentType = "home"
 ) => {
-  const { history, interval, startDate, focusTime } = selectedPlan;
+  const { history, interval, startDate, focusTime, endDate } = selectedPlan;
   const today = type === "prev" ? dayjs().subtract(1, "day") : dayjs();
   const todayHistory = history?.[today.format("YYYY-MM-DD")];
   const isHistory = 0 < Object.keys(history).length;
@@ -25,6 +25,8 @@ export const usePlanPercent = (
   let todayFocus = 0;
 
   while (currentDate.isSameOrBefore(today, "day")) {
+    if (dayjs(currentDate).isAfter(endDate)) break;
+
     const currentHistory = history?.[currentDate.format("YYYY-MM-DD")];
     if (selectedPlan.days.includes(currentDate.day())) {
       totalDay++;
