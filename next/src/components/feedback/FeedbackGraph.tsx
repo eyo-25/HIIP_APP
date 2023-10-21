@@ -2,6 +2,7 @@ import { FeedbackDataModel } from "@/comman/model/plan";
 import WeeklyGraph from "../ui/WeeklyGraph";
 import { useEffect, useState } from "react";
 import HelpIcon from "../ui/HelpIcon";
+import dayjs from "dayjs";
 
 type Props = {
   feedBackList: FeedbackDataModel[];
@@ -49,7 +50,9 @@ function FeedbackGraph({ feedBackList }: Props) {
         </div>
         <div className="flex items-end">
           <h5 className="black-italic text-5xl">
-            {feedBackList[selectPlanIndex].successPercent}
+            {dayjs().isAfter(feedBackList[selectPlanIndex].endDate, "day")
+              ? 0
+              : feedBackList[selectPlanIndex].successPercent}
             <span className="text-3xl">%</span>
           </h5>
           <p

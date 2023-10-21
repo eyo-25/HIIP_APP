@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import CalendarHeader from "../calendar/CalendarHeader";
 import dayjs from "dayjs";
 import CalendarDays from "../calendar/CalendarDays";
 import { getCalendar } from "@/comman/utils/calendar";
 import CalendarCard from "../calendar/CalendarCard";
 import { SimplePlanModel } from "@/comman/model/plan";
+import { today } from "@/comman/utils/today";
 
 type Props = {
   isStartDate: boolean;
@@ -13,7 +14,6 @@ type Props = {
 };
 
 function MonthDatePicker({ modalClose, handleDateSet, isStartDate }: Props) {
-  const today = useMemo(() => dayjs(), []);
   const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(today);
   const [calendarArray, setCalendarArray] = useState<string[]>();
 

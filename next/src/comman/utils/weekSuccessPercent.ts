@@ -1,12 +1,12 @@
 import dayjs from "dayjs";
 import { HomePlanModel, planPercent } from "../model/plan";
+import { today } from "./today";
 
 export const weekSuccessPercent = (
   planData: HomePlanModel,
   planPercent: planPercent
 ) => {
-  const today = dayjs();
-  const { history, days, startDate, title } = planData;
+  const { history, days, startDate, endDate } = planData;
   const { successCount, totalDay, successPercent } = planPercent;
 
   const weekSuccessArr = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -18,6 +18,7 @@ export const weekSuccessPercent = (
     currentDate = currentDate.subtract(1, "day");
     const currentKey = currentDate.format("YYYY-MM-DD");
 
+    if (dayjs(currentDate).isAfter(endDate, "day")) continue;
     if (dayjs(startDate).isAfter(currentDate, "day")) continue;
     if (today.isBefore(currentDate, "day")) continue;
     if (today.isSame(currentDate, "day")) {

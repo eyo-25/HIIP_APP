@@ -1,12 +1,15 @@
 import { IoPlaySharp } from "react-icons/io5";
 import { DEFAULTMEMO, StatusImg, planColor } from "./PlanCard.data";
 import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
-import { useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { PencilIcon, XIcon } from "@/comman/assets";
 import Link from "next/link";
 import { mutate } from "swr";
 import { motion } from "framer-motion";
 import { removePlan, useOnClickOutside } from "@/comman/hooks";
+import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
+import { today } from "@/comman/utils/today";
 
 const cardVariants = {
   click: {
@@ -21,6 +24,7 @@ const cardVariants = {
 type Props = {
   planData: SimplePlanModel;
   selectedPlanId?: string;
+  clickedDate: dayjs.Dayjs;
   selectPlan: (planData: SelectPlanModel | null) => void;
   loadingSetter: (isBoardLoading: boolean) => void;
 };
@@ -28,6 +32,7 @@ type Props = {
 export default function PlanCard({
   planData,
   selectedPlanId,
+  clickedDate,
   selectPlan,
   loadingSetter,
 }: Props) {
@@ -38,6 +43,7 @@ export default function PlanCard({
   const cardRef = useRef(null);
   const intervalArray = Array.from({ length: interval }, (_, index) => index);
   const isActive = selectedPlanId === _id;
+  const router = useRouter();
 
   const handleSelectPlan = () => {
     !isActive && selectPlan({ title, _id, startDate, endDate });
@@ -63,16 +69,29 @@ export default function PlanCard({
       loadingSetter(true);
       removePlan(_id)
         .then((res) => {
-          mutate(`/api/plan`);
+          let currentMonth = dayjs(startDate);
+          while (currentMonth.isSameOrBefore(endDate, "month")) {
+            mutate(
+              `/api/calendar?date=${currentMonth.year()}-${
+                currentMonth.month() + 1
+              }`
+            );
+            currentMonth = currentMonth.add(1, "month");
+          }
           selectPlan(null);
         })
         .catch((err) => alert(err.toString()))
-        .finally(() =>
+        .finally(() => {
           setTimeout(() => {
             loadingSetter(false);
-          }, 600)
-        );
+          }, 100);
+        });
     }
+  };
+  const handleQuickStartClick = () => {
+    if (status !== "pending") return;
+    if (!clickedDate.isSame(today, "day")) return;
+    router.push(`/timer/${_id}`);
   };
 
   return (
@@ -131,7 +150,10 @@ export default function PlanCard({
               {interval}{" "}
               <span className="text-base text-gray-700 font-normal">SET</span>
             </p>
-            <IoPlaySharp className="text-gray-600" />
+            <IoPlaySharp
+              onClick={handleQuickStartClick}
+              className="text-gray-600"
+            />
           </div>
         </div>
         <p className="text-gray-600 font-normal h-48pxr ellipsis-2">

@@ -32,9 +32,3 @@ export function calculatePlanStatus(
 
   return "pending";
 }
-
-export function dateMemoKey(date: dayjs.Dayjs): string {
-  const displayYear = date.year();
-  const displayMonth = date.month();
-  return `${displayYear}-${displayMonth}`;
-}

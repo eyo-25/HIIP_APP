@@ -1,4 +1,5 @@
 import { DAYS } from "@/comman/constants";
+import { today } from "@/comman/utils/today";
 import dayjs from "dayjs";
 
 type Props = {
@@ -7,7 +8,6 @@ type Props = {
 };
 
 function WeeklyGraph({ weekSuccessArr, isSuccess = true }: Props) {
-  const today = dayjs();
   return (
     <div className="relative flex flex-col h-full w-full">
       <div className="grid grid-rows-4 my-6pxr h-full pb-18pxr">

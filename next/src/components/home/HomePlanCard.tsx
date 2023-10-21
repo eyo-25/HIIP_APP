@@ -1,6 +1,7 @@
 import { HomePlanModel } from "@/comman/model/plan";
 import { StatusImg, planColor } from "../plan/PlanCard.data";
 import { IoPlaySharp } from "react-icons/io5";
+import { useRouter } from "next/navigation";
 
 type Props = {
   data: HomePlanModel;
@@ -12,11 +13,16 @@ export default function HomePlanCard({ data, idx, planListSort }: Props) {
   const { title, interval, _id, color, status } = data;
   const intervalArray = Array.from({ length: interval }, (_, index) => index);
   const isActive = idx === 0;
+  const router = useRouter();
 
   const handleCardClick = () => {
     if (idx === 0 || status !== "pending") return;
 
     planListSort(_id);
+  };
+  const handleQuickStartClick = () => {
+    if (status !== "pending") return;
+    router.push(`/timer/${_id}`);
   };
 
   return (
@@ -47,7 +53,10 @@ export default function HomePlanCard({ data, idx, planListSort }: Props) {
               {interval}{" "}
               <span className="text-base text-gray-700 font-normal">SET</span>
             </p>
-            <IoPlaySharp className="text-gray-600" />
+            <IoPlaySharp
+              onClick={handleQuickStartClick}
+              className="text-gray-600"
+            />
           </div>
         </div>
         <ul className="absolute flex gap-[1%] bottom-0pxr w-full h-7pxr">

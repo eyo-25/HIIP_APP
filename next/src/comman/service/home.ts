@@ -6,6 +6,7 @@ import {
   StatusType,
 } from "../model/plan";
 import { client } from "./sanity";
+import { today } from "../utils/today";
 
 export async function getDatePlanList(
   userId: string,
@@ -30,8 +31,6 @@ function mapHomePlanList(
   planList: PlanDataModel[],
   date: string
 ): HomePlanModel[] {
-  const today = dayjs();
-
   return planList
     .map((plan) => {
       const {

@@ -107,10 +107,6 @@ export interface CalendarModel {
   colors: ColorType[];
 }
 
-export interface CalendaMemoModel {
-  [key: string]: CalendarModel[][];
-}
-
 export interface FeedbackDataModel {
   successPercent: number;
   processPercent: number;
