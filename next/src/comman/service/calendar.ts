@@ -1,10 +1,5 @@
 import { client } from "./sanity";
-import {
-  ColorType,
-  PlanDataModel,
-  PlanHistory,
-  StatusType,
-} from "../model/plan";
+import { PlanDataModel, PlanHistory } from "../model/plan";
 import { today } from "../utils/today";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -23,23 +18,6 @@ const getCalendar = (date: string): dayjs.Dayjs[] => {
 
   return calendarArray;
 };
-
-interface SimplePlanModel {
-  title: string;
-  memo: string;
-  interval: number;
-  color: ColorType;
-  _id: string;
-  status: StatusType;
-  startDate: string;
-  endDate: string;
-}
-
-interface CalendarModel {
-  date: string;
-  list: SimplePlanModel[];
-  colors: ColorType[];
-}
 
 export async function getCalendarList(userId: string, date: string) {
   const calendarList = getCalendar(date);

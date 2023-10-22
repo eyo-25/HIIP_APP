@@ -1,29 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import PlanHeader from "./PlanHeader";
 import PlanListBoard from "@/components/plan/PlanListBoard";
 import MetaButton from "@/components/ui/MetaButton";
 import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
-import Link from "next/link";
 import { useMouseHandlers } from "@/comman/utils/mouseHandlers";
 import { useTouchHandlers } from "@/comman/utils/touchHandlers";
-import dayjs from "dayjs";
 import { today } from "@/comman/utils/today";
 import { useCalendar } from "@/comman/hooks/plan";
 import CalendarPicker from "../calendar/CalendarPicker";
-
-const buttonVarients = {
-  normal: {
-    opacity: 0,
-  },
-  animate: {
-    opacity: 1,
-    transition: {
-      duration: 0.7,
-      type: "linear",
-    },
-  },
-};
+import {
+  buttonVarients,
+  getCalendarVariants,
+  getPlanBoardVariants,
+} from "./PlanVariants";
 
 function PlanSection() {
   const index = useMemo(
@@ -48,6 +40,9 @@ function PlanSection() {
     setIsWeekly,
     isWeekly
   );
+  const calendarVariants = getCalendarVariants(isWeekly);
+  const planBoardVariants = getPlanBoardVariants(isWeekly);
+
   const selectPlan = (data: SelectPlanModel | null) => {
     setSelectedPlan(data);
   };
@@ -67,32 +62,6 @@ function PlanSection() {
       setPlanList(calendarData[index][today.day()].list);
     }
   }, [calendarData, clickedDate]);
-
-  const calendarVariants = {
-    normal: {
-      height: "0%",
-    },
-    animate: {
-      height: isWeekly ? "20%" : "52%",
-      transition: {
-        duration: 0.45,
-        type: "linear",
-      },
-    },
-  };
-
-  const planBoardVariants = {
-    normal: {
-      height: "80%",
-    },
-    animate: {
-      height: isWeekly ? "80%" : "48%",
-      transition: {
-        duration: 0.45,
-        type: "linear",
-      },
-    },
-  };
 
   return (
     <>

@@ -1,25 +1,16 @@
-import { IoPlaySharp } from "react-icons/io5";
-import { DEFAULTMEMO, StatusImg, planColor } from "./PlanCard.data";
-import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
-import { PencilIcon, XIcon } from "@/comman/assets";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { mutate } from "swr";
 import { motion } from "framer-motion";
+import dayjs from "dayjs";
+import { IoPlaySharp } from "react-icons/io5";
+import { DEFAULTMEMO, StatusImg, planColor } from "./PlanCard.data";
+import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
+import { PencilIcon, XIcon } from "@/comman/assets";
 import { removePlan, useOnClickOutside } from "@/comman/hooks";
 import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
 import { today } from "@/comman/utils/today";
-
-const cardVariants = {
-  click: {
-    scale: 0.95,
-    transition: {
-      delay: 0.3,
-      type: "linear",
-    },
-  },
-};
+import { planCardVariants } from "./PlanVariants";
 
 type Props = {
   planData: SimplePlanModel;
@@ -96,7 +87,7 @@ export default function PlanCard({
 
   return (
     <motion.li
-      variants={cardVariants}
+      variants={planCardVariants}
       whileTap="click"
       ref={cardRef}
       onContextMenu={(e) => e.preventDefault()}
