@@ -110,7 +110,7 @@ function PlanSection() {
         </motion.section>
       </main>
       <motion.div variants={buttonVarients} initial="normal" animate="animate">
-        <Link href={"/write/creat"}>
+        <Link href={"/write/creat"} aria-label="플랜 작성 페이지로 이동">
           <MetaButton mode={"creat"} />
         </Link>
       </motion.div>

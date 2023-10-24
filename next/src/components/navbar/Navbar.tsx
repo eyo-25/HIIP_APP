@@ -12,7 +12,11 @@ export default function Navbar() {
       <ul className="grid grid-cols-4 items-center h-full">
         {LINKS.map(({ icon, href, title, selectIcon }, idx) => (
           <li key={idx}>
-            <Link href={href} className="flex-col-center">
+            <Link
+              href={href}
+              aria-label={`${title}페이지로 이동`}
+              className="flex-col-center"
+            >
               {path === `${href}` ? selectIcon : icon}
               <h2
                 className={`text-xs ${

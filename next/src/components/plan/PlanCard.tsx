@@ -111,6 +111,7 @@ export default function PlanCard({
             </div>
           </button>
           <Link
+            aria-label="플랜수정 페이지로 이동"
             className="z-20 flex-center desktop:w-45pxr desktop:h-45pxr w-40pxr h-40pxr"
             href={`/write/edit/${_id}`}
           >

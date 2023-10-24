@@ -64,7 +64,7 @@ function PlanWriter({ planData, mode, planId, isLoading = false }: Props) {
       )}
       <div className="flex flex-col mx-auto w-[88%] h-full">
         <section className="flex mt-15pxr mb-10pxr">
-          <Link href={"/plan"}>
+          <Link aria-label="플랜 페이지로 이동" href={"/plan"}>
             <IoArrowBackOutline className="w-30pxr h-30pxr" />
           </Link>
         </section>

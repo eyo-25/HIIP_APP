@@ -54,7 +54,7 @@ function CalendarList({
           ))}
         </motion.ul>
       ) : (
-        <motion.div
+        <motion.ul
           variants={calendarListVariants}
           initial="normal"
           animate="animate"
@@ -78,7 +78,7 @@ function CalendarList({
               />
             ))
           )}
-        </motion.div>
+        </motion.ul>
       )}
     </>
   );
