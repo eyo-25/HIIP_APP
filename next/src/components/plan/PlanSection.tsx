@@ -18,10 +18,6 @@ import {
 } from "./PlanVariants";
 
 function PlanSection() {
-  const index = useMemo(
-    () => Math.ceil((today.startOf("month").day() + today.date()) / 7) - 1,
-    []
-  );
   const [displayMonth, setDisplayMonth] = useState<string>(
     today.format("YYYY-MM")
   );
@@ -32,7 +28,9 @@ function PlanSection() {
     null
   );
   const [clickedDate, setClickedDate] = useState<dayjs.Dayjs>(today);
-  const [weekIndex, setWeekIndex] = useState(index);
+  const [weekIndex, setWeekIndex] = useState(
+    Math.ceil((today.startOf("month").day() + today.date()) / 7) - 1
+  );
 
   const { calendarData, isLoading } = useCalendar(displayMonth);
   const { handleTouchStart, handleTouchEnd } = useTouchHandlers(setIsWeekly);
@@ -54,14 +52,19 @@ function PlanSection() {
   };
 
   useEffect(() => {
+    const clickedIndex =
+      Math.ceil((clickedDate.startOf("month").day() + clickedDate.date()) / 7) -
+      1;
     if (
       calendarData &&
-      clickedDate.isSame(today, "day") &&
-      dayjs(calendarData[index][today.day()].date).isSame(today, "day")
+      dayjs(calendarData[clickedIndex][clickedDate.day()].date).isSame(
+        clickedDate,
+        "day"
+      )
     ) {
-      setPlanList(calendarData[index][today.day()].list);
+      setPlanList(calendarData[clickedIndex][clickedDate.day()].list);
     }
-  }, [calendarData, clickedDate]);
+  }, [calendarData]);
 
   return (
     <>

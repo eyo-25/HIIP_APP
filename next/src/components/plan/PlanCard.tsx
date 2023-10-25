@@ -59,16 +59,8 @@ export default function PlanCard({
     if (ok) {
       loadingSetter(true);
       removePlan(_id)
-        .then((res) => {
-          let currentMonth = dayjs(startDate);
-          while (currentMonth.isSameOrBefore(endDate, "month")) {
-            mutate(
-              `/api/calendar?date=${currentMonth.year()}-${
-                currentMonth.month() + 1
-              }`
-            );
-            currentMonth = currentMonth.add(1, "month");
-          }
+        .then((_) => {
+          mutate(`/api/calendar?date=${clickedDate.format("YYYY-MM")}`);
           selectPlan(null);
         })
         .catch((err) => alert(err.toString()))
