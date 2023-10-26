@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import CalendarHeader from "../calendar/CalendarHeader";
 import dayjs from "dayjs";
+import CalendarHeader from "../calendar/CalendarHeader";
 import CalendarDays from "../calendar/CalendarDays";
 import { getCalendar } from "@/comman/utils/calendar";
 import CalendarCard from "../calendar/CalendarCard";
@@ -18,7 +18,9 @@ function MonthDatePicker({ modalClose, handleDateSet, isStartDate }: Props) {
   const [calendarArray, setCalendarArray] = useState<string[]>();
 
   useEffect(() => {
-    const calendarDates = getCalendar(displayDate);
+    const calendarDates = getCalendar(displayDate).map((date) =>
+      date.format("YYYY-MM-DD")
+    );
     setCalendarArray(calendarDates);
   }, [displayDate]);
 
@@ -42,7 +44,7 @@ function MonthDatePicker({ modalClose, handleDateSet, isStartDate }: Props) {
     >
       <div className="flex flex-col items-center max-w-sm w-full">
         <h5 className="py-23pxr text-gray-700">
-          {isStartDate ? "시작날짜" : "종료날짜"}를 설정해 주세요
+          {isStartDate ? "시작날짜" : "종료날짜"}를 설정해 주세요.
         </h5>
         <CalendarHeader
           handlePrevClick={handlePrevClick}

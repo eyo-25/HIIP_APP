@@ -146,7 +146,7 @@ export async function removePlan(planId: string) {
 }
 
 export const useCalendar = (initialDate: string) => {
-  const { data, error, isLoading } = useSWR<CalendarModel[][]>(
+  const { data, error, isLoading } = useSWR(
     `/api/calendar?date=${initialDate}`
   );
 

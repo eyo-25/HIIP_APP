@@ -1,5 +1,5 @@
 import { client } from "./sanity";
-import { PlanDataModel, PlanHistory } from "../model/plan";
+import { PlanDataModel, PlanHistory, PlanModel } from "../model/plan";
 import { today } from "../utils/today";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -25,78 +25,36 @@ export async function getCalendarList(userId: string, date: string) {
   const endDate = calendarList[calendarList.length - 1].format(
     "YYYY-MM-DDTHH:mm:ss[Z]"
   );
-  const planList: PlanDataModel[] = await client.fetch(
-    `*[_type == "plan" && author._ref == $userId && endDate >= $startDate && startDate <= $endDate]`,
-    {
-      userId,
-      startDate,
-      endDate,
-    }
-  );
 
-  const calendarDataList = calendarList.map((date: dayjs.Dayjs) => {
-    const formatDate = date.format("YYYY-MM-DD");
-    const day = date.day();
-    const colors: string[] = [];
-    const filteredPlanList = planList.filter((plan) => {
-      const { days, startDate, endDate, color } = plan;
-      if (
-        days.includes(day) &&
-        date.isSameOrAfter(startDate, "day") &&
-        date.isSameOrBefore(endDate, "day")
-      ) {
-        colors.push(color);
-        return true;
-      }
-      return false;
-    });
-    const transformPlanList = filteredPlanList.map((plan) => {
-      const transformedObject = plan?.history?.reduce(
-        (result: { [key: string]: PlanHistory }, cu) => {
-          const formatDate = dayjs(cu.date).format("YYYY-MM-DD");
-          result[formatDate] = cu;
-          return result;
-        },
-        {}
-      );
-
-      return {
-        ...plan,
-        history: transformedObject,
-      };
-    });
-
-    const list = transformPlanList.map((plan) => {
-      const { title, memo, interval, color, _id, startDate, endDate } = plan;
-      let status = "pending";
-      const historyData = plan?.history?.[formatDate];
-      const isPastDate = dayjs(date).isBefore(today, "day");
-
-      if (historyData?.isSuccess) {
-        status = "success";
-      } else if (isPastDate || historyData?.focusSet === 0) {
-        status = "fail";
-      }
-
-      return {
-        title,
-        memo,
-        interval,
-        color,
-        _id,
-        status,
+  return await client
+    .fetch(
+      `*[_type == "plan" && author._ref == $userId && endDate >= $startDate && startDate <= $endDate]`,
+      {
+        userId,
         startDate,
         endDate,
-      };
-    });
+      }
+    )
+    .then(mapPlanList);
+}
 
-    return { date: formatDate, list, colors };
+function mapPlanList(planList: PlanDataModel[]): PlanModel[] {
+  return planList.map((plan) => {
+    const transformedObject = plan?.history?.reduce(
+      (result: { [key: string]: PlanHistory }, item) => {
+        const formatDate = dayjs(item.date).format("YYYY-MM-DD");
+        result[formatDate] = item;
+        return result;
+      },
+      {}
+    );
+
+    return {
+      ...plan,
+      startDate: dayjs(plan.startDate).format("YYYY-MM-DD"),
+      endDate: dayjs(plan.endDate).format("YYYY-MM-DD"),
+      history: transformedObject,
+      memo: plan.memo ? plan.memo : "",
+    };
   });
-
-  const res = [];
-  for (let i = 0; i < calendarDataList.length; i += 7) {
-    res.push(calendarDataList.slice(i, i + 7));
-  }
-
-  return res;
 }

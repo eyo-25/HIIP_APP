@@ -10,6 +10,7 @@ type Props = {
   clickedDate: dayjs.Dayjs;
   planList: SimplePlanModel[];
   selectedPlanId?: string;
+  calendarData: any;
   selectPlan: (planData: SelectPlanModel | null) => void;
 };
 
@@ -17,6 +18,7 @@ function PlanListBoard({
   planList,
   selectedPlanId,
   clickedDate,
+  calendarData,
   selectPlan,
 }: Props) {
   const [isBoardLoading, setIsBoardLoading] = useState<boolean>(false);
@@ -53,6 +55,7 @@ function PlanListBoard({
               key={planData._id}
               clickedDate={clickedDate}
               planData={planData}
+              calendarData={calendarData}
               selectedPlanId={selectedPlanId}
               selectPlan={selectPlan}
               loadingSetter={loadingSetter}

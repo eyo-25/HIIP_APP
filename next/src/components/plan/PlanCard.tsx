@@ -16,6 +16,7 @@ type Props = {
   planData: SimplePlanModel;
   selectedPlanId?: string;
   clickedDate: dayjs.Dayjs;
+  calendarData: any;
   selectPlan: (planData: SelectPlanModel | null) => void;
   loadingSetter: (isBoardLoading: boolean) => void;
 };
@@ -24,6 +25,7 @@ export default function PlanCard({
   planData,
   selectedPlanId,
   clickedDate,
+  calendarData,
   selectPlan,
   loadingSetter,
 }: Props) {
@@ -60,10 +62,16 @@ export default function PlanCard({
       loadingSetter(true);
       removePlan(_id)
         .then((_) => {
+          const filteredData = calendarData.filter(
+            (data: any) => data._id !== _id
+          );
           mutate(`/api/calendar?date=${clickedDate.format("YYYY-MM")}`);
           selectPlan(null);
         })
-        .catch((err) => alert(err.toString()))
+        .catch((err) => {
+          alert(err.toString());
+          mutate(`/api/calendar?date=${clickedDate.format("YYYY-MM")}`);
+        })
         .finally(() => {
           setTimeout(() => {
             loadingSetter(false);

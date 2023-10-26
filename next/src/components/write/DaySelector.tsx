@@ -1,5 +1,4 @@
 import React from "react";
-import TitleContainer from "./TitleContainer";
 import { DAYS } from "@/comman/constants";
 
 type Props = {

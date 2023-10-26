@@ -51,7 +51,6 @@ export const calendarPickerVariants = {
   animate: {
     opacity: 1,
     transition: {
-      delay: 0.5,
       duration: 1,
       type: "linear",
     },
@@ -65,7 +64,6 @@ export const calendarListVariants = {
   animate: {
     opacity: 1,
     transition: {
-      delay: 0.4,
       duration: 0.5,
       type: "linear",
     },
