@@ -122,7 +122,10 @@ function HomeSection({ planListData, isLoading }: Props) {
         )}
       </motion.section>
       <motion.div variants={buttonVarients} initial="normal" animate="animate">
-        <Link href={planList[0] ? `/timer/${planList[0]._id}` : "/write/creat"}>
+        <Link
+          aria-label="타이머 페이지로 이동"
+          href={planList[0] ? `/timer/${planList[0]._id}` : "/write/creat"}
+        >
           <MetaButton mode={isPlanList ? "play" : "creat"} />
         </Link>
       </motion.div>

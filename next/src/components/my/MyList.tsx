@@ -13,6 +13,7 @@ function MyList({ data }: Props) {
   return (
     <li className="desktop:py-10pxr py-8pxr border-b-2 border-gray-400">
       <Link
+        aria-label={`${title}페이지 새창열기`}
         className="flex justify-between items-center"
         href={link}
         target="_blank"

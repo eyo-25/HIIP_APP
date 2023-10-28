@@ -8,6 +8,7 @@ import {
   PlanHistory,
   FeedbackDataModel,
   CalendarModel,
+  SimplePlanModel,
 } from "../model/plan";
 
 export const usePlan = (planId: string) => {
@@ -145,10 +146,12 @@ export async function removePlan(planId: string) {
   return response;
 }
 
-export const useCalendar = (initialDate: string) => {
-  const { data, error, isLoading } = useSWR<CalendarModel[][]>(
-    `/api/calendar?date=${initialDate}`
-  );
+export const useMonthPlanList = (initialDate: string) => {
+  const {
+    data: monthPlanListData,
+    error,
+    isLoading,
+  } = useSWR<PlanModel[]>(`/api/plan?date=${initialDate}`);
 
-  return { calendarData: data, isLoading, error };
+  return { monthPlanListData, isLoading, error };
 };

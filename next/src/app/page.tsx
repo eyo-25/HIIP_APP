@@ -1,11 +1,11 @@
 "use client";
 
+import dayjs from "dayjs";
+import Image from "next/image";
 import { HomeBackground } from "@/comman/assets";
 import { useDatePlanList } from "@/comman/hooks/plan";
 import HomeSection from "@/components/home/HomeSection";
 import NavigationContext from "@/context/NavigationContext";
-import dayjs from "dayjs";
-import Image from "next/image";
 
 export default function Main() {
   const { planListData, isLoading, error } = useDatePlanList(

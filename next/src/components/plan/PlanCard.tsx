@@ -1,30 +1,26 @@
-import { IoPlaySharp } from "react-icons/io5";
-import { DEFAULTMEMO, StatusImg, planColor } from "./PlanCard.data";
-import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
-import { PencilIcon, XIcon } from "@/comman/assets";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { mutate } from "swr";
 import { motion } from "framer-motion";
+import dayjs from "dayjs";
+import { IoPlaySharp } from "react-icons/io5";
+import { DEFAULTMEMO, StatusImg, planColor } from "./PlanCard.data";
+import {
+  PlanModel,
+  SelectPlanModel,
+  SimplePlanModel,
+} from "@/comman/model/plan";
+import { PencilIcon, XIcon } from "@/comman/assets";
 import { removePlan, useOnClickOutside } from "@/comman/hooks";
 import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
 import { today } from "@/comman/utils/today";
-
-const cardVariants = {
-  click: {
-    scale: 0.95,
-    transition: {
-      delay: 0.3,
-      type: "linear",
-    },
-  },
-};
+import { planCardVariants } from "./PlanVariants";
 
 type Props = {
   planData: SimplePlanModel;
   selectedPlanId?: string;
   clickedDate: dayjs.Dayjs;
+  monthPlanListData: PlanModel[];
   selectPlan: (planData: SelectPlanModel | null) => void;
   loadingSetter: (isBoardLoading: boolean) => void;
 };
@@ -33,6 +29,7 @@ export default function PlanCard({
   planData,
   selectedPlanId,
   clickedDate,
+  monthPlanListData,
   selectPlan,
   loadingSetter,
 }: Props) {
@@ -68,19 +65,20 @@ export default function PlanCard({
     if (ok) {
       loadingSetter(true);
       removePlan(_id)
-        .then((res) => {
-          let currentMonth = dayjs(startDate);
-          while (currentMonth.isSameOrBefore(endDate, "month")) {
-            mutate(
-              `/api/calendar?date=${currentMonth.year()}-${
-                currentMonth.month() + 1
-              }`
-            );
-            currentMonth = currentMonth.add(1, "month");
-          }
+        .then((_) => {
+          const filteredData = monthPlanListData.filter(
+            (data: PlanModel) => data._id !== _id
+          );
+          mutate(
+            `/api/plan?date=${clickedDate.format("YYYY-MM")}`,
+            filteredData
+          );
           selectPlan(null);
         })
-        .catch((err) => alert(err.toString()))
+        .catch((err) => {
+          alert(err.toString());
+          mutate(`/api/plan?date=${clickedDate.format("YYYY-MM")}`);
+        })
         .finally(() => {
           setTimeout(() => {
             loadingSetter(false);
@@ -96,7 +94,7 @@ export default function PlanCard({
 
   return (
     <motion.li
-      variants={cardVariants}
+      variants={planCardVariants}
       whileTap="click"
       ref={cardRef}
       onContextMenu={(e) => e.preventDefault()}
@@ -120,6 +118,7 @@ export default function PlanCard({
             </div>
           </button>
           <Link
+            aria-label="플랜수정 페이지로 이동"
             className="z-20 flex-center desktop:w-45pxr desktop:h-45pxr w-40pxr h-40pxr"
             href={`/write/edit/${_id}`}
           >

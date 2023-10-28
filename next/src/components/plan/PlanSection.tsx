@@ -1,35 +1,25 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import PlanHeader from "./PlanHeader";
 import PlanListBoard from "@/components/plan/PlanListBoard";
-import MetaButton from "@/components/ui/MetaButton";
-import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
-import Link from "next/link";
+import {
+  CalendarModel,
+  ColorType,
+  PlanModel,
+  SelectPlanModel,
+  SimplePlanModel,
+  StatusType,
+} from "@/comman/model/plan";
 import { useMouseHandlers } from "@/comman/utils/mouseHandlers";
 import { useTouchHandlers } from "@/comman/utils/touchHandlers";
-import dayjs from "dayjs";
 import { today } from "@/comman/utils/today";
-import { useCalendar } from "@/comman/hooks/plan";
+import { useMonthPlanList } from "@/comman/hooks/plan";
 import CalendarPicker from "../calendar/CalendarPicker";
-
-const buttonVarients = {
-  normal: {
-    opacity: 0,
-  },
-  animate: {
-    opacity: 1,
-    transition: {
-      duration: 0.7,
-      type: "linear",
-    },
-  },
-};
+import { getCalendarVariants, getPlanBoardVariants } from "./PlanVariants";
+import { getCalendar } from "@/comman/utils/calendar";
 
 function PlanSection() {
-  const index = useMemo(
-    () => Math.ceil((today.startOf("month").day() + today.date()) / 7) - 1,
-    []
-  );
   const [displayMonth, setDisplayMonth] = useState<string>(
     today.format("YYYY-MM")
   );
@@ -40,14 +30,20 @@ function PlanSection() {
     null
   );
   const [clickedDate, setClickedDate] = useState<dayjs.Dayjs>(today);
-  const [weekIndex, setWeekIndex] = useState(index);
+  const [weekIndex, setWeekIndex] = useState(
+    Math.ceil((today.startOf("month").day() + today.date()) / 7) - 1
+  );
+  const [calendarArray, setCalendarArray] = useState<CalendarModel[][]>([]);
 
-  const { calendarData, isLoading } = useCalendar(displayMonth);
+  const { monthPlanListData } = useMonthPlanList(displayMonth);
   const { handleTouchStart, handleTouchEnd } = useTouchHandlers(setIsWeekly);
   const { handleMouseUp, handleMouseDown } = useMouseHandlers(
     setIsWeekly,
     isWeekly
   );
+  const calendarVariants = getCalendarVariants(isWeekly);
+  const planBoardVariants = getPlanBoardVariants(isWeekly);
+
   const selectPlan = (data: SelectPlanModel | null) => {
     setSelectedPlan(data);
   };
@@ -59,40 +55,90 @@ function PlanSection() {
   };
 
   useEffect(() => {
-    if (
-      calendarData &&
-      clickedDate.isSame(today, "day") &&
-      dayjs(calendarData[index][today.day()].date).isSame(today, "day")
-    ) {
-      setPlanList(calendarData[index][today.day()].list);
+    if (monthPlanListData) {
+      const calendarList = getCalendar(displayDate);
+      let calendarDataList: CalendarModel[] = [];
+
+      if (0 < monthPlanListData.length) {
+        calendarDataList = calendarList.map((date: dayjs.Dayjs) => {
+          const formatDate = date.format("YYYY-MM-DD");
+          const day = date.day();
+          const colors: ColorType[] = [];
+
+          const filteredPlanList = monthPlanListData.filter(
+            (plan: PlanModel) => {
+              const { days, startDate, endDate, color } = plan;
+              if (
+                days.includes(day) &&
+                date.isSameOrAfter(startDate, "day") &&
+                date.isSameOrBefore(endDate, "day")
+              ) {
+                colors.push(color);
+                return true;
+              }
+              return false;
+            }
+          );
+
+          const list: SimplePlanModel[] = filteredPlanList.map(
+            (plan: PlanModel) => {
+              const { title, memo, interval, color, _id, startDate, endDate } =
+                plan;
+              let status: StatusType = "pending";
+              const historyData = plan?.history?.[formatDate];
+              const isPastDate = dayjs(date).isBefore(today, "day");
+
+              if (historyData?.isSuccess) {
+                status = "success";
+              } else if (isPastDate || historyData?.focusSet === 0) {
+                status = "fail";
+              }
+
+              return {
+                title,
+                memo,
+                interval,
+                color,
+                _id,
+                status,
+                startDate,
+                endDate,
+              };
+            }
+          );
+
+          return { date: formatDate, list, colors };
+        });
+      } else {
+        calendarDataList = calendarList.map((date) => {
+          return { date: date.format("YYYY-MM-DD"), list: [], colors: [] };
+        });
+      }
+
+      const res = [];
+      for (let i = 0; i < calendarDataList.length; i += 7) {
+        res.push(calendarDataList.slice(i, i + 7));
+      }
+
+      setCalendarArray(res);
     }
-  }, [calendarData, clickedDate]);
+  }, [monthPlanListData]);
 
-  const calendarVariants = {
-    normal: {
-      height: "0%",
-    },
-    animate: {
-      height: isWeekly ? "20%" : "52%",
-      transition: {
-        duration: 0.45,
-        type: "linear",
-      },
-    },
-  };
+  useEffect(() => {
+    if (0 >= calendarArray.length) return;
 
-  const planBoardVariants = {
-    normal: {
-      height: "80%",
-    },
-    animate: {
-      height: isWeekly ? "80%" : "48%",
-      transition: {
-        duration: 0.45,
-        type: "linear",
-      },
-    },
-  };
+    const clickedIndex =
+      Math.ceil((clickedDate.startOf("month").day() + clickedDate.date()) / 7) -
+      1;
+    if (
+      dayjs(calendarArray[clickedIndex][clickedDate.day()].date).isSame(
+        clickedDate,
+        "day"
+      )
+    ) {
+      setPlanList(calendarArray[clickedIndex][clickedDate.day()].list);
+    }
+  }, [calendarArray]);
 
   return (
     <>
@@ -111,18 +157,18 @@ function PlanSection() {
           onTouchStart={handleTouchStart}
           className="bg-white drop-shadow-sm"
         >
-          {calendarData && (
+          {monthPlanListData && (
             <CalendarPicker
-              calendarData={calendarData}
+              calendarData={calendarArray}
               isWeekly={isWeekly}
               selectedPlan={selectedPlan}
               clickedDate={clickedDate}
               displayDate={displayDate}
+              weekIndex={weekIndex}
               setDisplayDate={setDisplayDate}
               setClickedDate={setClickedDate}
               setPlanList={setPlanList}
               displayMonthSetter={displayMonthSetter}
-              weekIndex={weekIndex}
               setWeekIndex={setWeekIndex}
             />
           )}
@@ -132,19 +178,17 @@ function PlanSection() {
           initial="normal"
           animate="animate"
         >
-          <PlanListBoard
-            selectedPlanId={selectedPlan?._id}
-            planList={planList}
-            clickedDate={clickedDate}
-            selectPlan={selectPlan}
-          />
+          {monthPlanListData && (
+            <PlanListBoard
+              selectedPlanId={selectedPlan?._id}
+              planList={planList}
+              clickedDate={clickedDate}
+              monthPlanListData={monthPlanListData}
+              selectPlan={selectPlan}
+            />
+          )}
         </motion.section>
       </main>
-      <motion.div variants={buttonVarients} initial="normal" animate="animate">
-        <Link href={"/write/creat"}>
-          <MetaButton mode={"creat"} />
-        </Link>
-      </motion.div>
     </>
   );
 }
