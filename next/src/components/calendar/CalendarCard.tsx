@@ -6,19 +6,7 @@ import {
 import dayjs from "dayjs";
 import { planColor } from "../plan/PlanCard.data";
 import { motion } from "framer-motion";
-
-const calendarCardVariants = {
-  normal: {
-    opacity: 0,
-  },
-  animate: {
-    opacity: 1,
-    transition: {
-      duration: 0.5,
-      type: "linear",
-    },
-  },
-};
+import { calendarCardVariants } from "../plan/PlanVariants";
 
 type Props = {
   data: CalendarModel;

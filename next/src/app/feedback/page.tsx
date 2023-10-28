@@ -29,7 +29,11 @@ export default function FeedbackPage() {
               플랜을 생성하고 HIIP에서 제공하는 <br />
               FEEDBACK을 받아보세요
             </p>
-            <Link href="/write/creat" className="flex items-center mt-[5%]">
+            <Link
+              href="/write/creat"
+              aria-label="플랜 작성 페이지로 이동"
+              className="flex items-center mt-[5%]"
+            >
               <p className="text-sm mr-5pxr">플랜 생성하러가기</p>
               <RxArrowTopRight />
             </Link>

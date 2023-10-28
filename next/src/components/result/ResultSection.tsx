@@ -18,7 +18,11 @@ function ResultSection({ isSuccess, planId, planData, isLoading }: Props) {
   return (
     <>
       <section className="flex flex-col justify-between w-full h-[30%] z-20 px-22pxr py-30pxr">
-        <Link href={`/timer/${planId}`} className="flex w-30pxr h-30pxr">
+        <Link
+          href={`/timer/${planId}`}
+          aria-label="타이머페이지로 이동"
+          className="flex w-30pxr h-30pxr"
+        >
           <IoChevronBack className="text-white w-full h-full" />
         </Link>
         <div className="text-white font-bold text-2xl leading-9">

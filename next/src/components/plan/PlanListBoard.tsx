@@ -1,35 +1,28 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
+import React, { useState } from "react";
+import {
+  PlanModel,
+  SelectPlanModel,
+  SimplePlanModel,
+} from "@/comman/model/plan";
 import { motion } from "framer-motion";
 import PlanCardSkeleton from "./PlanCardSkeleton";
 import PlanCard from "./PlanCard";
 import dayjs from "dayjs";
+import { planListBoardVariants } from "./PlanVariants";
 
 type Props = {
   clickedDate: dayjs.Dayjs;
   planList: SimplePlanModel[];
   selectedPlanId?: string;
+  monthPlanListData: PlanModel[];
   selectPlan: (planData: SelectPlanModel | null) => void;
-};
-
-const boardVariants = {
-  normal: {
-    opacity: 0,
-  },
-  animate: {
-    opacity: 1,
-    transition: {
-      delay: 0.5,
-      duration: 1,
-      type: "linear",
-    },
-  },
 };
 
 function PlanListBoard({
   planList,
   selectedPlanId,
   clickedDate,
+  monthPlanListData,
   selectPlan,
 }: Props) {
   const [isBoardLoading, setIsBoardLoading] = useState<boolean>(false);
@@ -39,7 +32,7 @@ function PlanListBoard({
 
   return (
     <motion.ul
-      variants={boardVariants}
+      variants={planListBoardVariants}
       initial="normal"
       animate="animate"
       className={`pb-[40%] h-full pt-5pxr w-full px-[5%] mx-auto overflow-hidden ${
@@ -66,6 +59,7 @@ function PlanListBoard({
               key={planData._id}
               clickedDate={clickedDate}
               planData={planData}
+              monthPlanListData={monthPlanListData}
               selectedPlanId={selectedPlanId}
               selectPlan={selectPlan}
               loadingSetter={loadingSetter}

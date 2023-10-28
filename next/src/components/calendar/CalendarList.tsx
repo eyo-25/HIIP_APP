@@ -6,20 +6,7 @@ import {
 } from "@/comman/model/plan";
 import CalendarCard from "./CalendarCard";
 import { motion } from "framer-motion";
-
-const calendarVariants = {
-  normal: {
-    opacity: 0,
-  },
-  animate: {
-    opacity: 1,
-    transition: {
-      delay: 0.4,
-      duration: 0.5,
-      type: "linear",
-    },
-  },
-};
+import { calendarListVariants } from "../plan/PlanVariants";
 
 type Props = {
   isWeekly: boolean;
@@ -44,7 +31,7 @@ function CalendarList({
     <>
       {isWeekly ? (
         <motion.ul
-          variants={calendarVariants}
+          variants={calendarListVariants}
           initial="normal"
           animate="animate"
           key={"weekly"}
@@ -67,8 +54,8 @@ function CalendarList({
           ))}
         </motion.ul>
       ) : (
-        <motion.div
-          variants={calendarVariants}
+        <motion.ul
+          variants={calendarListVariants}
           initial="normal"
           animate="animate"
           key={"month"}
@@ -91,7 +78,7 @@ function CalendarList({
               />
             ))
           )}
-        </motion.div>
+        </motion.ul>
       )}
     </>
   );

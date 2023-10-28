@@ -13,7 +13,11 @@ export default function Error() {
         <p className="text-sm mt-[5%] leading-relaxed text-gray-600">
           요청하신 페이지를 찾을 수 없습니다.
         </p>
-        <Link href="/" className="flex items-center mt-[5%]">
+        <Link
+          href="/"
+          aria-label="메인 페이지로 이동"
+          className="flex items-center mt-[5%]"
+        >
           <p className="text-sm mr-5pxr">홈으로 돌아가기</p>
           <RxArrowTopRight />
         </Link>

@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import CalendarHeader from "./CalendarHeader";
 import CalendarDays from "./CalendarDays";
 import { today } from "@/comman/utils/today";
+import { calendarPickerVariants } from "../plan/PlanVariants";
 
 type Props = {
   isWeekly: boolean;
@@ -23,20 +24,6 @@ type Props = {
   setClickedDate: Dispatch<SetStateAction<dayjs.Dayjs>>;
   setPlanList: Dispatch<SetStateAction<SimplePlanModel[]>>;
   displayMonthSetter: (year: number, month: number) => void;
-};
-
-const calendarVariants = {
-  normal: {
-    opacity: 0,
-  },
-  animate: {
-    opacity: 1,
-    transition: {
-      delay: 0.5,
-      duration: 1,
-      type: "linear",
-    },
-  },
 };
 
 function CalendarPicker({
@@ -110,6 +97,11 @@ function CalendarPicker({
       Math.ceil((today.startOf("month").day() + today.date()) / 7) - 1;
     updateCalendarValue(today, index);
     setClickedDate(today);
+    if (today.month() === clickedDate.month()) {
+      const index =
+        Math.ceil((today.startOf("month").day() + today.date()) / 7) - 1;
+      setPlanList(calendarData[index][today.day()].list);
+    }
   };
   const handleDateClick = (date: string, planList: SimplePlanModel[]) => {
     const selectDate = dayjs(date);
@@ -130,7 +122,7 @@ function CalendarPicker({
 
   return (
     <motion.div
-      variants={calendarVariants}
+      variants={calendarPickerVariants}
       initial="normal"
       animate="animate"
       className="relative flex flex-col items-center w-full h-full"
