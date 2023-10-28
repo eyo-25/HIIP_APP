@@ -1,4 +1,4 @@
-import { getPlanList } from "@/comman/service/plan";
+import { getMonthPlanList, getPlanList } from "@/comman/service/plan";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
@@ -15,9 +15,16 @@ export async function GET(req: NextRequest) {
 
   const date = req.nextUrl.searchParams.get("date");
   if (date) {
-    return getDatePlanList(user.id, date).then((data) =>
-      NextResponse.json(data)
-    );
+    const dateLength = date.split("-").length;
+    if (3 === dateLength) {
+      return getDatePlanList(user.id, date).then((data) =>
+        NextResponse.json(data)
+      );
+    } else {
+      return getMonthPlanList(user.id, date).then((data) =>
+        NextResponse.json(data)
+      );
+    }
   }
 
   return getPlanList(user.id).then((data) => NextResponse.json(data));

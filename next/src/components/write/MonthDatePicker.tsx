@@ -4,7 +4,6 @@ import CalendarHeader from "../calendar/CalendarHeader";
 import CalendarDays from "../calendar/CalendarDays";
 import { getCalendar } from "@/comman/utils/calendar";
 import CalendarCard from "../calendar/CalendarCard";
-import { SimplePlanModel } from "@/comman/model/plan";
 import { today } from "@/comman/utils/today";
 
 type Props = {
@@ -30,7 +29,7 @@ function MonthDatePicker({ modalClose, handleDateSet, isStartDate }: Props) {
   };
   const handleNextClick = () => setDisplayDate((prev) => prev.add(1, "M"));
 
-  const handleDateClick = (date: string, planList: SimplePlanModel[]) => {
+  const handleDateClick = (date: string) => {
     const selectDate = dayjs(date);
     if (selectDate.isBefore(today, "d")) return;
     handleDateSet(selectDate.format("YYYY-MM-DD"));

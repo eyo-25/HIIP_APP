@@ -5,7 +5,11 @@ import { motion } from "framer-motion";
 import dayjs from "dayjs";
 import { IoPlaySharp } from "react-icons/io5";
 import { DEFAULTMEMO, StatusImg, planColor } from "./PlanCard.data";
-import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
+import {
+  PlanModel,
+  SelectPlanModel,
+  SimplePlanModel,
+} from "@/comman/model/plan";
 import { PencilIcon, XIcon } from "@/comman/assets";
 import { removePlan, useOnClickOutside } from "@/comman/hooks";
 import { useRouter } from "next/navigation";
@@ -16,7 +20,7 @@ type Props = {
   planData: SimplePlanModel;
   selectedPlanId?: string;
   clickedDate: dayjs.Dayjs;
-  calendarData: any;
+  monthPlanListData: PlanModel[];
   selectPlan: (planData: SelectPlanModel | null) => void;
   loadingSetter: (isBoardLoading: boolean) => void;
 };
@@ -25,7 +29,7 @@ export default function PlanCard({
   planData,
   selectedPlanId,
   clickedDate,
-  calendarData,
+  monthPlanListData,
   selectPlan,
   loadingSetter,
 }: Props) {
@@ -62,15 +66,18 @@ export default function PlanCard({
       loadingSetter(true);
       removePlan(_id)
         .then((_) => {
-          const filteredData = calendarData.filter(
-            (data: any) => data._id !== _id
+          const filteredData = monthPlanListData.filter(
+            (data: PlanModel) => data._id !== _id
           );
-          mutate(`/api/calendar?date=${clickedDate.format("YYYY-MM")}`);
+          mutate(
+            `/api/plan?date=${clickedDate.format("YYYY-MM")}`,
+            filteredData
+          );
           selectPlan(null);
         })
         .catch((err) => {
           alert(err.toString());
-          mutate(`/api/calendar?date=${clickedDate.format("YYYY-MM")}`);
+          mutate(`/api/plan?date=${clickedDate.format("YYYY-MM")}`);
         })
         .finally(() => {
           setTimeout(() => {

@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
+import {
+  PlanModel,
+  SelectPlanModel,
+  SimplePlanModel,
+} from "@/comman/model/plan";
 import { motion } from "framer-motion";
 import PlanCardSkeleton from "./PlanCardSkeleton";
 import PlanCard from "./PlanCard";
@@ -10,7 +14,7 @@ type Props = {
   clickedDate: dayjs.Dayjs;
   planList: SimplePlanModel[];
   selectedPlanId?: string;
-  calendarData: any;
+  monthPlanListData: PlanModel[];
   selectPlan: (planData: SelectPlanModel | null) => void;
 };
 
@@ -18,7 +22,7 @@ function PlanListBoard({
   planList,
   selectedPlanId,
   clickedDate,
-  calendarData,
+  monthPlanListData,
   selectPlan,
 }: Props) {
   const [isBoardLoading, setIsBoardLoading] = useState<boolean>(false);
@@ -55,7 +59,7 @@ function PlanListBoard({
               key={planData._id}
               clickedDate={clickedDate}
               planData={planData}
-              calendarData={calendarData}
+              monthPlanListData={monthPlanListData}
               selectedPlanId={selectedPlanId}
               selectPlan={selectPlan}
               loadingSetter={loadingSetter}
