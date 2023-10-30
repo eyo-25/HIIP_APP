@@ -22,7 +22,6 @@ type Props = {
   clickedDate: dayjs.Dayjs;
   monthPlanListData: PlanModel[];
   selectPlan: (planData: SelectPlanModel | null) => void;
-  loadingSetter: (isBoardLoading: boolean) => void;
 };
 
 export default function PlanCard({
@@ -31,7 +30,6 @@ export default function PlanCard({
   clickedDate,
   monthPlanListData,
   selectPlan,
-  loadingSetter,
 }: Props) {
   const { title, memo, interval, _id, startDate, endDate, status, color } =
     planData;
@@ -63,7 +61,6 @@ export default function PlanCard({
   const handleDeleteClick = () => {
     const ok = confirm("플랜을 삭제하시겠습니까?");
     if (ok) {
-      loadingSetter(true);
       removePlan(_id)
         .then((_) => {
           const filteredData = monthPlanListData.filter(
@@ -78,11 +75,6 @@ export default function PlanCard({
         .catch((err) => {
           alert(err.toString());
           mutate(`/api/plan?date=${clickedDate.format("YYYY-MM")}`);
-        })
-        .finally(() => {
-          setTimeout(() => {
-            loadingSetter(false);
-          }, 100);
         });
     }
   };

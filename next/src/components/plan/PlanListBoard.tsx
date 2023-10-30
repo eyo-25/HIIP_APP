@@ -15,6 +15,7 @@ type Props = {
   planList: SimplePlanModel[];
   selectedPlanId?: string;
   monthPlanListData: PlanModel[];
+  isValidating: boolean;
   selectPlan: (planData: SelectPlanModel | null) => void;
 };
 
@@ -23,23 +24,19 @@ function PlanListBoard({
   selectedPlanId,
   clickedDate,
   monthPlanListData,
+  isValidating,
   selectPlan,
 }: Props) {
-  const [isBoardLoading, setIsBoardLoading] = useState<boolean>(false);
-  const loadingSetter = (isBoardLoading: boolean) => {
-    setIsBoardLoading(isBoardLoading);
-  };
-
   return (
     <motion.ul
       variants={planListBoardVariants}
       initial="normal"
       animate="animate"
       className={`pb-[40%] h-full pt-5pxr w-full px-[5%] mx-auto overflow-hidden ${
-        !isBoardLoading && "sroll"
+        !isValidating && "sroll"
       }`}
     >
-      {isBoardLoading ? (
+      {isValidating ? (
         <>
           {Array.from({ length: 4 }).map((_, idx) => (
             <li className="w-full bg-gray-200" key={idx}>
@@ -62,7 +59,6 @@ function PlanListBoard({
               monthPlanListData={monthPlanListData}
               selectedPlanId={selectedPlanId}
               selectPlan={selectPlan}
-              loadingSetter={loadingSetter}
             />
           ))}
         </>

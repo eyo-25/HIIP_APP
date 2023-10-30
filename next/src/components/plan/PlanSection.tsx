@@ -35,7 +35,7 @@ function PlanSection() {
   );
   const [calendarArray, setCalendarArray] = useState<CalendarModel[][]>([]);
 
-  const { monthPlanListData } = useMonthPlanList(displayMonth);
+  const { monthPlanListData, isValidating } = useMonthPlanList(displayMonth);
   const { handleTouchStart, handleTouchEnd } = useTouchHandlers(setIsWeekly);
   const { handleMouseUp, handleMouseDown } = useMouseHandlers(
     setIsWeekly,
@@ -183,6 +183,7 @@ function PlanSection() {
               selectedPlanId={selectedPlan?._id}
               planList={planList}
               clickedDate={clickedDate}
+              isValidating={isValidating}
               monthPlanListData={monthPlanListData}
               selectPlan={selectPlan}
             />
