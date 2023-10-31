@@ -14,8 +14,8 @@ type Props = {
   clickedDate: dayjs.Dayjs;
   planList: SimplePlanModel[];
   selectedPlanId?: string;
-  monthPlanListData: PlanModel[];
   isValidating: boolean;
+  handleDeleteClick: (_id: string) => void;
   selectPlan: (planData: SelectPlanModel | null) => void;
 };
 
@@ -23,8 +23,8 @@ function PlanListBoard({
   planList,
   selectedPlanId,
   clickedDate,
-  monthPlanListData,
   isValidating,
+  handleDeleteClick,
   selectPlan,
 }: Props) {
   return (
@@ -56,8 +56,8 @@ function PlanListBoard({
               key={planData._id}
               clickedDate={clickedDate}
               planData={planData}
-              monthPlanListData={monthPlanListData}
               selectedPlanId={selectedPlanId}
+              handleDeleteClick={handleDeleteClick}
               selectPlan={selectPlan}
             />
           ))}
@@ -67,4 +67,4 @@ function PlanListBoard({
   );
 }
 
-export default React.memo(PlanListBoard);
+export default PlanListBoard;

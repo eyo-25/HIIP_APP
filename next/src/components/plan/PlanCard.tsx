@@ -1,17 +1,12 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { mutate } from "swr";
 import { motion } from "framer-motion";
 import dayjs from "dayjs";
 import { IoPlaySharp } from "react-icons/io5";
 import { DEFAULTMEMO, StatusImg, planColor } from "./PlanCard.data";
-import {
-  PlanModel,
-  SelectPlanModel,
-  SimplePlanModel,
-} from "@/comman/model/plan";
+import { SelectPlanModel, SimplePlanModel } from "@/comman/model/plan";
 import { PencilIcon, XIcon } from "@/comman/assets";
-import { removePlan, useOnClickOutside } from "@/comman/hooks";
+import { useOnClickOutside } from "@/comman/hooks";
 import { useRouter } from "next/navigation";
 import { today } from "@/comman/utils/today";
 import { planCardVariants } from "./PlanVariants";
@@ -20,7 +15,7 @@ type Props = {
   planData: SimplePlanModel;
   selectedPlanId?: string;
   clickedDate: dayjs.Dayjs;
-  monthPlanListData: PlanModel[];
+  handleDeleteClick: (_id: string) => void;
   selectPlan: (planData: SelectPlanModel | null) => void;
 };
 
@@ -28,7 +23,7 @@ export default function PlanCard({
   planData,
   selectedPlanId,
   clickedDate,
-  monthPlanListData,
+  handleDeleteClick,
   selectPlan,
 }: Props) {
   const { title, memo, interval, _id, startDate, endDate, status, color } =
@@ -57,27 +52,6 @@ export default function PlanCard({
     }
   };
   useOnClickOutside(cardRef, () => setIsModalOpen(false));
-
-  const handleDeleteClick = () => {
-    const ok = confirm("플랜을 삭제하시겠습니까?");
-    if (ok) {
-      removePlan(_id)
-        .then((_) => {
-          const filteredData = monthPlanListData.filter(
-            (data: PlanModel) => data._id !== _id
-          );
-          mutate(
-            `/api/plan?date=${clickedDate.format("YYYY-MM")}`,
-            filteredData
-          );
-          selectPlan(null);
-        })
-        .catch((err) => {
-          alert(err.toString());
-          mutate(`/api/plan?date=${clickedDate.format("YYYY-MM")}`);
-        });
-    }
-  };
   const handleQuickStartClick = () => {
     if (status !== "pending") return;
     if (!clickedDate.isSame(today, "day")) return;
@@ -102,7 +76,7 @@ export default function PlanCard({
       {isModalOpen && (
         <div className="absolute flex desktop:top-[-22px] top-[-18px] right-15pxr">
           <button
-            onClick={handleDeleteClick}
+            onClick={() => handleDeleteClick(_id)}
             className="z-20 flex-center desktop:w-45pxr desktop:h-45pxr w-40pxr h-40pxr"
           >
             <div className="flex-center desktop:w-34pxr desktop:h-34pxr w-32pxr h-32pxr rounded-full drop-shadow-md bg-gray-600">

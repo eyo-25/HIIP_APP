@@ -14,7 +14,7 @@ type Props = {
 };
 
 export default function TimerPage({ params: { planId } }: Props) {
-  const { planTimerData, isLoading, error } = usePlanTimer(planId);
+  const { planTimerData, isLoading } = usePlanTimer(planId);
   const [isSplash, setIsSplash] = useState(true);
 
   const splashDone = () => {
@@ -43,31 +43,3 @@ export default function TimerPage({ params: { planId } }: Props) {
     </main>
   );
 }
-
-const { planTimerData, isLoading, error } = usePlanTimer(planId);
-const [isSplash, setIsSplash] = useState(true);
-
-const splashDone = () => {
-  setIsSplash(false);
-};
-
-return (
-  <main className="relative flex-center bg-black h-full">
-    {isSplash ? (
-      <TimerSplash splashDone={splashDone} />
-    ) : (
-      <>
-        <TimerSection
-          planTimerData={planTimerData}
-          planId={planId}
-          isLoading={isLoading}
-        />
-        <Image
-          className="absolute opacity-70"
-          fill
-          src={TimerBackground}
-          alt="timer 배경"
-        />
-      </>
-    )}
-  </main>
