@@ -48,7 +48,7 @@ function MetaButton({ mode, move, onClick }: Props) {
 
   return (
     <div
-      className={`fixed flex mx-auto left-0pxr right-0pxr bottom-[14%] desktop:bottom-[16%] z-20 w-80pxr h-80pxr desktop:w-88pxr desktop:h-88pxr`}
+      className={`fixed flex mx-auto left-0pxr right-0pxr bottom-[14%] desktop:bottom-[15%] z-20 w-80pxr h-80pxr desktop:w-88pxr desktop:h-88pxr`}
     >
       <motion.button
         title={buttonData[mode].label}

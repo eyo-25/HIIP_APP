@@ -51,7 +51,9 @@ export default function PlanCard({
       clearTimeout(pressTimer);
     }
   };
-  useOnClickOutside(cardRef, () => setIsModalOpen(false));
+  useOnClickOutside(cardRef, () => {
+    setIsModalOpen(false);
+  });
   const handleQuickStartClick = () => {
     if (status !== "pending") return;
     if (!clickedDate.isSame(today, "day")) return;
@@ -76,7 +78,10 @@ export default function PlanCard({
       {isModalOpen && (
         <div className="absolute flex desktop:top-[-22px] top-[-18px] right-15pxr">
           <button
-            onClick={() => handleDeleteClick(_id)}
+            onClick={() => {
+              setIsModalOpen(false);
+              handleDeleteClick(_id);
+            }}
             className="z-20 flex-center desktop:w-45pxr desktop:h-45pxr w-40pxr h-40pxr"
           >
             <div className="flex-center desktop:w-34pxr desktop:h-34pxr w-32pxr h-32pxr rounded-full drop-shadow-md bg-gray-600">

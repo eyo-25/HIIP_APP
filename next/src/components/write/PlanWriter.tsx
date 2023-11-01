@@ -9,6 +9,7 @@ import { PlanDataModel } from "@/comman/model/plan";
 import dayjs from "dayjs";
 import LoadingSpinner from "../ui/Loading";
 import { useAtomValue } from "jotai";
+import { is_loading_atom } from "@/store";
 
 type Props = {
   planData?: PlanDataModel;
@@ -25,6 +26,7 @@ function PlanWriter({ planData, mode, planId, isLoading = false }: Props) {
   const [endDate, setEndDate] = useState<string>("");
   const [isStart, setIsStart] = useState(false);
   const [isStartDate, setIsStartDate] = useState(true);
+  const isLoadingAtom = useAtomValue(is_loading_atom);
 
   const handleDateSet = (date: string) => {
     isStartDate ? setStartDate(date) : setEndDate(date);
@@ -43,7 +45,7 @@ function PlanWriter({ planData, mode, planId, isLoading = false }: Props) {
 
   return (
     <main className="bg-white text-lg font-semibold sroll h-full">
-      {isLoading && (
+      {(isLoadingAtom || isLoading) && (
         <div className="flex flex-col z-30 absolute w-full h-full bg-black/50 backdrop-blur-[1px]">
           <LoadingSpinner text="Loading..." />
         </div>
