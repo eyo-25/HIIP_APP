@@ -13,16 +13,15 @@ import {
 } from "@/comman/model/plan";
 import { useMouseHandlers } from "@/comman/utils/mouseHandlers";
 import { useTouchHandlers } from "@/comman/utils/touchHandlers";
-import { today } from "@/comman/utils/today";
-import { useMonthPlanList } from "@/comman/hooks/plan";
+import { today, todayFormat } from "@/comman/utils/today";
+import { removePlan, useMonthPlanList } from "@/comman/hooks/plan";
 import CalendarPicker from "../calendar/CalendarPicker";
 import { getCalendarVariants, getPlanBoardVariants } from "./PlanVariants";
 import { getCalendar } from "@/comman/utils/calendar";
+import { mutate } from "swr";
 
 function PlanSection() {
-  const [displayMonth, setDisplayMonth] = useState<string>(
-    today.format("YYYY-MM")
-  );
+  const [displayMonth, setDisplayMonth] = useState<string>(todayFormat);
   const [displayDate, setDisplayDate] = useState<dayjs.Dayjs>(today);
   const [isWeekly, setIsWeekly] = useState<boolean>(false);
   const [planList, setPlanList] = useState<SimplePlanModel[]>([]);
@@ -35,7 +34,7 @@ function PlanSection() {
   );
   const [calendarArray, setCalendarArray] = useState<CalendarModel[][]>([]);
 
-  const { monthPlanListData } = useMonthPlanList(displayMonth);
+  const { monthPlanListData, isValidating } = useMonthPlanList(displayMonth);
   const { handleTouchStart, handleTouchEnd } = useTouchHandlers(setIsWeekly);
   const { handleMouseUp, handleMouseDown } = useMouseHandlers(
     setIsWeekly,
@@ -51,6 +50,26 @@ function PlanSection() {
     const [currentYear, currentMonth] = displayMonth.split("-");
     if (+currentYear !== year || +currentMonth !== month) {
       setDisplayMonth(`${year}-${month}`);
+    }
+  };
+  const handleDeleteClick = (_id: string) => {
+    const ok = confirm("플랜을 삭제하시겠습니까?");
+    if (ok && monthPlanListData) {
+      removePlan(_id)
+        .then((_) => {
+          const filteredData = monthPlanListData.filter(
+            (data: PlanModel) => data._id !== _id
+          );
+          mutate(
+            `/api/plan?date=${clickedDate.format("YYYY-MM")}`,
+            filteredData
+          );
+          selectPlan(null);
+        })
+        .catch((err) => {
+          alert(err.toString());
+          mutate(`/api/plan?date=${clickedDate.format("YYYY-MM")}`);
+        });
     }
   };
 
@@ -178,15 +197,14 @@ function PlanSection() {
           initial="normal"
           animate="animate"
         >
-          {monthPlanListData && (
-            <PlanListBoard
-              selectedPlanId={selectedPlan?._id}
-              planList={planList}
-              clickedDate={clickedDate}
-              monthPlanListData={monthPlanListData}
-              selectPlan={selectPlan}
-            />
-          )}
+          <PlanListBoard
+            selectedPlanId={selectedPlan?._id}
+            planList={planList}
+            clickedDate={clickedDate}
+            isValidating={isValidating}
+            handleDeleteClick={handleDeleteClick}
+            selectPlan={selectPlan}
+          />
         </motion.section>
       </main>
     </>

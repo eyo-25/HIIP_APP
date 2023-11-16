@@ -14,7 +14,8 @@ type Props = {
   clickedDate: dayjs.Dayjs;
   planList: SimplePlanModel[];
   selectedPlanId?: string;
-  monthPlanListData: PlanModel[];
+  isValidating: boolean;
+  handleDeleteClick: (_id: string) => void;
   selectPlan: (planData: SelectPlanModel | null) => void;
 };
 
@@ -22,24 +23,20 @@ function PlanListBoard({
   planList,
   selectedPlanId,
   clickedDate,
-  monthPlanListData,
+  isValidating,
+  handleDeleteClick,
   selectPlan,
 }: Props) {
-  const [isBoardLoading, setIsBoardLoading] = useState<boolean>(false);
-  const loadingSetter = (isBoardLoading: boolean) => {
-    setIsBoardLoading(isBoardLoading);
-  };
-
   return (
     <motion.ul
       variants={planListBoardVariants}
       initial="normal"
       animate="animate"
       className={`pb-[40%] h-full pt-5pxr w-full px-[5%] mx-auto overflow-hidden ${
-        !isBoardLoading && "sroll"
+        !isValidating && "sroll"
       }`}
     >
-      {isBoardLoading ? (
+      {isValidating ? (
         <>
           {Array.from({ length: 4 }).map((_, idx) => (
             <li className="w-full bg-gray-200" key={idx}>
@@ -59,10 +56,9 @@ function PlanListBoard({
               key={planData._id}
               clickedDate={clickedDate}
               planData={planData}
-              monthPlanListData={monthPlanListData}
               selectedPlanId={selectedPlanId}
+              handleDeleteClick={handleDeleteClick}
               selectPlan={selectPlan}
-              loadingSetter={loadingSetter}
             />
           ))}
         </>
@@ -71,4 +67,4 @@ function PlanListBoard({
   );
 }
 
-export default React.memo(PlanListBoard);
+export default PlanListBoard;

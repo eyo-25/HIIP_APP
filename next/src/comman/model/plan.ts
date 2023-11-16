@@ -5,47 +5,44 @@ export type ColorType =
   | "green"
   | "blue"
   | "purple";
+
 export type StatusType = "success" | "fail" | "pending";
 
-export interface PlanDataModel {
+interface PlanBase {
   _id: string;
   title: string;
   memo: string;
   startDate: string;
   endDate: string;
   interval: number;
+  color: ColorType;
+}
+
+export interface SimplePlanModel extends PlanBase {
+  status: StatusType;
+}
+
+export interface PlanDataModel extends PlanBase {
   isStart: boolean;
   focusTime: number;
   breakTime: number;
   days: number[];
-  color: ColorType;
   history: PlanHistory[];
 }
 
-export interface PlanModel {
-  _id: string;
-  title: string;
-  memo: string;
-  startDate: string;
-  endDate: string;
-  interval: number;
+export interface HomePlanModel extends Omit<PlanBase, "memo"> {
+  status: StatusType;
+  days: number[];
+  focusTime: number;
+  history: { [key: string]: PlanHistory };
+}
+
+export interface PlanModel extends PlanBase {
   isStart: boolean;
   focusTime: number;
   breakTime: number;
   days: number[];
-  color: ColorType;
   history: { [key: string]: PlanHistory };
-}
-
-export interface SimplePlanModel {
-  title: string;
-  memo: string;
-  interval: number;
-  color: ColorType;
-  _id: string;
-  status: StatusType;
-  startDate: string;
-  endDate: string;
 }
 
 export interface FormModel {
@@ -58,19 +55,6 @@ export interface FormModel {
   breakTime: number;
   color: ColorType;
   days: number[];
-}
-
-export interface HomePlanModel {
-  _id: string;
-  title: string;
-  interval: number;
-  color: ColorType;
-  status: StatusType;
-  days: number[];
-  startDate: string;
-  focusTime: number;
-  endDate: string;
-  history: { [key: string]: PlanHistory };
 }
 
 export interface PlanTimerData {

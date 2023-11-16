@@ -7,8 +7,6 @@ import {
   PlanTimerData,
   PlanHistory,
   FeedbackDataModel,
-  CalendarModel,
-  SimplePlanModel,
 } from "../model/plan";
 
 export const usePlan = (planId: string) => {
@@ -151,7 +149,8 @@ export const useMonthPlanList = (initialDate: string) => {
     data: monthPlanListData,
     error,
     isLoading,
+    isValidating,
   } = useSWR<PlanModel[]>(`/api/plan?date=${initialDate}`);
 
-  return { monthPlanListData, isLoading, error };
+  return { monthPlanListData, isLoading, isValidating, error };
 };
