@@ -14,7 +14,7 @@ type Props = {
 };
 
 export default function TimerPage({ params: { planId } }: Props) {
-  const { planTimerData, isLoading, error } = usePlanTimer(planId);
+  const { planTimerData, isLoading } = usePlanTimer(planId);
   const [isSplash, setIsSplash] = useState(true);
 
   const splashDone = () => {

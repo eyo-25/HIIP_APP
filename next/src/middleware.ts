@@ -4,20 +4,22 @@ import { NextRequest, NextResponse } from "next/server";
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req });
 
-  if (!token) {
-    if (req.nextUrl.pathname.startsWith("/api")) {
-      return new NextResponse("Authentication Error", { status: 401 });
+  if (req.nextUrl.pathname === "/auth") {
+    if (token) {
+      return NextResponse.redirect(new URL("/", req.nextUrl.origin));
     }
+    return NextResponse.next();
+  }
 
+  if (!token) {
     const { pathname, search, origin, basePath } = req.nextUrl;
-    const signInUrl = new URL(`${basePath}/auth`, origin);
-    signInUrl.searchParams.append(
+    const authUrl = new URL(`${basePath}/auth`, origin);
+    authUrl.searchParams.append(
       "callbackUrl",
       `${basePath}${pathname}${search}`
     );
-    return NextResponse.redirect(signInUrl);
+    return NextResponse.redirect(authUrl);
   }
-
   return NextResponse.next();
 }
 
@@ -30,5 +32,6 @@ export const config = {
     "/feedback",
     "/write",
     "/write/:path*",
+    "/auth",
   ],
 };
