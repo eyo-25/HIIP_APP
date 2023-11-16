@@ -30,18 +30,18 @@ export interface PlanDataModel extends PlanBase {
   history: PlanHistory[];
 }
 
-export interface PlanModel extends Omit<PlanBase, "memo"> {
-  isStart: boolean;
-  focusTime: number;
-  breakTime: number;
-  days: number[];
-  history: { [key: string]: PlanHistory };
-}
-
 export interface HomePlanModel extends Omit<PlanBase, "memo"> {
   status: StatusType;
   days: number[];
   focusTime: number;
+  history: { [key: string]: PlanHistory };
+}
+
+export interface PlanModel extends PlanBase {
+  isStart: boolean;
+  focusTime: number;
+  breakTime: number;
+  days: number[];
   history: { [key: string]: PlanHistory };
 }
 

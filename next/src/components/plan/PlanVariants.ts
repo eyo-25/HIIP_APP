@@ -1,16 +1,3 @@
-export const buttonVarients = {
-  normal: {
-    opacity: 0,
-  },
-  animate: {
-    opacity: 1,
-    transition: {
-      duration: 0.7,
-      type: "linear",
-    },
-  },
-};
-
 export const getCalendarVariants = (isWeekly: boolean) => {
   const calendarVariants = {
     normal: {
@@ -42,6 +29,19 @@ export const getPlanBoardVariants = (isWeekly: boolean) => {
     },
   };
   return planBoardVariants;
+};
+
+export const buttonVarients = {
+  normal: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      duration: 0.7,
+      type: "linear",
+    },
+  },
 };
 
 export const calendarPickerVariants = {
